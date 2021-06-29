@@ -1,15 +1,42 @@
 import { Schema } from "mongoose";
 
-new Schema({
-    name:String,
-    surname1:String,
-    surname2:String,
-    range:Number,
+export const UserSchema = new Schema({
+    name:{
+        type:String,
+        required: true
+    },
+    surname1:{
+        type:String,
+        required: true
+    },
+    surname2:{
+        type:String,
+        required: true
+    },
+    range:{
+        type:Number,
+        required: true
+    },
     description:String,
-    email:String,
-    date:Number,
+    email:{
+        type:String,
+        required: true
+    },
+    date:{
+        type: Number,
+        default: new Date().getTime()
+    },
     //online:boolean;
-    playListMusic: Object,  //TODO Crear interfaces
-    playListVideo: Object,  //TODO Crear interfaces
-    gallery: Object,        //TODO Crear interfaces
+    playListMusic: {
+        type: Object,
+        default: []
+    },
+    playListVideo: {
+        type: Object,
+        default: []
+    },
+    gallery: {
+        type: Object,
+        default: []
+    }
 });

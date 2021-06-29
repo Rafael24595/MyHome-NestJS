@@ -15,8 +15,8 @@ export class UserService {
         return users;
     }
 
-    async getUser(userEmail: string): Promise<User>{
-        const user = await this.userModel.findOne({email:userEmail});
+    async getUser(userNickName: string): Promise<User>{
+        const user = await this.userModel.findOne({nickname:userNickName});
         return user;
     }
 
@@ -26,14 +26,14 @@ export class UserService {
         return user;
     }
 
-    async deleteUser(userEmail: string): Promise<User>{
-        const deletedUser = await this.userModel.findOneAndDelete({email:userEmail});
+    async deleteUser(userNickName: string): Promise<User>{
+        const deletedUser = await this.userModel.findOneAndDelete({nickname:userNickName});
         return deletedUser;
     }
 
-    async updateUser(userEmail:string, createUserDTO: CreateUserDTO): Promise<User>{
-        const user = this.userModel();
-        return user;
+    async updateUser(userNickName:string, createUserDTO: CreateUserDTO): Promise<User>{
+        const updatedUser = await this.userModel.findOneAndUpdate({nickname:userNickName}, createUserDTO, {new: true});
+        return updatedUser;
     }
 
 }

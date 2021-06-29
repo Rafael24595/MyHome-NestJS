@@ -1,5 +1,5 @@
 export class CreateUserDTO{
-
+    nickname:string;
     name:string;
     surname1:string;
     surname2:string;
@@ -11,5 +11,4 @@ export class CreateUserDTO{
     playListMusic: Object;  //TODO Crear interfaces
     playListVideo: Object;  //TODO Crear interfaces
     gallery: Object;        //TODO Crear interfaces
-
 }

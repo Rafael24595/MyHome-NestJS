@@ -1,6 +1,5 @@
 import { ForbiddenException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { throws } from "assert";
 import { Model } from "mongoose";
 import { User } from "../interfaces/user.interface";
 
@@ -29,4 +28,28 @@ export class UserUtils{
         if(userByEmail.exists) throw new ForbiddenException('User email already exists');
     }
 
+    simplifyUser(user:User | User[]): User | User[]{
+        if(Array.isArray(user)){
+            for (let index = 0; index < user.length; index++) {
+                user[index].email = "";
+                user[index].password = "";
+                user[index].playListMusic = [];
+                user[index].playListVideo = [];
+                user[index].gallery = [];
+            }
+        }
+        else{
+            user.email = "";
+            user.password = "";
+            user.playListMusic = [];
+            user.playListVideo = [];
+            user.gallery = [];
+        }
+        return user;
+    }
+
+    simplifyProfile(user:User): User{
+            user.password = "";
+        return user;
+    }
 }

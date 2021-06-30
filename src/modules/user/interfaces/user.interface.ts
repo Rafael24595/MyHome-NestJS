@@ -8,6 +8,7 @@ export interface User extends Document{
     range:number;
     description:string;
     email:string;
+    password:string;
     date:number;
     //online:boolean;
     playListMusic: Object;  //TODO Crear interfaces

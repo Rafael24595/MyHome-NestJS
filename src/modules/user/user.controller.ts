@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException, ForbiddenException } from '@nestjs/common';
 
 import { CreateUserDTO } from "./dto/user.dto";
+import { User } from './interfaces/user.interface';
 
 import { UserService } from "./user.service";
 import { UserUtils } from './utils/user.utils';
@@ -12,7 +13,8 @@ export class UserController {
 
     @Get()
     async getUsers(@Res() res){
-        const users = await this.userService.getUsers();
+        let users = await this.userService.getUsers();
+        users = this.userUtils.simplifyUser(users) as User[];
         res.status(HttpStatus.OK).json({
             status: true,
             message: users
@@ -21,7 +23,19 @@ export class UserController {
 
     @Get(':userNickname')
     async getUser(@Res() res, @Param('userNickname') userNickname){
-        const user = await this.userService.getUser(userNickname);
+        let user = await this.userService.getUser(userNickname);
+        user = this.userUtils.simplifyUser(user) as User;
+        if(!user) throw new NotFoundException('User Does not exists');
+        res.status(HttpStatus.OK).json({
+            status: true,
+            message: user
+        });
+    }
+
+    @Get(':userNickname/profile')
+    async getUserProfile(@Res() res, @Param('userNickname') userNickname){
+        let user = await this.userService.getUser(userNickname);
+        user = this.userUtils.simplifyProfile(user) as User;
         if(!user) throw new NotFoundException('User Does not exists');
         res.status(HttpStatus.OK).json({
             status: true,

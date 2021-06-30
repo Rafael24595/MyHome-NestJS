@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "./schemas/user.schema";
 import { UserUtils } from './utils/user.utils';
+import { UserMiddleware } from './middleware/user.middleware';
 
 @Module({
   imports:[
@@ -14,4 +15,14 @@ import { UserUtils } from './utils/user.utils';
   controllers: [UserController],
   providers: [UserService, UserUtils]
 })
-export class UserModule {}
+export class UserModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+    .apply(UserMiddleware)
+    .exclude(
+      { path: '/api/user', method: RequestMethod.GET },
+      { path: '/api/user/:userNickname', method: RequestMethod.GET },
+    )
+    .forRoutes(UserController)
+  }
+}

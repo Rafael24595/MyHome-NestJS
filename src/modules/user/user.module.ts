@@ -13,7 +13,8 @@ import { UserMiddleware } from './middleware/user.middleware';
     ])
   ],
   controllers: [UserController],
-  providers: [UserService, UserUtils]
+  providers: [UserService, UserUtils],
+  exports: [UserService]
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

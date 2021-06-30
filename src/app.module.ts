@@ -3,13 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 const mongoUri = "mongodb://localhost:27017/myhome";
 
 @Module({
   imports: [
     MongooseModule.forRoot(mongoUri), 
-    UserModule
+    UserModule, AuthModule
   ],
   controllers: [
     AppController

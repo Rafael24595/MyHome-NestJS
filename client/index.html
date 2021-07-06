@@ -7,18 +7,56 @@
     <title>Document</title>
 </head>
 <body>
+    <script>
+
+        const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaWNrbmFtZSI6InVzcjB4IiwiZW1haWwiOiJ0ZXN0YUAuY29tIiwiaWF0IjoxNjI1NTUzOTk4LCJleHAiOjE2MjU2NDAzOTh9.68Kv-TBEURdn99YfPkP2vzQE_sBhzkCTIGeW0Br2HXg';
+            
+        window.localStorage.clear();
+        document.cookie = `token=${token}`;
+
+        let url = 'http://localhost:3000/api/auth/cookie';
+
+        let response = fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+            'Content-Type': 'video/mp4',
+            'Authorization': token,
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        });
+    
+    </script>
     <video id='video' auth-src="video/movies/Metro.mp4" style="width: 100%; height: 100%;" controls>
-        <source src="http://localhost:3000/api/auth/file?filePath=video/movies/Metro.mp4" type="video/mp4" id="myvideo">
+        <source src="http://localhost:3000/api/file?filePath=video/movies/Metro.mp4" type="video/mp4" id="myvideo">
         Your browser does not support the video tag.
     </video>
     <script>
 
     window.onload = async() => {
 
-        const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaWNrbmFtZSI6InVzcjB4IiwiZW1haWwiOiJ0ZXN0YUAuY29tIiwiaWF0IjoxNjI1NDY2OTg3LCJleHAiOjE2MjU1NTMzODd9.gYEw3D7sBTMyatA43qC3Bi9F0QmXe-74yCEmc57h_ak';
+        /*const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaWNrbmFtZSI6InVzcjB4IiwiZW1haWwiOiJ0ZXN0YUAuY29tIiwiaWF0IjoxNjI1NTUzOTk4LCJleHAiOjE2MjU2NDAzOTh9.68Kv-TBEURdn99YfPkP2vzQE_sBhzkCTIGeW0Br2HXg';
 
         window.localStorage.clear();
         document.cookie = `token=${token}`;
+
+        let url = 'http://localhost:3000/api/auth/cookie';
+
+        let response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+            'Content-Type': 'video/mp4',
+            'Authorization': token,
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        });*/
 
         /*let video = document.getElementById('video');
         let url = 'http://localhost:3000/api/auth/file';

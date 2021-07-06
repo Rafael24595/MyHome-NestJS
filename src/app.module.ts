@@ -6,6 +6,9 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { FileController } from './modules/file/file.controller';
+import { FileService } from './modules/file/file.service';
+import { FileModule } from './modules/file/file.module';
 
 const mongoUri = "mongodb://localhost:27017/myhome";
 
@@ -15,13 +18,15 @@ const mongoUri = "mongodb://localhost:27017/myhome";
       rootPath: join(__dirname, '..', 'client'),
     }),
     MongooseModule.forRoot(mongoUri), 
-    UserModule, AuthModule
+    UserModule, AuthModule, FileModule
   ],
   controllers: [
-    AppController
+    AppController,
+    FileController
   ],
   providers: [
-    AppService
+    AppService,
+    FileService
   ],
 })
 export class AppModule {}

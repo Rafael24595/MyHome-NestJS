@@ -1,6 +1,7 @@
-import { Controller, Request, Res, Get, Query, UseGuards, Post, Delete, BadRequestException } from '@nestjs/common';
+import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException } from '@nestjs/common';
 import { statSync } from 'fs';
 import { join } from 'path';
+import { AppUtils } from 'src/utils/app.utils';
 import { PathVariables } from 'src/utils/Variables';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
@@ -10,16 +11,16 @@ import { FileUtils } from './utils/file.utils';
 @Controller('file')
 export class FileController {
 
-    constructor(private fileService:FileService, private fileUtils:FileUtils){}
+    constructor(private fileService:FileService, private fileUtils:FileUtils, private appUtils:AppUtils){}
 
     @UseGuards(JwtCookieAuthGuard)
-    @Get()
-    async getFile(@Request() req, @Query() filePathQuery: {filePath:string}, @Res() res){
-        
+    @Get('*')
+    async getFile(@Request() req, @Res() res){
+
         const range = req.headers.range;
         if (!range) throw new BadRequestException('Requires Range header');
 
-        const filePath = filePathQuery.filePath;
+        const filePath = this.appUtils.cleanUrl('file', req.url);
         const relativePath = join(__dirname, PathVariables.private_assets , filePath);
         const videoSize = statSync(relativePath).size;
         const start = this.fileUtils.setStart(range);

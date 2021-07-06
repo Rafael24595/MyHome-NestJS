@@ -9,6 +9,7 @@ import { join } from 'path';
 import { FileController } from './modules/file/file.controller';
 import { FileService } from './modules/file/file.service';
 import { FileModule } from './modules/file/file.module';
+import { AppUtils } from './utils/app.utils';
 
 const mongoUri = "mongodb://localhost:27017/myhome";
 
@@ -26,7 +27,11 @@ const mongoUri = "mongodb://localhost:27017/myhome";
   ],
   providers: [
     AppService,
-    FileService
+    FileService,
+    AppUtils
   ],
+  exports:[
+    AppUtils
+  ]
 })
 export class AppModule {}

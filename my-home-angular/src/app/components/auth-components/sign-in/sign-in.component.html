@@ -1,0 +1,22 @@
+<div>
+    <h2>Iniciar Sesión</h2>
+    <div>
+        <p>Correo electrónico: </p>
+        <input type="text" class="{{formError.email.class}}">
+        <ng-container *ngIf="formError.email.text != ''; else elseBlockEmail">
+            <p id="email_error" class="warn_text">{{formError.email.text}}</p>
+        </ng-container>
+        <ng-template #elseBlockEmail>
+            <br>
+        </ng-template>
+        <p>Contraseña: </p>
+        <input type="password" class="{{formError.password.class}}">
+        <ng-container *ngIf="formError.password.text != ''; else elseBlockPassword">
+            <p id="password_error" class="warn_text">{{formError.password.text}}</p>
+        </ng-container>
+        <ng-template #elseBlockPassword>
+            <br>
+        </ng-template>
+        <input type="button" value="Acceder" (click)="validarDatos">
+    </div>
+</div>

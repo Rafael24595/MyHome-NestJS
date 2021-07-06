@@ -1,0 +1,6 @@
+<ng-container *ngIf="!Globals_User.valid; else elseBlock">
+  <app-sign-in></app-sign-in>
+</ng-container>
+<ng-template #elseBlock>
+  <router-outlet></router-outlet>
+</ng-template>

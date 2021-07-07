@@ -8,7 +8,9 @@ import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
 import { FileService } from './file.service';
 import { FileUtils } from './utils/file.utils';
 
-@Controller('file')
+const controller = 'file';
+
+@Controller(controller)
 export class FileController {
 
     constructor(private fileService:FileService, private fileUtils:FileUtils, private appUtils:AppUtils){}
@@ -20,16 +22,15 @@ export class FileController {
         const range = req.headers.range;
         if (!range) throw new BadRequestException('Requires Range header');
 
-        const filePath = this.appUtils.cleanUrl('file', req.url);
-        const relativePath = join(__dirname, PathVariables.private_assets , filePath);
-        const videoSize = statSync(relativePath).size;
+        const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
+        const videoSize = statSync(filePath).size;
         const start = this.fileUtils.setStart(range);
         const end = this.fileUtils.setEnd(start, videoSize);
         const headers = this.fileUtils.setHeaders(start, end, videoSize);
 
         res.writeHead(206, headers);
 
-        const videoStream = await this.fileService.getFileStream(relativePath, start, end);
+        const videoStream = await this.fileService.getFileStream(filePath, start, end);
         videoStream.pipe(res);
 
     }

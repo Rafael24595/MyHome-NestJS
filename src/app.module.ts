@@ -10,6 +10,7 @@ import { FileController } from './modules/file/file.controller';
 import { FileService } from './modules/file/file.service';
 import { FileModule } from './modules/file/file.module';
 import { AppUtils } from './utils/app.utils';
+import { DirectoryModule } from './modules/directory/directory.module';
 
 const mongoUri = "mongodb://localhost:27017/myhome";
 
@@ -19,7 +20,7 @@ const mongoUri = "mongodb://localhost:27017/myhome";
       rootPath: join(__dirname, '..', 'client'),
     }),
     MongooseModule.forRoot(mongoUri), 
-    UserModule, AuthModule, FileModule
+    UserModule, AuthModule, FileModule, DirectoryModule
   ],
   controllers: [
     AppController,

@@ -11,11 +11,19 @@ export class AppUtils{
         return extname(path).replace(/\./, '');
     }
 
+    pathParent(path: string){
+        return join(path , '..');
+    }
+
     cleanUrl(controller: string, url: string): string{
-        let path: string = url.replace(`api/${controller}/`, '');
+        let path: string = url.replace(`/api/${controller}/`, '');
         path = path.replace(/\?.*/g, '');
         path = path.replace(/#.*/g, '');
         return path;
+    }
+
+    isRoot(controller: string, url: string): boolean{
+        return (this.cleanUrl(controller, url) == '');
     }
 
     getCleanRelativePath(controller: string, url: string): string {

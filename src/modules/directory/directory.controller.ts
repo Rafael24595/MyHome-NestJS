@@ -1,5 +1,4 @@
 import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException, HttpStatus } from '@nestjs/common';
-import { statSync } from 'fs';
 import { AppUtils } from 'src/utils/app.utils';
 import { DirectoryService } from './directory.service';
 
@@ -12,9 +11,9 @@ export class DirectoryController {
 
     @Get('*')
     async getDirectoryContent(@Request() req, @Res() res){
-
+        const isRoot = this.appUtils.isRoot(controller, req.url);
         const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
-        const content = await this.directoryService.getDirectoryContent(filePath);
+        const content = await this.directoryService.getDirectoryContent(filePath, isRoot);
         console.log(content)
 
         res.status(HttpStatus.OK).json({

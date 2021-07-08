@@ -6,4 +6,6 @@ export interface DirectoryContent{
     size: number;
     birthtime: number;
     modtime: number;
+    metadata: boolean;
+    return: boolean
 }

@@ -11,28 +11,20 @@ export class DirectoryService {
 
     constructor(private directoryUtils: DirectoryUtils, private appUtils: AppUtils){}
 
-    async getDirectoryContent(filePath: string): Promise<CreateDirectoryContentDTO[]>{
-
+    async getDirectoryContent(filePath: string, isRoot: boolean): Promise<CreateDirectoryContentDTO[]>{
+        
         const files = readdirSync(filePath);console.log(files)
         let dirContent:DirectoryContent[] = []
 
-        for (let index = 0; index < files.length; index++) {
-            
-            const absolutePath = join(filePath, files[index]);
-            const fileStat = statSync(absolutePath); 
+        if(!isRoot){
+            dirContent.push(this.directoryUtils.getDirectoryParent(filePath));
+        }
 
-            const item = {
-                abpath: absolutePath,
-                directory: fileStat.isDirectory(),
-                name: this.appUtils.basename(absolutePath),
-                extension: this.appUtils.extname(absolutePath),
-                size: await this.directoryUtils.getTotalContentSize(absolutePath),
-                birthtime: fileStat.birthtimeMs,
-                modtime: fileStat.mtimeMs
-            }
+        for (let index = 0; index < files.length; index++) {
+            const absolutePath = join(filePath, files[index]);
+            const item = await this.directoryUtils.getDirectory(absolutePath);
             
-            dirContent.push(item);
-            
+            dirContent.push(item);  
         }
 
         return dirContent;

@@ -1,8 +1,10 @@
-<div>
+<div style="position: absolute; text-align: center; display: inline-block; top: 50%; left: 50%; transform: translate(-50%, -60%);">
+    <h1>MyHome</h1>
+    <br>
     <h2>Iniciar Sesión</h2>
     <div>
         <p>Correo electrónico: </p>
-        <input type="text" class="{{formError.email.class}}">
+        <input type="text" class="{{formError.email.class}}" [(ngModel)]="nickname">
         <ng-container *ngIf="formError.email.text != ''; else elseBlockEmail">
             <p id="email_error" class="warn_text">{{formError.email.text}}</p>
         </ng-container>
@@ -10,13 +12,13 @@
             <br>
         </ng-template>
         <p>Contraseña: </p>
-        <input type="password" class="{{formError.password.class}}">
+        <input type="password" class="{{formError.password.class}}" [(ngModel)]="password">
         <ng-container *ngIf="formError.password.text != ''; else elseBlockPassword">
             <p id="password_error" class="warn_text">{{formError.password.text}}</p>
         </ng-container>
         <ng-template #elseBlockPassword>
-            <br>
+            <br><br>
         </ng-template>
-        <input type="button" value="Acceder" (click)="validarDatos">
+        <button (click)="login()">Acceder</button>
     </div>
 </div>

@@ -1,6 +1,10 @@
-<ng-container *ngIf="!Globals_User.valid; else elseBlock">
+<ng-container *ngIf="!Globals_User.user; else elseBlock">
   <app-sign-in></app-sign-in>
 </ng-container>
 <ng-template #elseBlock>
+  <video id='video' auth-src="video/movies/Metro.mp4" style="width: 100%; height: 100%;" controls>
+    <source src="http://localhost:3000/api/file/media/video/movies/Metro.mp4" type="video/mp4" id="myvideo">
+    Your browser does not support the video tag.
+</video>
   <router-outlet></router-outlet>
 </ng-template>

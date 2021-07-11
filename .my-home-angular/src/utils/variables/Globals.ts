@@ -8,7 +8,6 @@ export const service_config = {
     }
 }
 
-export let user_config: {user: User | undefined, valid: boolean} = {
-    user: undefined,
-    valid: false
+export let user_config: {user: User | undefined} = {
+    user: undefined
 };

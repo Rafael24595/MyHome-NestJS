@@ -18,7 +18,7 @@ export class User{
     date: number;
     online: boolean;
 
-    private constructor(name: string, surname1: string, surname2: string, range: number, date:number, description:string, email: string, playListMusic?: PlayListMusic[], playListVideo?: PlayListVideo[], gallery?: Gallery[], online?: boolean){
+    constructor(name: string, surname1: string, surname2: string, range: number, date:number, description:string, email: string, playListMusic?: PlayListMusic[], playListVideo?: PlayListVideo[], gallery?: Gallery[], online?: boolean){
         
         this.name = name;
         this.surname1 = surname1;

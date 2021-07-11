@@ -1,6 +1,14 @@
 import { User } from "src/classes/User";
 
-export let user_config: {user: User | undefined, validUser: boolean} = {
+export const service_config = {
+    connection: {
+        protocol: 'http',
+        host: 'localhost',
+        port: '3000'
+    }
+}
+
+export let user_config: {user: User | undefined, valid: boolean} = {
     user: undefined,
-    validUser: false
+    valid: false
 };

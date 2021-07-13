@@ -81,7 +81,7 @@ export class DirectoryUtils{
       simplifyPath(absolutePath: string){
         const regexPattern = `.*${this.rootDirectory}`;
         const regex = new RegExp(regexPattern,"g");
-        return join(absolutePath.replace(regex, '')).replace(/\\/g, '/');
+        return absolutePath.replace(regex, '').replace(/\\/g, '/');
       }
 
       async getDirectory(absolutePath: string){
@@ -107,11 +107,12 @@ export class DirectoryUtils{
       getDirectoryParent(filePath:string): DirectoryContent{
 
         const absolutePath = this.simplifyPath(this.appUtils.pathParent(filePath));
+        const name = (this.appUtils.basename(absolutePath) == '') ? 'root' : this.appUtils.basename(absolutePath);
 
         const item: DirectoryContent = {
             abpath: absolutePath,
             directory: true,
-            name: this.appUtils.basename(absolutePath),
+            name: name,
             extension: '',
             size: 0,
             content: {directory:0, file:0},

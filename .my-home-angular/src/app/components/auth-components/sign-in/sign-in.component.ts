@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { use } from 'passport';
+import { Router } from '@angular/router';
 import { AuthService } from "src/app/services/auth/auth.service";
 import { User } from 'src/classes/User';
 import { user_config } from 'src/utils/variables/Globals';
@@ -12,11 +12,13 @@ import { AuthTools } from 'src/utils/variables/tools/auth.tools';
 })
 export class SignInComponent implements OnInit {
 
-  constructor(private authService: AuthService, private authTools:AuthTools) { }
+  constructor(private authService: AuthService, private authTools:AuthTools, private router: Router) { }
 
   ngOnInit(): void {
     this.verifyToken();
   }
+
+  Globals_User = user_config;
 
   nickname = '';
   password = '';
@@ -32,6 +34,7 @@ export class SignInComponent implements OnInit {
       sucess=>{
         const user = this.dataToUser(sucess.user);
         this.authTools.setUserSession(user);
+        this.authTools.goLastURI();
       },
       err=>{
         console.error(err);
@@ -42,13 +45,12 @@ export class SignInComponent implements OnInit {
   login(){
     this.authService.login(this.nickname, this.password).subscribe(
       sucess=>{
-        console.log(sucess)
         const token = sucess.access_token;
-        const user =this.dataToUser(sucess.user)
+        const user = this.dataToUser(sucess.user);
 
         this.authTools.setUserSessionToken(user, token);
         this.resetForm();
-
+        this.authTools.goLastURI();
       },
       err=>{
         this.formError.password.text = 'Usuario o contraseña incorrectos';

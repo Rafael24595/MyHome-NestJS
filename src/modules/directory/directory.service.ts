@@ -13,7 +13,7 @@ export class DirectoryService {
 
     async getDirectoryContent(filePath: string, isRoot: boolean): Promise<CreateDirectoryContentDTO[]>{
         
-        const files = readdirSync(filePath);console.log(files)
+        const files = readdirSync(filePath);
         let dirContent:DirectoryContent[] = []
 
         if(!isRoot){

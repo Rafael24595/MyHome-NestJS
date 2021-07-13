@@ -6,4 +6,5 @@ export class CreateDirectoryContentDTO{
     size: number;
     birthtime: number;
     modtime: number;
+    back: boolean;
 }

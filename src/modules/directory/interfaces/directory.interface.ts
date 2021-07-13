@@ -4,8 +4,9 @@ export interface DirectoryContent{
     name: string;
     extension: string;
     size: number;
+    content: {directory: number, file: number}
     birthtime: number;
     modtime: number;
     metadata: boolean;
-    return: boolean
+    back: boolean
 }

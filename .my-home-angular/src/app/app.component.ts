@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { user_config } from '../utils/variables/Globals';
+import { user_config } from 'src/utils/variables/Globals';
 
 @Component({
   selector: 'app-root',

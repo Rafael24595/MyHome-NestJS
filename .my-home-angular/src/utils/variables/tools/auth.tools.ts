@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { User } from "src/classes/User";
 import { user_config } from "../Globals";
@@ -7,8 +8,9 @@ import { user_config } from "../Globals";
 export class AuthTools{
 
     ItemName = 'session-token';
+    URIName = 'last-uri';
 
-    constructor(private authService: AuthService){}
+    constructor(private authService: AuthService,  private router: Router){}
 
     public getToken(): string | null{
         return localStorage.getItem(this.ItemName);
@@ -45,6 +47,26 @@ export class AuthTools{
         this.setUser(user);
         this.setToken(token);
         this.setCookie(token);
+    }
+
+    getLastURI(){
+        return localStorage.getItem(this.URIName);
+    }
+
+    setLastURI(){
+        const href = this.router.url;
+        localStorage.setItem(this.URIName, href);
+    }
+
+    goLastURI(){
+        const uri = this.getLastURI();
+        this.router.navigate([uri]);
+    }
+
+    checkSession(){
+        const token = this.getToken();
+        this.setLastURI();
+        if (!token || !user_config.user) this.router.navigate(['/Login']); 
     }
 
 }

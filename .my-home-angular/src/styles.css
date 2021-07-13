@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+html, body{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(245, 245, 245);
+}
+
+.principal-module{
+    overflow: hidden;
+}
+
+#header, #footer{
+    height: 10%;
+    background-color: rgb(225, 225, 225);
+}
+
+#header{
+}
+
+#body{
+    height: 80%;
+}
+
+#footer{
+}

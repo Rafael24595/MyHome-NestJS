@@ -1,0 +1,6 @@
+<p>file-manager works!</p>
+<div>
+    <div *ngFor='let content of directoryContent' (click)='getDirectory(content.abpath)'>
+        {{content.name}}
+    </div>
+</div>

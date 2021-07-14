@@ -1,3 +1,4 @@
+
 export class Path{
 
     abpath: string;
@@ -22,6 +23,19 @@ export class Path{
         this.modtime = modtime;
         this.metadata = metadata;
         this.back = back;
+    }
+
+    static getEmptyPath(): Path{
+        return new Path('', false, '', '', 0, {directoty: 0, file: 0}, 0, 0, false, false);
+    }
+
+    static getParentDirectory(path: string): Path{
+        let pathArray = path.split('/');
+        pathArray.pop();
+        const parentPath = pathArray.join('/');
+        pathArray.pop();
+        const name = pathArray.pop() as string;
+        return new Path(parentPath, true, name, '', 0, {directoty: 0, file: 0}, 0, 0, false, true);
     }
 
 }

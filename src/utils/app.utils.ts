@@ -8,7 +8,7 @@ export class AppUtils{
     }
 
     extname(path: string): string{
-        return extname(path).replace(/\./, '');
+        return extname(path).replace(/\./, '').toLowerCase();
     }
 
     pathParent(path: string){
@@ -28,7 +28,7 @@ export class AppUtils{
 
     getCleanRelativePath(controller: string, url: string): string {
         const filePath = this.cleanUrl(controller, url);
-        const relativePath = join(__dirname, PathVariables.private_assets_root , filePath);
+        const relativePath = decodeURIComponent(join(__dirname, PathVariables.private_assets_root , filePath));
         return relativePath;
     }
 }

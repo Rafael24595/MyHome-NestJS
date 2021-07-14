@@ -1,6 +1,6 @@
 import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException } from '@nestjs/common';
-import { statSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, statSync } from 'fs';
+import path, { join } from 'path';
 import { AppUtils } from 'src/utils/app.utils';
 import { PathVariables } from 'src/utils/Variables';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -19,19 +19,31 @@ export class FileController {
     @Get('*')
     async getFile(@Request() req, @Res() res){
 
-        const range = req.headers.range;
-        if (!range) throw new BadRequestException('Requires Range header');
-
         const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
-        const videoSize = statSync(filePath).size;
-        const start = this.fileUtils.setStart(range);
-        const end = this.fileUtils.setEnd(start, videoSize);
-        const headers = this.fileUtils.setHeaders(start, end, videoSize);
+        const isImage = this.fileUtils.typeFile(filePath);
 
-        res.writeHead(206, headers);
+        if(isImage){
+            const data = readFileSync(filePath);
 
-        const videoStream = await this.fileService.getFileStream(filePath, start, end);
-        videoStream.pipe(res);
+            res.writeHead(200, {'Content-Type': 'image/jpg'});
+            res.end(data);
+        }
+        else{
+
+            const range = req.headers.range;
+
+            if (!range) throw new BadRequestException('Requires Range header');
+
+            const videoSize = statSync(filePath).size;
+            const start = (!isImage) ? this.fileUtils.setStart(range) : 0;
+            const end = this.fileUtils.setEnd(start, videoSize);
+            const headers = this.fileUtils.setHeaders(start, end, videoSize);
+
+            res.writeHead(206, headers);
+
+            const videoStream = await this.fileService.getFileStream(filePath, start, end);
+            videoStream.pipe(res); 
+        }
 
     }
 

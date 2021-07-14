@@ -13,6 +13,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FileManagerComponent } from './components/body/file-manager/file-manager.component';
 import { CollectionsComponent } from './components/body/collections/collections.component';
+import { MediaViewComponent } from './components/body/media-view/media-view.component';
+import { MiscTools } from 'src/utils/variables/tools/misc.tools';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { CollectionsComponent } from './components/body/collections/collections.
     HeaderComponent,
     FooterComponent,
     FileManagerComponent,
-    CollectionsComponent
+    CollectionsComponent,
+    MediaViewComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import { CollectionsComponent } from './components/body/collections/collections.
   ],
   providers: [
     AuthTools,
+    MiscTools,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

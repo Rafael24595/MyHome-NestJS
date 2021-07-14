@@ -1,5 +1,14 @@
-export class FileUtils {
+import { Injectable } from "@nestjs/common";
+import { extname } from "path";
+import { AppUtils } from "src/utils/app.utils";
 
+@Injectable()
+export class FileUtils {
+    
+    imageFormats = ['png', 'jpg'];
+
+    constructor(private appUtils: AppUtils){}
+    
     setStart(range: string): number{
         const start = Number(range.replace(/\D/g, ""));
         return start;
@@ -20,6 +29,11 @@ export class FileUtils {
             "Content-Type": "video/mp4",
         };
         return headers;
+    }
+
+    typeFile(path:string):boolean{
+        const extension = this.appUtils.extname(path);
+        return (this.imageFormats.indexOf(extension) != -1);
     }
 
 }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaWNrbmFtZSI6InVzcjB4IiwiZW1haWwiOiJ0ZXN0YUAuY29tIiwiaWF0IjoxNjI2MDQxMjg4LCJleHAiOjE2MjYxMjc2ODh9.U8UlzJISMAYxswF5PgM11bha09Q9WzAx6Vn2sroZXqA';
+            
+        window.localStorage.clear();
+        document.cookie = `token=${token}`;
+
+        let url = 'http://localhost:3000/api/auth/cookie';
+
+        let response = fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+            'Content-Type': 'video/mp4',
+            'Authorization': token,
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        });
+    
+    </script>
+    <video id='video' auth-src="video/movies/Metro.mp4" style="width: 100%; height: 100%;" controls>
+        <source src="http://localhost:3000/api/file/media/video/movies/Metro.mp4" type="video/mp4" id="myvideo">
+        Your browser does not support the video tag.
+    </video>
+    <script>
+
+    window.onload = async() => {
+
+        /*const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaWNrbmFtZSI6InVzcjB4IiwiZW1haWwiOiJ0ZXN0YUAuY29tIiwiaWF0IjoxNjI1NTUzOTk4LCJleHAiOjE2MjU2NDAzOTh9.68Kv-TBEURdn99YfPkP2vzQE_sBhzkCTIGeW0Br2HXg';
+
+        window.localStorage.clear();
+        document.cookie = `token=${token}`;
+
+        let url = 'http://localhost:3000/api/auth/cookie';
+
+        let response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+            'Content-Type': 'video/mp4',
+            'Authorization': token,
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        });*/
+
+        /*let video = document.getElementById('video');
+        let url = 'http://localhost:3000/api/auth/file';
+        url = `${url}?filePath=${video.getAttribute('auth-src')}`;
+
+        let response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+            'Content-Type': 'video/mp4',
+            'Authorization': token,
+            //'Range': 'bytes=0-',
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        });
+
+        const reader = response.body.getReader();
+
+        const contentLength = +response.headers.get('Content-Length');
+
+        let receivedLength = 0;
+        let chunks = [];
+        while(true) {
+        const {done, value} = await reader.read();
+
+        if (done) break;
+
+        chunks.push(value);
+        receivedLength += value.length;
+
+        console.log(`Received ${receivedLength} of ${contentLength} bytes`)
+        }
+
+        setURL();
+
+        function setURL(){
+            let blob = new Blob(chunks);
+            video.src = URL.createObjectURL(blob);
+            video.onload = () => {
+                URL.revokeObjectURL(video.src);
+            }
+        }*/
+
+    }
+
+    </script>
+</body>
+</html>

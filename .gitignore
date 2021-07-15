@@ -1,6 +1,11 @@
+# angular
+/.my-home-angular/node_modules
+/.my-home-angular/dist
+
 # compiled output
 /dist
 /node_modules
+/private_assets
 
 # Logs
 logs

@@ -4,7 +4,6 @@ import { UserService } from './user.service';
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "./schemas/user.schema";
 import { UserUtils } from './utils/user.utils';
-import { UserMiddleware } from './middleware/user.middleware';
 
 @Module({
   imports:[
@@ -13,10 +12,11 @@ import { UserMiddleware } from './middleware/user.middleware';
     ])
   ],
   controllers: [UserController],
-  providers: [UserService, UserUtils]
+  providers: [UserService, UserUtils],
+  exports: [UserService, UserUtils]
 })
-export class UserModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+export class UserModule /*implements NestModule*/ {
+  /*configure(consumer: MiddlewareConsumer) {
     consumer
     .apply(UserMiddleware)
     .exclude(
@@ -24,5 +24,5 @@ export class UserModule implements NestModule {
       { path: '/api/user/:userNickname', method: RequestMethod.GET },
     )
     .forRoutes(UserController)
-  }
+  }*/
 }

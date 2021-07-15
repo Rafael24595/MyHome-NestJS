@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException, ForbiddenException, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 import { CreateUserDTO } from "./dto/user.dto";
 import { User } from './interfaces/user.interface';
@@ -32,6 +33,7 @@ export class UserController {
         });
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':userNickname/profile')
     async getUserProfile(@Res() res, @Param('userNickname') userNickname){
         let user = await this.userService.getUser(userNickname);

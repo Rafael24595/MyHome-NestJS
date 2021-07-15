@@ -1,0 +1,5 @@
+<div>
+    <div *ngFor='let content of directoryContent' [routerLink]='["/Manage" + content.abpath]' >
+        <p>{{content.name}} <span *ngIf='content.extension != ""'>.{{content.extension}}</span></p>
+    </div>
+</div>

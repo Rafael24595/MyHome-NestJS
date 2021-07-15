@@ -1,0 +1,9 @@
+<div id="header" class="principal-module">
+  <app-header *ngIf="Globals_User.user"></app-header>
+</div>
+<div id="body" class="principal-module">
+  <router-outlet></router-outlet>
+</div>
+<div id="footer" class="principal-module">
+  <app-footer *ngIf="Globals_User.user"></app-footer>
+</div>

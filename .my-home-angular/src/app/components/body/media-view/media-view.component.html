@@ -1,18 +1,23 @@
-<div [routerLink]='["/Manage" + parentDirectory.abpath]'>
-    <p>{{parentDirectory.name}}</p>
+<div style="padding: 10px;">
+    <div [routerLink]='["/Manage" + parentDirectory.abpath]' class="directory-element-horizontal no-border">
+        <div class="img-thumnail" style="display: inline-block;">
+            <img src="{{mediaPath}}{{logos_name.directory.back}}">
+        </div>
+        <p class="directory-element-title">{{parentDirectory.name}}</p>
+    </div>
+    <ng-container *ngIf='fileType == "video"'>
+        <video id='video' style="width: 100%;" controls>
+            <source src="http://localhost:3000/api/file/{{path}}" type="video/mp4" id="myvideo">
+            Your browser does not support the video tag.
+        </video>
+    </ng-container>
+    <ng-container *ngIf='fileType == "audio"'>
+        <audio controls>
+            <source src="http://localhost:3000/api/file/{{path}}" type="audio/mp3">
+            Your browser does not support the audio tag.
+          </audio>
+    </ng-container>
+    <ng-container *ngIf='fileType == "image"'>
+        <img src="http://localhost:3000/api/file/{{path}}" style="width: 100%;">
+    </ng-container>
 </div>
-<ng-container *ngIf='fileType == "video"'>
-    <video id='video' style="width: 100%;" controls>
-        <source src="http://localhost:3000/api/file/{{path}}" type="video/mp4" id="myvideo">
-        Your browser does not support the video tag.
-    </video>
-</ng-container>
-<ng-container *ngIf='fileType == "audio"'>
-    <audio controls>
-        <source src="http://localhost:3000/api/file/{{path}}" type="audio/mp3">
-        Your browser does not support the audio tag.
-      </audio>
-</ng-container>
-<ng-container *ngIf='fileType == "image"'>
-    <img src="http://localhost:3000/api/file/{{path}}" style="width: 100%;">
-</ng-container>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FileManagerService } from 'src/app/services/file-manager/file-manager.service';
 import { Path } from 'src/classes/Path';
+import { logos_name, media_types, service_config } from 'src/utils/variables/Globals';
 import { AuthTools } from 'src/utils/variables/tools/auth.tools';
 import { MiscTools } from 'src/utils/variables/tools/misc.tools';
 
@@ -16,6 +17,10 @@ export class FileManagerComponent implements OnInit {
   routerEvent: Subscription | undefined;
   path: string = '';
   directoryContent:Path[] = [];
+  mediaPath = '../../../../assets/media/';
+  connection = service_config.connection; 
+  media_types = media_types;
+  logos_name = logos_name;
 
   constructor(private authTools:AuthTools, private miscTools: MiscTools, private router: Router, private route: ActivatedRoute, private fileManagerService: FileManagerService) { }
 

@@ -38,6 +38,7 @@ export class SignInComponent implements OnInit {
       },
       err=>{
         console.error(err);
+        this.authTools.destroySession();
       }
     );
   }

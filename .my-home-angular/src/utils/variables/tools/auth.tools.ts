@@ -20,7 +20,7 @@ export class AuthTools{
         localStorage.setItem(this.ItemName, token);
     }
 
-    public setUser(user: User):void{
+    public setUser(user: User | undefined):void{
         user_config.user = user;
     }
 
@@ -54,13 +54,18 @@ export class AuthTools{
     }
 
     setLastURI(){
-        const href = this.router.url;
+        const href = decodeURIComponent(this.router.url);
         localStorage.setItem(this.URIName, href);
     }
 
     goLastURI(){
         const uri = this.getLastURI();
         this.router.navigate([uri]);
+    }
+
+    destroySession(){
+        this.setToken('');
+        this.setUser(undefined);
     }
 
     checkSession(){

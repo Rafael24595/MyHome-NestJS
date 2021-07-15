@@ -5,6 +5,8 @@ import { AppUtils } from "src/utils/app.utils";
 @Injectable()
 export class FileUtils {
     
+    videoFormats = ['mp4', 'avi'];
+    audioFormats = ['mp3', 'wav'];
     imageFormats = ['png', 'jpg'];
 
     constructor(private appUtils: AppUtils){}
@@ -31,9 +33,17 @@ export class FileUtils {
         return headers;
     }
 
-    typeFile(path:string):boolean{
+    isImage(path:string):boolean{
         const extension = this.appUtils.extname(path);
         return (this.imageFormats.indexOf(extension) != -1);
+    }
+
+    typeFile(path:string):string{
+        const extension = this.appUtils.extname(path);
+        if(this.videoFormats.indexOf(extension) != -1) return 'video';
+        if(this.audioFormats.indexOf(extension) != -1) return 'audio';
+        if(this.imageFormats.indexOf(extension) != -1) return 'image';
+        return 'other';
     }
 
 }

@@ -1,5 +1,6 @@
 import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException, HttpStatus } from '@nestjs/common';
 import { AppUtils } from 'src/utils/app.utils';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { DirectoryService } from './directory.service';
 
 const controller = 'directory';
@@ -9,6 +10,7 @@ export class DirectoryController {
 
     constructor(private directoryService: DirectoryService, private appUtils: AppUtils){}
 
+    @UseGuards(JwtAuthGuard)
     @Get('*')
     async getDirectoryContent(@Request() req, @Res() res){
         const isRoot = this.appUtils.isRoot(controller, req.url);

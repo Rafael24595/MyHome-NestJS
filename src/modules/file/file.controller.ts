@@ -20,7 +20,7 @@ export class FileController {
     async getFile(@Request() req, @Res() res){
 
         const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
-        const isImage = this.fileUtils.typeFile(filePath);
+        const isImage = this.fileUtils.isImage(filePath);
 
         if(isImage){
             const data = readFileSync(filePath);

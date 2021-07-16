@@ -16,7 +16,7 @@
                         <img src="{{mediaPath}}{{logos_name.files.other}}">
                     </ng-container>
                     <ng-container *ngIf='content.type == media_types.image; else elseOther'>
-                        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/{{content.abpath}}">
+                        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/data/{{content.abpath}}">
                     </ng-container>
                     <ng-template #elseOther>
                         

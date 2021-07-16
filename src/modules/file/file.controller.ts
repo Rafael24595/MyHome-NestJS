@@ -1,25 +1,27 @@
+import * as genThumbnail from 'simple-thumbnail';
 import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException } from '@nestjs/common';
 import { readFileSync, statSync } from 'fs';
-import path, { join } from 'path';
 import { AppUtils } from 'src/utils/app.utils';
-import { PathVariables } from 'src/utils/Variables';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
 import { FileService } from './file.service';
 import { FileUtils } from './utils/file.utils';
 
+
 const controller = 'file';
+const get_file_Controller = 'data';
 
 @Controller(controller)
 export class FileController {
 
     constructor(private fileService:FileService, private fileUtils:FileUtils, private appUtils:AppUtils){}
 
+    
     @UseGuards(JwtCookieAuthGuard)
-    @Get('*')
+    @Get(`${get_file_Controller}/*`)
     async getFile(@Request() req, @Res() res){
 
-        const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_file_Controller}`, req.url);console.log(filePath)
         const isImage = this.fileUtils.isImage(filePath);
 
         if(isImage){
@@ -45,6 +47,21 @@ export class FileController {
             videoStream.pipe(res); 
         }
 
+    }
+
+    @Get('thumbnail/*')
+    async getVideoThumbnail(@Request() req, @Res() res){
+ 
+        try {
+            await genThumbnail('C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\private_assets\\media\\video\\movies\\test.mp4', 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp\\kkis.png', '250x?')
+            console.log('Done!')
+        } catch (err) {
+            console.error(err)
+        }
+
+        res.status(200).json({
+            status: true
+        });
     }
 
     @UseGuards(JwtAuthGuard)

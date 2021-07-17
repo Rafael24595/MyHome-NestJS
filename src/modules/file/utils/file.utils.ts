@@ -1,6 +1,7 @@
+import * as genThumbnail from 'simple-thumbnail';
 import { Injectable } from "@nestjs/common";
-import { extname } from "path";
 import { AppUtils } from "src/utils/app.utils";
+import { join } from 'path';
 
 @Injectable()
 export class FileUtils {
@@ -44,6 +45,14 @@ export class FileUtils {
         if(this.audioFormats.indexOf(extension) != -1) return 'audio';
         if(this.imageFormats.indexOf(extension) != -1) return 'image';
         return 'other';
+    }
+
+    async generateThumbnail(filePath: string, thumbnailPath:string): Promise<void>{
+        try {
+            await genThumbnail(join(filePath), thumbnailPath, '250x?')
+        } catch (err) {
+            console.error(err)
+        }
     }
 
 }

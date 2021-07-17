@@ -1,15 +1,16 @@
-import * as genThumbnail from 'simple-thumbnail';
 import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException } from '@nestjs/common';
-import { readFileSync, statSync } from 'fs';
+import { existsSync, readFileSync, statSync } from 'fs';
 import { AppUtils } from 'src/utils/app.utils';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
 import { FileService } from './file.service';
 import { FileUtils } from './utils/file.utils';
+import { join } from 'path';
 
-
+const root = 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp';
 const controller = 'file';
 const get_file_Controller = 'data';
+const get_thumbnail_Controller = 'thumbnail';
 
 @Controller(controller)
 export class FileController {
@@ -21,7 +22,7 @@ export class FileController {
     @Get(`${get_file_Controller}/*`)
     async getFile(@Request() req, @Res() res){
 
-        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_file_Controller}`, req.url);console.log(filePath)
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_file_Controller}`, req.url);
         const isImage = this.fileUtils.isImage(filePath);
 
         if(isImage){
@@ -49,19 +50,22 @@ export class FileController {
 
     }
 
-    @Get('thumbnail/*')
+    @Get(`${get_thumbnail_Controller}/*`)
     async getVideoThumbnail(@Request() req, @Res() res){
  
-        try {
-            await genThumbnail('C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\private_assets\\media\\video\\movies\\test.mp4', 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp\\kkis.png', '250x?')
-            console.log('Done!')
-        } catch (err) {
-            console.error(err)
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_thumbnail_Controller}`, req.url);console.log(filePath)
+        const fileHash = this.appUtils.getFileHash(filePath);console.log(fileHash)
+        const thumbnailPath = join(root, `${fileHash}.png`);
+
+        if(!existsSync(thumbnailPath)){
+            await this.fileUtils.generateThumbnail(filePath, thumbnailPath);
         }
 
-        res.status(200).json({
-            status: true
-        });
+        const data = readFileSync(thumbnailPath);
+
+        res.writeHead(200, {'Content-Type': 'image/jpg'});
+        res.end(data);
+
     }
 
     @UseGuards(JwtAuthGuard)

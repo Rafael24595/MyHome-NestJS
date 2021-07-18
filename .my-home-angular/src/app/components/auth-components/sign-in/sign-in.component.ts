@@ -12,6 +12,8 @@ import { AuthTools } from 'src/utils/variables/tools/auth.tools';
 })
 export class SignInComponent implements OnInit {
 
+  verify = false;
+  
   constructor(private authService: AuthService, private authTools:AuthTools, private router: Router) { }
 
   ngOnInit(): void {
@@ -29,18 +31,23 @@ export class SignInComponent implements OnInit {
   }
 
   verifyToken(){
-    if(this.authTools.getToken())
-    this.authService.verifyToken().subscribe(
-      sucess=>{
-        const user = this.dataToUser(sucess.user);
-        this.authTools.setUserSession(user);
-        this.authTools.goLastURI();
-      },
-      err=>{
-        console.error(err);
-        this.authTools.destroySession();
-      }
-    );
+    if(this.authTools.getToken()){
+      this.authService.verifyToken().subscribe(
+        sucess=>{
+          const user = this.dataToUser(sucess.user);
+          this.authTools.setUserSession(user);
+          this.authTools.goLastURI();
+        },
+        err=>{
+          console.error(err);
+          this.verify = true;
+          this.authTools.destroySession();
+        }
+      );
+    }
+    else{
+      this.verify = true;
+    }
   }
 
   login(){

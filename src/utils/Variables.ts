@@ -1,4 +1,10 @@
-export const PathVariables: {private_assets_root: string, private_assets_media:string} = {
-    private_assets_root: '../../private_assets',
-    private_assets_media: '../../../private_assets/media'
+import { join } from "path";
+
+export const PathVariables: {private_assets_root: string, tmp_thumbnails:string} = {
+    private_assets_root: join(__dirname, '../../private_assets'),
+    tmp_thumbnails: join(__dirname, '../../.tmp')
+}
+
+export const LifeTime: {thumbnail: number} = {
+    thumbnail: 43200000
 }

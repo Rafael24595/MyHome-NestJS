@@ -6,6 +6,7 @@ import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
 import { FileService } from './file.service';
 import { FileUtils } from './utils/file.utils';
 import { join } from 'path';
+import { PathVariables } from 'src/utils/Variables';
 
 const root = 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp';
 const controller = 'file';
@@ -53,9 +54,9 @@ export class FileController {
     @Get(`${get_thumbnail_Controller}/*`)
     async getVideoThumbnail(@Request() req, @Res() res){
  
-        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_thumbnail_Controller}`, req.url);console.log(filePath)
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_thumbnail_Controller}`, req.url);
         const fileHash = this.appUtils.getFileHash(filePath);console.log(fileHash)
-        const thumbnailPath = join(root, `${fileHash}.png`);
+        const thumbnailPath = join(PathVariables.tmp_thumbnails, `${fileHash}.png`);
 
         if(!existsSync(thumbnailPath)){
             await this.fileUtils.generateThumbnail(filePath, thumbnailPath);

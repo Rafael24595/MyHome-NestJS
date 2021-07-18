@@ -11,7 +11,8 @@ export const service_config = {
 export const media_types = {
     audio: 'audio',
     video: 'video',
-    image: 'image'
+    image: 'image',
+    other: 'other'
 }
 
 export const logos_name = {

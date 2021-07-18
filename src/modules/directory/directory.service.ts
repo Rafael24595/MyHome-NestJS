@@ -9,7 +9,7 @@ import { DirectoryUtils } from './utils/directory.utils';
 @Injectable()
 export class DirectoryService {
 
-    constructor(private directoryUtils: DirectoryUtils, private appUtils: AppUtils){}
+    constructor(private directoryUtils: DirectoryUtils){}
 
     async getDirectoryContent(filePath: string, isRoot: boolean): Promise<CreateDirectoryContentDTO[]>{
         

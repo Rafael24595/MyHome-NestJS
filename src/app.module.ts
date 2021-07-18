@@ -12,6 +12,7 @@ import { FileModule } from './modules/file/file.module';
 import { AppUtils } from './utils/app.utils';
 import { DirectoryModule } from './modules/directory/directory.module';
 import { FileUtils } from './modules/file/utils/file.utils';
+import { Shedule } from './utils/shedule.job';
 
 const mongoUri = "mongodb://localhost:27017/myhome";
 
@@ -31,7 +32,8 @@ const mongoUri = "mongodb://localhost:27017/myhome";
     AppService,
     FileService,
     AppUtils,
-    FileUtils
+    FileUtils,
+    Shedule
   ],
   exports:[
     AppUtils,

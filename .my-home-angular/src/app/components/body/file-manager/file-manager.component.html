@@ -1,29 +1,42 @@
 <div style="padding: 10px;">
     <div *ngFor='let content of directoryContent' [routerLink]='["/Manage" + content.abpath]' class="directory-element-horizontal">
-        <div class="img-thumnail" style="display: inline-block;">
-            <ng-container *ngIf='content.back; else backElse'>
+        <ng-container *ngIf='content.back; else backElse'>
+            <div class="img-thumnail" style="display: inline-block;">
                 <img src="{{mediaPath}}{{logos_name.directory.back}}">
-            </ng-container>
-            <ng-template #backElse>
-                <ng-container *ngIf='content.directory; else fileElse'>
+            </div>
+        </ng-container>
+        <ng-template #backElse>
+            <ng-container *ngIf='content.directory; else fileElse'>
+                <div class="img-thumnail" style="display: inline-block;">
                     <img src="{{mediaPath}}{{logos_name.directory.folder}}">
-                </ng-container>
-                <ng-template #fileElse>
-                    <ng-container *ngIf='content.type == media_types.audio'>
+                </div>
+            </ng-container>
+            <ng-template #fileElse>
+                <ng-container *ngIf='content.type == media_types.audio'>
+                    <div class="img-thumnail" style="display: inline-block;">
                         <img src="{{mediaPath}}{{logos_name.files.audio}}">
-                    </ng-container>
-                    <ng-container *ngIf='content.type == media_types.video'>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf='content.type == media_types.video'>
+                    <div class="video-thumnail" style="display: inline-block;">
+                        <div></div>
+                        <div class="video-thumnail-area">
+                            <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/thumbnail/{{content.abpath}}">
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf='content.type == media_types.image'>
+                    <div class="img-thumnail" style="display: inline-block;">
+                        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/thumbnail/{{content.abpath}}">
+                    </div>
+                </ng-container>
+                <ng-container *ngIf='content.type == media_types.other'>
+                    <div class="img-thumnail" style="display: inline-block;">
                         <img src="{{mediaPath}}{{logos_name.files.other}}">
-                    </ng-container>
-                    <ng-container *ngIf='content.type == media_types.image; else elseOther'>
-                        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/data/{{content.abpath}}">
-                    </ng-container>
-                    <ng-template #elseOther>
-                        
-                    </ng-template>
-                </ng-template>
+                    </div>
+                </ng-container>
             </ng-template>
-        </div>
+        </ng-template>
         <p class="directory-element-title">{{content.name}} <span *ngIf='content.extension != ""'>.{{content.extension}}</span></p>
     </div>
 </div>

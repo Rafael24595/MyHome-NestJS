@@ -41,6 +41,39 @@ html, body{
     object-fit: cover;
 }
 
+.video-thumnail{
+    position: relative;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.video-thumnail-area{
+    width: 68% !important;
+    background-image: none !important;
+    background-color: black;
+    overflow: hidden;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.video-thumnail-area img{
+    position: relative;
+    height: 100%;
+    object-fit: contain;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.video-thumnail div{
+    height: 100%;
+    width: 100%;
+    background-image: url(./assets/media/images/icons/movie-roll.png);
+    background-size: contain;
+    position: absolute;
+}
+
 .directory-element-horizontal{
     padding: 10px;
     white-space: nowrap;

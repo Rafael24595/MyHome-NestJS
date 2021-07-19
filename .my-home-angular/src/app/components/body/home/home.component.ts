@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { user_config } from 'src/utils/variables/Globals';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 
 @Component({
   selector: 'app-home',

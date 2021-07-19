@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 
 @Component({
   selector: 'app-collections',

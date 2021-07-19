@@ -15,7 +15,7 @@ export class Shedule{
 
     static thumbnailControl(){
         const time = '0 */12 * * *';
-        scheduleJob(time, Shedule.instance.cleanThumbnailDirectory);
+        scheduleJob(time, Shedule.instance.cleanThumbnailDirectory.bind(Shedule.instance));
     }
 
     async cleanThumbnailDirectory():Promise<{ status: boolean; message: string; }> {

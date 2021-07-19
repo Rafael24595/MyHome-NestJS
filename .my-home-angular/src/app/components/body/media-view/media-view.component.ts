@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Path } from 'src/classes/Path';
 import { logos_name, service_config } from 'src/utils/variables/Globals';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
-import { MiscTools } from 'src/utils/variables/tools/misc.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
+import { MiscTools } from 'src/utils/tools/misc.tools';
 
 @Component({
   selector: 'app-media-view',
@@ -23,7 +23,7 @@ export class MediaViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.authTools.checkSession();
-    this.path = this.miscTools.getChildPath(this.route);console.log(this.path)
+    this.path = MiscTools.getChildPath(this.route);console.log(this.path)
     this.fileType = this.miscTools.typeFile(this.path);
     this.parentDirectory = Path.getParentDirectory(this.path);console.log(this.parentDirectory)
   }

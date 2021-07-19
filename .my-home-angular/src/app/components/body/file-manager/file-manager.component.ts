@@ -4,8 +4,11 @@ import { Subscription } from 'rxjs';
 import { FileManagerService } from 'src/app/services/file-manager/file-manager.service';
 import { Path } from 'src/classes/Path';
 import { logos_name, media_types, service_config } from 'src/utils/variables/Globals';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
-import { MiscTools } from 'src/utils/variables/tools/misc.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
+import { MiscTools } from 'src/utils/tools/misc.tools';
+import { ModalBaseComponent } from '../../modal-components/modal-base.component';
+import { Modal } from 'src/classes/Modal';
+import { ModalTools } from 'src/utils/tools/modal.tools';
 
 @Component({
   selector: 'app-file-manager',
@@ -22,7 +25,7 @@ export class FileManagerComponent implements OnInit {
   media_types = media_types;
   logos_name = logos_name;
 
-  constructor(private authTools:AuthTools, private miscTools: MiscTools, private router: Router, private route: ActivatedRoute, private fileManagerService: FileManagerService) { }
+  constructor(private authTools:AuthTools, private router: Router, private route: ActivatedRoute, private fileManagerService: FileManagerService) { }
 
   ngOnInit(): void {
     this.authTools.checkSession();
@@ -42,8 +45,8 @@ export class FileManagerComponent implements OnInit {
   }
 
   getDirectory(){
-    this.path = this.miscTools.getChildPath(this.route);
-    if(this.miscTools.isFile(this.path)){
+    this.path = MiscTools.getChildPath(this.route);
+    if(MiscTools.isFile(this.path)){
       this.router.navigate([`/Media${this.path}`]);
     }
     else{
@@ -57,6 +60,17 @@ export class FileManagerComponent implements OnInit {
         }
       );
     }
+  }
+
+  showElementOptions(element: Path){
+    const options = ModalTools.generateActions(this, element);
+    ModalBaseComponent.openModal(options);
+  }
+
+  showProperties(path: Path): void{
+    let options = ModalTools.generateDescription(path);;
+    ModalBaseComponent.openModal(options);
+    console.log(path)
   }
 
 }

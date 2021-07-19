@@ -77,7 +77,7 @@ html, body{
 .directory-element-horizontal{
     padding: 10px;
     white-space: nowrap;
-    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
 }
 
 .no-border{
@@ -86,9 +86,52 @@ html, body{
 
 .directory-element-title{
     display: inline-block;
-    width: 80%;
+    width: 70%;
     margin-left: 10px;
     vertical-align: baseline;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.directory-element-menu{
+    display: inline-block;
+    margin-left: 15px;
+    transform: translateY(-50%);
+}
+
+.directory-element-menu div{
+    display: block;
+    width: 4px;
+    height: 4px;
+    margin: 3px;
+    border-radius: 50%;
+    background-color: rgb(65, 65, 65);
+}
+
+#modal-screen{
+    position: absolute;
+    max-width: 80%;
+    background-color: white;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+}
+
+.underline-box{
+    border-bottom: 2px solid gray;
+}
+
+.simple-modal-size{
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.option-element{
+    border-bottom: 0.5px solid gray;
+}
+
+.option-element p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    word-break: break-all;
 }

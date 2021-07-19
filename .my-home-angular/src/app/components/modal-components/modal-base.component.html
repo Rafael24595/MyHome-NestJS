@@ -1,0 +1,6 @@
+<ng-container *ngIf='modal.showModal'>
+    <div id="black-screen" (click)='closeModal()'></div>
+    <ng-container *ngIf='modal.modalType == "simple"'>
+        <app-modal-simple></app-modal-simple>
+    </ng-container>
+</ng-container>

@@ -7,14 +7,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './components/auth-components/sign-in/sign-in.component';
 import { AuthInterceptorService } from './services/auth/auth-interceptor/auth.interceptor.service';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 import { HomeComponent } from './components/body/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FileManagerComponent } from './components/body/file-manager/file-manager.component';
 import { CollectionsComponent } from './components/body/collections/collections.component';
 import { MediaViewComponent } from './components/body/media-view/media-view.component';
-import { MiscTools } from 'src/utils/variables/tools/misc.tools';
+import { MiscTools } from 'src/utils/tools/misc.tools';
+import { ModalBaseComponent } from './components/modal-components/modal-base.component';
+import { ModalSimpleComponent } from './components/modal-components/modal-simple/modal-simple/modal-simple.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { MiscTools } from 'src/utils/variables/tools/misc.tools';
     FooterComponent,
     FileManagerComponent,
     CollectionsComponent,
-    MediaViewComponent
+    MediaViewComponent,
+    ModalBaseComponent,
+    ModalSimpleComponent
   ],
   imports: [
     BrowserModule,

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from "src/app/services/auth/auth.service";
 import { User } from 'src/classes/User';
 import { user_config } from 'src/utils/variables/Globals';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 
 @Component({
   selector: 'app-sign-in',

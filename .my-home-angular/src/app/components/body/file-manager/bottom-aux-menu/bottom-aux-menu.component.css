@@ -1,0 +1,19 @@
+#bottom-aux-menu{
+    position: fixed;
+    top: 79.5%;
+    margin: 0px;
+    padding: 5px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(230, 230, 230, 0.95);
+    border-radius: 1%;
+    z-index: 3;
+}
+
+#bottom-aux-menu p{
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 0.9em;
+}

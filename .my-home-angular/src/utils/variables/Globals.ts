@@ -1,3 +1,4 @@
+import { Path } from "src/classes/Path";
 import { User } from "src/classes/User";
 
 export const service_config = {
@@ -24,6 +25,11 @@ export const logos_name = {
         audio: 'images/icons/audio-file.png',
         other: 'images/icons/unknown-file.png'
     }
+}
+
+export let lastRequest: {path: string, content: Path[]} = {
+    path: '',
+    content: [Path.getEmptyPath()]
 }
 
 export let user_config: {user: User | undefined} = {

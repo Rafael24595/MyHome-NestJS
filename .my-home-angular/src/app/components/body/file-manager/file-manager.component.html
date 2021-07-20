@@ -1,4 +1,4 @@
-<div style="padding: 10px;">
+<div style="padding: 10px; position: relative;">
     <div *ngFor='let content of directoryContent' class="directory-element-horizontal">
         <ng-container *ngIf='content.back; else backElse'>
             <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
@@ -40,4 +40,6 @@
         <p class="directory-element-title" [routerLink]='["/Manage" + content.abpath]'>{{content.name}} <span *ngIf='content.extension != ""'>.{{content.extension}}</span></p>
         <div *ngIf='content.metadata' class="directory-element-menu" (click)='showElementOptions(content)'><div></div><div></div><div></div></div>
     </div>
+    <br><br><br><br>
+    <app-bottom-aux-menu></app-bottom-aux-menu>
 </div>

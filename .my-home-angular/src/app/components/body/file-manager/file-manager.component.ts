@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, NavigationError, Router } from '@angular
 import { Subscription } from 'rxjs';
 import { FileManagerService } from 'src/app/services/file-manager/file-manager.service';
 import { Path } from 'src/classes/Path';
-import { logos_name, media_types, service_config } from 'src/utils/variables/Globals';
+import { lastRequest, logos_name, media_types, service_config } from 'src/utils/variables/Globals';
 import { AuthTools } from 'src/utils/tools/auth.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
 import { ModalBaseComponent } from '../../modal-components/modal-base.component';
@@ -49,16 +49,23 @@ export class FileManagerComponent implements OnInit {
     if(MiscTools.isFile(this.path)){
       this.router.navigate([`/Media${this.path}`]);
     }
-    else{
-      this.fileManagerService.getDirectory(this.path).subscribe(
-        sucess=>{
-          this.directoryContent = sucess.message;
-          console.log(this.directoryContent)
-        },
-        err=>{
-          console.error(err);
-        }
-      );
+    else{console.log()
+      if(lastRequest.path == this.path){console.log('cache')
+        this.directoryContent = lastRequest.content;
+      }
+      else{console.log('pettition')
+        this.fileManagerService.getDirectory(this.path).subscribe(
+          sucess=>{
+            this.directoryContent = sucess.message;
+            lastRequest.path = this.path;
+            lastRequest.content = this.directoryContent;
+          },
+          err=>{
+            console.error(err);
+          }
+        );
+      }
+      console.log(this.directoryContent)
     }
   }
 

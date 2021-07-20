@@ -1,0 +1,21 @@
+.my-home-logo{
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.my-home-logo-title{
+    position: relative;
+    color: rgb(173, 173, 173);
+    font-size: 3em;
+    z-index: 2;
+}
+.my-home-logo-shadow{
+    position: absolute;
+    color: rgb(211, 211, 211);
+    font-size: 3em;
+    left: 3px;
+    top: 3px;
+    z-index: 1;
+}

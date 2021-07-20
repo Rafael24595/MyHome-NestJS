@@ -51,7 +51,7 @@ export class FileManagerComponent implements OnInit {
     }
     else{
       this.fileManagerService.getDirectory(this.path).subscribe(
-        sucess=>{console.log(sucess)
+        sucess=>{
           this.directoryContent = sucess.message;
           console.log(this.directoryContent)
         },
@@ -63,14 +63,11 @@ export class FileManagerComponent implements OnInit {
   }
 
   showElementOptions(element: Path){
-    const options = ModalTools.generateActions(this, element);
-    ModalBaseComponent.openModal(options);
+    ModalTools.generateActions(this, element);
   }
 
   showProperties(path: Path): void{
-    let options = ModalTools.generateDescription(path);;
-    ModalBaseComponent.openModal(options);
-    console.log(path)
+    ModalTools.generateDescription(path);
   }
 
 }

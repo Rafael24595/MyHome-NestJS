@@ -1,13 +1,14 @@
 import { FileManagerComponent } from "src/app/components/body/file-manager/file-manager.component";
+import { ModalBaseComponent } from "src/app/components/modal-components/modal-base.component";
 import { Modal } from "src/classes/Modal";
 import { Path } from "src/classes/Path";
 import { MiscTools } from "./misc.tools";
 
 export class ModalTools{
 
-    static generateDescription(path: Path): Modal{
+    static generateDescription(path: Path): void{
         let options = Modal.setBasicModal(
-            'Elemento',
+            'Detalles',
             [
               {message: {title: 'Ruta', body:`${path.abpath}`}, click: false, funct: undefined, params: undefined}
             ],
@@ -27,11 +28,11 @@ export class ModalTools{
         options.elements.push({message: {title: 'Tamaño', body:`${MiscTools.formatBytes(path.size)}`}, click: false, funct: undefined, params: undefined});
         options.elements.push({message: {title: 'Fecha de creación', body:` ${MiscTools.formatDate(path.birthtime)}`}, click: false, funct: undefined, params: undefined});
 
-        return options;
+        ModalBaseComponent.openModal(options);
 
     }
 
-    static generateActions(instance: FileManagerComponent, path: Path): Modal{
+    static generateActions(instance: FileManagerComponent, path: Path): void{
         const options = Modal.setBasicModal(
             'Opciones',
             [
@@ -43,7 +44,7 @@ export class ModalTools{
             ]
         );
 
-        return options;
+        ModalBaseComponent.openModal(options);
     }
 
 }

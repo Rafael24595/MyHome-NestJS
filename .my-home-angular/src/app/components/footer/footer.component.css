@@ -1,11 +1,26 @@
 #footer-options{
     position: relative;
     text-align: center;
+    display: flex;
+    justify-content: space-evenly;
     top: 50%;
     transform: translateY(-50%);
 }
 
-#footer-options a{
+#footer-options div{
+    display: inline-block;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+#footer-options a{
+    font-size: 1.75em;
+    color: black;
+    text-decoration: none;
+}
+
+#footer-options p{
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 0.75em;
 }

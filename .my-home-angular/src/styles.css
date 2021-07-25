@@ -1,3 +1,8 @@
+@font-face {
+	font-family: my-home-icons;
+	src: url(./assets/fonts/my-home-icons.ttf);
+}
+
 *{
 	font-family: sans-serif;
 }
@@ -8,6 +13,10 @@ html, body{
     margin: 0px;
     padding: 0px;
     background-color: rgb(245, 245, 245);
+}
+
+.menu-icon{
+    font-family: my-home-icons;
 }
 
 .principal-module{

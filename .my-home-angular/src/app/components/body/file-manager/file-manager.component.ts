@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, NavigationError, Router } from '@angular
 import { Subscription } from 'rxjs';
 import { FileManagerService } from 'src/app/services/file-manager/file-manager.service';
 import { Path } from 'src/classes/Path';
-import { logos_name, media_types, service_config } from 'src/utils/variables/Globals';
+import { group_types, logos_name, media_types, order_types, service_config, user_config } from 'src/utils/variables/Globals';
 import { AuthTools } from 'src/utils/tools/auth.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
 import { ModalTools } from 'src/utils/tools/modal.tools';
@@ -20,8 +20,8 @@ export class FileManagerComponent implements OnInit {
   path: string = '';
   directoryContent:Path[] = [];
   mediaPath = '../../../../assets/media/';
-  groupByState = 'directories';
-  orderByState = 'name';
+  groupByState = group_types.directories;
+  orderByState = order_types.name;
   orderDirectionState = true;
   dirLoading = false;
   connection = service_config.connection; 
@@ -37,7 +37,7 @@ export class FileManagerComponent implements OnInit {
         this.getDirectory();
       }
       if (event instanceof NavigationError) {
-          console.log(event.error);
+          console.error(event.error);
       }
     });
     this.getDirectory();
@@ -58,6 +58,7 @@ export class FileManagerComponent implements OnInit {
           sucess=>{
             this.directoryContent = sucess.message;
             this.orderBy(this.orderByState);
+            MiscTools.resetLastElement(this.path);
           },
           err=>{
             console.error(err);
@@ -69,19 +70,19 @@ export class FileManagerComponent implements OnInit {
   groupBy(mode: string){
     switch (mode){
 
-      case "directories":
+      case group_types.directories:
         this.directoryContent = SortTools.Path.groupByDirectory(this.directoryContent, true);
       break;
 
-      case "files":
+      case group_types.files:
         this.directoryContent = SortTools.Path.groupByDirectory(this.directoryContent, false);
       break;
 
-      case "extension":
+      case group_types.extension:
         this.directoryContent = SortTools.Path.groupByExtension(this.directoryContent);
       break;
 
-      case "type":
+      case group_types.type:
         this.directoryContent = SortTools.Path.groupByType(this.directoryContent);
       break;
 
@@ -93,19 +94,19 @@ export class FileManagerComponent implements OnInit {
 
   orderBy(mode: string, direction?: boolean){
 
-    direction = (direction != undefined) ? direction : this.orderDirectionState; console.log(mode, direction)
+    direction = (direction != undefined) ? direction : this.orderDirectionState;
 
     switch (mode){
 
-      case "name":
+      case order_types.name:
         this.directoryContent = SortTools.Path.orderByName(this.directoryContent, direction);
       break;
 
-      case "size":
+      case order_types.size:
         this.directoryContent = SortTools.Path.orderBySize(this.directoryContent, direction);
       break;
 
-      case "birth":
+      case order_types.birth:
         this.directoryContent = SortTools.Path.orderByBirth(this.directoryContent, direction);
       break;
 
@@ -136,6 +137,17 @@ export class FileManagerComponent implements OnInit {
 
   hideLoadMessage(){
     this.dirLoading = false;
+    this.scrollToLastElement();
   }
 
+  scrollToLastElement(){
+    const element = document.getElementById('element-' + user_config.lastElementId.path);
+    const body = document.getElementById('body');
+    if(body && element){
+      const elementTop = element.getBoundingClientRect().top;
+      const elementHeight = element.getBoundingClientRect().height;
+      const scrollValue = elementTop - elementHeight;
+      body.scrollTo(0, scrollValue);
+    }
+  }
 }

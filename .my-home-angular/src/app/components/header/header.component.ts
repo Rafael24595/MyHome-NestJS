@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { user_config } from 'src/utils/variables/Globals';
 
 @Component({
   selector: 'app-header',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+
+  user = user_config.user;
 
   constructor() { }
 

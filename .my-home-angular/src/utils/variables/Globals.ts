@@ -1,4 +1,3 @@
-import { Path } from "src/classes/Path";
 import { User } from "src/classes/User";
 
 export const service_config = {
@@ -16,6 +15,19 @@ export const media_types = {
     other: 'other'
 }
 
+export const group_types = {
+    directories: 'directories',
+    extension: 'extension',
+    files: 'files',
+    type: 'type'
+}
+
+export const order_types = {
+    name: 'name',
+    size: 'size',
+    birth: 'birth'
+}
+
 export const logos_name = {
     directory:{
         folder:'images/icons/folder.png',
@@ -27,6 +39,10 @@ export const logos_name = {
     }
 }
 
-export let user_config: {user: User | undefined} = {
-    user: undefined
+export let user_config: {user: User | undefined, lastElementId: {path: string, pathParent: string}} = {
+    user: undefined,
+    lastElementId: {
+        path: '',
+        pathParent: ''
+    }
 };

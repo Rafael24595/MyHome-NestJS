@@ -1,0 +1,11 @@
+#footer-options{
+    position: relative;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#footer-options a{
+    margin-left: 10px;
+    margin-right: 10px;
+}

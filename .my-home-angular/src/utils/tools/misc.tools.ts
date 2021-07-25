@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { user_config } from "../variables/Globals";
 
 @Injectable()
 export class MiscTools{
@@ -67,5 +68,12 @@ export class MiscTools{
             router.navigate([uri]);
         }, 1);
         
+    }
+
+    static resetLastElement(path: string){
+        if(path != user_config.lastElementId.pathParent){
+          user_config.lastElementId.path = '';
+          user_config.lastElementId.pathParent = '';
+        }
     }
 }

@@ -3,7 +3,7 @@
         <img src="../../../../assets/media/images/gifs/load.gif">
         <p>Cargando...</p>
     </div>
-    <div *ngFor='let content of directoryContent; index as i' class="directory-element-horizontal">
+    <div *ngFor='let content of directoryContent; index as i' class="directory-element-horizontal" id="element-{{content.abpath}}">
         <span *ngIf='i == directoryContent.length - 1'>{{hideLoadMessage()}}</span>
         <ng-container *ngIf='content.back; else backElse'>
             <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">

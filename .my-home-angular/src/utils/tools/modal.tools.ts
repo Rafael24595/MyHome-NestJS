@@ -2,6 +2,7 @@ import { FileManagerComponent } from "src/app/components/body/file-manager/file-
 import { ModalBaseComponent } from "src/app/components/modal-components/modal-base.component";
 import { Modal } from "src/classes/Modal";
 import { Path } from "src/classes/Path";
+import { group_types, order_types } from "../variables/Globals";
 import { MiscTools } from "./misc.tools";
 
 export class ModalTools{
@@ -47,27 +48,27 @@ export class ModalTools{
         ModalBaseComponent.openModal(options);
     }
 
-    static generateGroupBy(instance: FileManagerComponent): void{console.log(instance.directoryContent)
+    static generateGroupBy(instance: FileManagerComponent): void{
         const options = Modal.setBasicModal(
             'Agrupar',
             [
-              {message: {title: '', body: 'Por directorios'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)} , params: "directories"},
-              {message: {title: '', body: 'Por ficheros'}, click: false, funct:(mode: string)=>{instance.groupBy(mode)}, params: "files"},
-              {message: {title: '', body: 'Por extensión'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: "extension"},
-              {message: {title: '', body: 'Por tipo'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: "type"}
+              {message: {title: '', body: 'Por directorios'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)} , params: group_types.directories},
+              {message: {title: '', body: 'Por ficheros'}, click: false, funct:(mode: string)=>{instance.groupBy(mode)}, params: group_types.files},
+              {message: {title: '', body: 'Por extensión'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: group_types.extension},
+              {message: {title: '', body: 'Por tipo'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: group_types.type}
             ]
         );
 
         ModalBaseComponent.openModal(options);
     }
 
-    static generateOrderBy(instance: FileManagerComponent): void{console.log(instance.directoryContent)
+    static generateOrderBy(instance: FileManagerComponent): void{
         const options = Modal.setBasicModal(
             'Agrupar',
             [
-              {message: {title: '', body: 'Por nombre'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)}, params: "name"},
-              {message: {title: '', body: 'Por tamaño'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)} , params: "size"},
-              {message: {title: '', body: 'Por antiguedad'}, click: false, funct:(mode: string)=>{instance.orderBy(mode)}, params: "birth"},
+              {message: {title: '', body: 'Por nombre'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)}, params: order_types.name},
+              {message: {title: '', body: 'Por tamaño'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)} , params: order_types.size},
+              {message: {title: '', body: 'Por antiguedad'}, click: false, funct:(mode: string)=>{instance.orderBy(mode)}, params: order_types.birth},
               {message: {title: '', body: ''}, click: false, funct: undefined, params: undefined},
               {message: {title: '', body: 'Ascendente'}, click: false, funct:(mode: boolean)=>{instance.orderDirection(mode)}, params: true},
               {message: {title: '', body: 'Descendente'}, click: false, funct:(mode: boolean)=>{instance.orderDirection(mode)}, params: false},

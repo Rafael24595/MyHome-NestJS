@@ -1,5 +1,5 @@
 <div style="padding: 10px;">
-    <div [routerLink]='["/Manage" + parentDirectory.abpath]' class="directory-element-horizontal no-border">
+    <div [routerLink]='["/Manage" + parentDirectory.abpath]' (click)='setLastElementId()' class="directory-element-horizontal no-border">
         <div class="img-thumnail" style="display: inline-block;">
             <img src="{{mediaPath}}{{logos_name.directory.back}}">
         </div>

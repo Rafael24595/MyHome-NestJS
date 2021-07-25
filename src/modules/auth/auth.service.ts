@@ -19,7 +19,7 @@ export class AuthService {
 
     async login (user: {nickname: string, password: string}): Promise<{status: boolean, user:CreateUserDTO, access_token: string}>{
         const userExist = await this.userService.getUser(user.nickname);
-        const payload = { nickname: userExist.nickname, email: userExist.email };console.log(payload)
+        const payload = { nickname: userExist.nickname, email: userExist.email };
         return{
             status: true,
             user:userExist,

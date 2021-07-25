@@ -3,12 +3,11 @@ import { ActivatedRoute, NavigationEnd, NavigationError, Router } from '@angular
 import { Subscription } from 'rxjs';
 import { FileManagerService } from 'src/app/services/file-manager/file-manager.service';
 import { Path } from 'src/classes/Path';
-import { lastRequest, logos_name, media_types, service_config } from 'src/utils/variables/Globals';
+import { logos_name, media_types, service_config } from 'src/utils/variables/Globals';
 import { AuthTools } from 'src/utils/tools/auth.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
-import { ModalBaseComponent } from '../../modal-components/modal-base.component';
-import { Modal } from 'src/classes/Modal';
 import { ModalTools } from 'src/utils/tools/modal.tools';
+import { SortTools } from 'src/utils/tools/sort.tools';
 
 @Component({
   selector: 'app-file-manager',
@@ -21,6 +20,10 @@ export class FileManagerComponent implements OnInit {
   path: string = '';
   directoryContent:Path[] = [];
   mediaPath = '../../../../assets/media/';
+  groupByState = 'directories';
+  orderByState = 'name';
+  orderDirectionState = true;
+  dirLoading = false;
   connection = service_config.connection; 
   media_types = media_types;
   logos_name = logos_name;
@@ -49,24 +52,73 @@ export class FileManagerComponent implements OnInit {
     if(MiscTools.isFile(this.path)){
       this.router.navigate([`/Media${this.path}`]);
     }
-    else{console.log()
-      if(lastRequest.path == this.path){console.log('cache')
-        this.directoryContent = lastRequest.content;
-      }
-      else{console.log('pettition')
+    else{
+        this.showLoadMessage();
         this.fileManagerService.getDirectory(this.path).subscribe(
           sucess=>{
             this.directoryContent = sucess.message;
-            lastRequest.path = this.path;
-            lastRequest.content = this.directoryContent;
+            this.orderBy(this.orderByState);
           },
           err=>{
             console.error(err);
           }
         );
-      }
-      console.log(this.directoryContent)
     }
+  }
+
+  groupBy(mode: string){
+    switch (mode){
+
+      case "directories":
+        this.directoryContent = SortTools.Path.groupByDirectory(this.directoryContent, true);
+      break;
+
+      case "files":
+        this.directoryContent = SortTools.Path.groupByDirectory(this.directoryContent, false);
+      break;
+
+      case "extension":
+        this.directoryContent = SortTools.Path.groupByExtension(this.directoryContent);
+      break;
+
+      case "type":
+        this.directoryContent = SortTools.Path.groupByType(this.directoryContent);
+      break;
+
+    }
+
+    this.groupByState = mode;
+
+  }
+
+  orderBy(mode: string, direction?: boolean){
+
+    direction = (direction != undefined) ? direction : this.orderDirectionState; console.log(mode, direction)
+
+    switch (mode){
+
+      case "name":
+        this.directoryContent = SortTools.Path.orderByName(this.directoryContent, direction);
+      break;
+
+      case "size":
+        this.directoryContent = SortTools.Path.orderBySize(this.directoryContent, direction);
+      break;
+
+      case "birth":
+        this.directoryContent = SortTools.Path.orderByBirth(this.directoryContent, direction);
+      break;
+
+    }
+
+    this.orderByState = mode;
+    this.groupBy(this.groupByState);
+
+  }
+
+  orderDirection(mode: boolean){
+    this.orderBy(this.orderByState, mode);
+    this.orderDirectionState = mode;
   }
 
   showElementOptions(element: Path){
@@ -75,6 +127,15 @@ export class FileManagerComponent implements OnInit {
 
   showProperties(path: Path): void{
     ModalTools.generateDescription(path);
+  }
+
+  showLoadMessage(){
+    this.directoryContent = [];
+    this.dirLoading = true;
+  }
+
+  hideLoadMessage(){
+    this.dirLoading = false;
   }
 
 }

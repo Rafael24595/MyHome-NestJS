@@ -31,7 +31,7 @@ export class Path{
         return new Path('', false, '', '', 0, '' , {directory: 0, file: 0}, 0, 0, false, false);
     }
 
-    static getParentDirectory(path: string): Path{console.log(path)
+    static getParentDirectory(path: string): Path{
         let pathArray = path.split('/');
         pathArray.pop();
         const parentPath = pathArray.join('/');

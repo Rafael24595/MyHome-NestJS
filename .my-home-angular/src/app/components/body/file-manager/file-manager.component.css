@@ -1,0 +1,16 @@
+.loading-dir{
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.loading-dir p{
+    font-weight: bold ;
+}
+
+.loading-dir img{
+    height: 50px;
+    width: 50px;
+}

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Injectable()
 export class MiscTools{
@@ -36,10 +36,10 @@ export class MiscTools{
     }
 
     static getChildPath(route: ActivatedRoute): string{
-        const path = MiscTools.decodeURIComponentFull(location.pathname.toString());console.log(path)
-        const parentPath = route.snapshot.routeConfig?.path;console.log(parentPath)
+        const path = MiscTools.decodeURIComponentFull(location.pathname.toString());
+        const parentPath = route.snapshot.routeConfig?.path;
         const regexPattern = `.*${parentPath}`;
-        var regex = new RegExp(regexPattern);console.log(path.replace(regex, ''))
+        var regex = new RegExp(regexPattern);
         return path.replace(regex, '');
     }
 
@@ -60,4 +60,12 @@ export class MiscTools{
         return dateFormat;
     }
 
+    static refreshPage(router: Router){
+        const uri = router.url;
+        router.navigate(['']);
+        setTimeout(() => {
+            router.navigate([uri]);
+        }, 1);
+        
+    }
 }

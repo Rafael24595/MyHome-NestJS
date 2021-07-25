@@ -16,7 +16,6 @@ export class DirectoryController {
         const isRoot = this.appUtils.isRoot(controller, req.url);
         const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
         const content = await this.directoryService.getDirectoryContent(filePath, isRoot);
-        console.log(content)
 
         res.status(HttpStatus.OK).json({
             status: true,

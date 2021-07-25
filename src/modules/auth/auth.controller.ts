@@ -17,7 +17,7 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Get('token/profile')
-    async getProfile(@Request() req, @Res() res){console.log('in')
+    async getProfile(@Request() req, @Res() res){
         const user = await this.userService.getUser(req.user.nickname);
         res.status(HttpStatus.OK).json({
             status: true,

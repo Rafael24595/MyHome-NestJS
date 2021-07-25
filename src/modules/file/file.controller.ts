@@ -55,7 +55,7 @@ export class FileController {
     async getVideoThumbnail(@Request() req, @Res() res){
  
         const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_thumbnail_Controller}`, req.url);
-        const fileHash = this.appUtils.getFileHash(filePath);console.log(fileHash)
+        const fileHash = this.appUtils.getFileHash(filePath);
         const thumbnailPath = join(PathVariables.tmp_thumbnails, `${fileHash}.png`);
 
         if(!existsSync(thumbnailPath)){

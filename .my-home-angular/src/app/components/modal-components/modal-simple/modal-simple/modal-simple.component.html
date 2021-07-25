@@ -7,12 +7,17 @@
     <div class="underline-box"></div>
     <br>
     <div style="padding-left: 15px;padding-right: 15px;">
-        <div *ngFor='let element of modal.modalDataSimple.elements' class="option-element">
-            <ng-container *ngIf='element.funct; else elseFunct'>
-                <p (click)='selectOption(element)' style="cursor: pointer;"><span><b>{{element.message.title}}</b></span><span *ngIf='element.message.title != "" && element.message.body != ""'><b>: </b></span><span>{{element.message.body}}</span></p>
+        <div *ngFor='let element of modal.modalDataSimple.elements'>
+            <ng-container *ngIf='element.message.title == "" && element.message.body == "" && ! element.funct; else elseContent'>
+                <br>
             </ng-container>
-            <ng-template #elseFunct>
-                <p><span><b>{{element.message.title}}</b></span><span *ngIf='element.message.title != "" && element.message.body != ""'><b>: </b><br>&nbsp;&nbsp;</span><span>{{element.message.body}}</span></p>
+            <ng-template #elseContent>
+                <ng-container *ngIf='element.funct; else elseFunct'>
+                    <p class="option-element" (click)='selectOption(element)' style="cursor: pointer;"><span><b>{{element.message.title}}</b></span><span *ngIf='element.message.title != "" && element.message.body != ""'><b>: </b></span><span>{{element.message.body}}</span></p>
+                </ng-container>
+                <ng-template #elseFunct>
+                    <p class="option-element"><span><b>{{element.message.title}}</b></span><span *ngIf='element.message.title != "" && element.message.body != ""'><b>: </b><br>&nbsp;&nbsp;</span><span>{{element.message.body}}</span></p>
+                </ng-template>
             </ng-template>
             <div></div>
         </div>

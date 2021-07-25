@@ -27,11 +27,6 @@ export const logos_name = {
     }
 }
 
-export let lastRequest: {path: string, content: Path[]} = {
-    path: '',
-    content: [Path.getEmptyPath()]
-}
-
 export let user_config: {user: User | undefined} = {
     user: undefined
 };

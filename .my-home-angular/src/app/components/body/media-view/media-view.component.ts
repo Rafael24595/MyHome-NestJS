@@ -23,9 +23,9 @@ export class MediaViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.authTools.checkSession();
-    this.path = MiscTools.getChildPath(this.route);console.log(this.path)
+    this.path = MiscTools.getChildPath(this.route);
     this.fileType = this.miscTools.typeFile(this.path);
-    this.parentDirectory = Path.getParentDirectory(this.path);console.log(this.parentDirectory)
+    this.parentDirectory = Path.getParentDirectory(this.path);
   }
 
 }

@@ -47,4 +47,34 @@ export class ModalTools{
         ModalBaseComponent.openModal(options);
     }
 
+    static generateGroupBy(instance: FileManagerComponent): void{console.log(instance.directoryContent)
+        const options = Modal.setBasicModal(
+            'Agrupar',
+            [
+              {message: {title: '', body: 'Por directorios'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)} , params: "directories"},
+              {message: {title: '', body: 'Por ficheros'}, click: false, funct:(mode: string)=>{instance.groupBy(mode)}, params: "files"},
+              {message: {title: '', body: 'Por extensión'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: "extension"},
+              {message: {title: '', body: 'Por tipo'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: "type"}
+            ]
+        );
+
+        ModalBaseComponent.openModal(options);
+    }
+
+    static generateOrderBy(instance: FileManagerComponent): void{console.log(instance.directoryContent)
+        const options = Modal.setBasicModal(
+            'Agrupar',
+            [
+              {message: {title: '', body: 'Por nombre'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)}, params: "name"},
+              {message: {title: '', body: 'Por tamaño'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)} , params: "size"},
+              {message: {title: '', body: 'Por antiguedad'}, click: false, funct:(mode: string)=>{instance.orderBy(mode)}, params: "birth"},
+              {message: {title: '', body: ''}, click: false, funct: undefined, params: undefined},
+              {message: {title: '', body: 'Ascendente'}, click: false, funct:(mode: boolean)=>{instance.orderDirection(mode)}, params: true},
+              {message: {title: '', body: 'Descendente'}, click: false, funct:(mode: boolean)=>{instance.orderDirection(mode)}, params: false},
+            ]
+        );
+
+        ModalBaseComponent.openModal(options);
+    }
+
 }

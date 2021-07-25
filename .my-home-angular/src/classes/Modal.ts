@@ -14,7 +14,7 @@ export class Modal{
         this.elements = elements;
         this.timer = timer;
         this.question = question;
-        this.actions = (actions != undefined) ? actions : true;console.log(this.actions, actions, this.actions)
+        this.actions = (actions != undefined) ? actions : true;
     }
 
     static getEmptyModal(): Modal{

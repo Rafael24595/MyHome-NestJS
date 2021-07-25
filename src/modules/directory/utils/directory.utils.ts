@@ -87,7 +87,7 @@ export class DirectoryUtils{
 
       async getDirectory(absolutePath: string){
 
-        const fileStat = statSync(absolutePath);console.log("thx:" + normalize(this.simplifyPath(absolutePath)))
+        const fileStat = statSync(absolutePath);
 
         const item: DirectoryContent = {
           abpath: this.simplifyPath(absolutePath),

@@ -18,6 +18,7 @@ import { MiscTools } from 'src/utils/tools/misc.tools';
 import { ModalBaseComponent } from './components/modal-components/modal-base.component';
 import { ModalSimpleComponent } from './components/modal-components/modal-simple/modal-simple/modal-simple.component';
 import { BottomAuxMenuComponent } from './components/body/file-manager/bottom-aux-menu/bottom-aux-menu.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { BottomAuxMenuComponent } from './components/body/file-manager/bottom-au
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ScrollingModule
   ],
   providers: [
     AuthTools,

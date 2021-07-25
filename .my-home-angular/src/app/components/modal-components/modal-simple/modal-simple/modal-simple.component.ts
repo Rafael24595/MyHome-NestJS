@@ -24,6 +24,8 @@ export class ModalSimpleComponent implements OnInit {
   selectOption(element:ModalElementsInterface): void{ 
     if(element.funct)
       element.funct(element.params);
+    if(element.click)
+      this.closeModal();
   }
 
 }

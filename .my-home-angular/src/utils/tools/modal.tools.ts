@@ -52,10 +52,10 @@ export class ModalTools{
         const options = Modal.setBasicModal(
             'Agrupar',
             [
-              {message: {title: '', body: 'Por directorios'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)} , params: group_types.directories},
-              {message: {title: '', body: 'Por ficheros'}, click: false, funct:(mode: string)=>{instance.groupBy(mode)}, params: group_types.files},
-              {message: {title: '', body: 'Por extensión'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: group_types.extension},
-              {message: {title: '', body: 'Por tipo'}, click: false, funct: (mode: string)=>{instance.groupBy(mode)}, params: group_types.type}
+              {message: {title: '', body: 'Por directorios'}, click: true, funct: (mode: string)=>{instance.groupBy(mode)} , params: group_types.directories},
+              {message: {title: '', body: 'Por ficheros'}, click: true, funct:(mode: string)=>{instance.groupBy(mode)}, params: group_types.files},
+              {message: {title: '', body: 'Por extensión'}, click: true, funct: (mode: string)=>{instance.groupBy(mode)}, params: group_types.extension},
+              {message: {title: '', body: 'Por tipo'}, click: true, funct: (mode: string)=>{instance.groupBy(mode)}, params: group_types.type}
             ]
         );
 
@@ -66,9 +66,9 @@ export class ModalTools{
         const options = Modal.setBasicModal(
             'Agrupar',
             [
-              {message: {title: '', body: 'Por nombre'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)}, params: order_types.name},
-              {message: {title: '', body: 'Por tamaño'}, click: false, funct: (mode: string)=>{instance.orderBy(mode)} , params: order_types.size},
-              {message: {title: '', body: 'Por antiguedad'}, click: false, funct:(mode: string)=>{instance.orderBy(mode)}, params: order_types.birth},
+              {message: {title: '', body: 'Por nombre'}, click: true, funct: (mode: string)=>{instance.orderBy(mode)}, params: order_types.name},
+              {message: {title: '', body: 'Por tamaño'}, click: true, funct: (mode: string)=>{instance.orderBy(mode)} , params: order_types.size},
+              {message: {title: '', body: 'Por antiguedad'}, click: true, funct:(mode: string)=>{instance.orderBy(mode)}, params: order_types.birth},
               {message: {title: '', body: ''}, click: false, funct: undefined, params: undefined},
               {message: {title: '', body: 'Ascendente'}, click: false, funct:(mode: boolean)=>{instance.orderDirection(mode)}, params: true},
               {message: {title: '', body: 'Descendente'}, click: false, funct:(mode: boolean)=>{instance.orderDirection(mode)}, params: false},

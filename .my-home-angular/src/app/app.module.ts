@@ -19,6 +19,7 @@ import { ModalBaseComponent } from './components/modal-components/modal-base.com
 import { ModalSimpleComponent } from './components/modal-components/modal-simple/modal-simple/modal-simple.component';
 import { BottomAuxMenuComponent } from './components/body/file-manager/bottom-aux-menu/bottom-aux-menu.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AudioBarComponent } from './components/audio-bar/audio-bar/audio-bar.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MediaViewComponent,
     ModalBaseComponent,
     ModalSimpleComponent,
-    BottomAuxMenuComponent
+    BottomAuxMenuComponent,
+    AudioBarComponent
   ],
   imports: [
     BrowserModule,

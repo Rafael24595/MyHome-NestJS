@@ -1,64 +1,62 @@
 <div (mousemove)='mouseDrag($event)' (touchmove)='mouseDrag($event)' (mouseleave)='mouseUpAudio();mouseUpVolume();mouseDrag($event)' (mouseup)='mouseUpAudio();mouseUpVolume()' (touchend)='mouseUpAudio();mouseUpVolume()'>
-    <div id="bar-ajustable-width" style="display: inline-block; width: {{greatBar}}%;">
-        <p class="timeTag" style="margin-left: {{timePointerPosition}}px; display:{{overBar}}; ">{{timePointer}}</p>
-        <div style="width: {{barAudioSize}}px;" id='audio-bar-padding' (mousedown)='toClick($event)' (touchstart)='toClick($event)'></div>
-        <div style="width: {{barAudioSizeProgress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>
-        <div style="width: {{barAudioSize}}px;" id='audio-bar'>
-            <div style="margin-left: {{pointAudioPosition}}px;" id='Meatball' (mousedown)='mouseDownAudio()'></div>
+    <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
+        <button tooltip="Volumen" placement="bottom" (click)='muteVol()' class="my-home-icons-font cursor-pointer button-style button-clear">{{volLogo}}</button>
+        <div style="display: inline-block; vertical-align: bottom;">
+            <div style="width: {{barVolumeSize}}px;" id='vol-bar-padding' (mousedown)='toClick($event)'></div>
+            <div style="width: {{barVolumeSizeProgress}}px; background-color: {{barVolColor}};" id='vol-bar-progress'></div>
+            <div style="width: {{barVolumeSize}}px; background-color: {{barVolColorBack}};" id='vol-bar'>
+                <div style="margin-left: {{pointVolumePosition}}px; background-color: {{babyMeatballColor}};" id='Baby-Meatball' (mousedown)='mouseDownVolume()'></div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div style="display: inline-block; margin-right: 10px; margin-left: 10px; margin-left: 5px; margin-right: 5px;">
+            <span style="color: white; font-weight: bold;">{{time}}</span>
+        </div>
+        <div id="bar-ajustable-width" style="display: inline-block; width: {{greatBar}}%;">
+            <p class="timeTag" style="margin-left: {{timePointerPosition}}px; display:{{overBar}}; ">{{timePointer}}</p>
+            <div style="width: {{barAudioSize}}px;" id='audio-bar-padding' (mousedown)='toClick($event)' (touchstart)='toClick($event)'></div>
+            <div style="width: {{barAudioSizeProgress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>
+            <div style="width: {{barAudioSize}}px;" id='audio-bar'>
+                <div style="margin-left: {{pointAudioPosition}}px;" id='Meatball' (mousedown)='mouseDownAudio()'></div>
+            </div>
+        </div>
+        <div style="display: inline-block; margin-right: 10px; margin-left: 10px; margin-left: 5px; margin-right: 5px;">
+            <span style="color: white; font-weight: bold;">{{maxTime}}</span>
         </div>
     </div>
     <div class="buttonsDisplay" style="background-color: rgba(0,0,25,0.3); padding: 10px;">
         <div>
             <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
                 <ng-container *ngIf='buttonGear'>
-                    <button tooltip="Anterior" placement="bottom" (click)='calculeNextThemePosition($event)' value="-1" class="my-vinyl-icons-font font-size-150 button-style cursor-pointer button-clear" >$</button>
-                    <button tooltip="Siguiente" placement="bottom" (click)='calculeNextThemePosition($event)' value="1" class="my-vinyl-icons-font font-size-150 button-style cursor-pointer button-clear">%</button>
-                    <button tooltip="Parar/Reproducir" placement="bottom" (click)='setPlayPause()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style button-clear">{{playLogo}}</button>
-                    <button tooltip="Parar" placement="bottom" (click)='stopAudio()' class="my-vinyl-icons-font font-size-150 button-style button-clear cursor-pointer {{buttonResponsiveII}}">#</button>
-                </ng-container>
-                <ng-container *ngIf='!buttonGear'>
-                    <button tooltip="Anterior" placement="bottom" (click)='calculeNextThemePosition($event)' value="-1" class="my-vinyl-icons-font font-size-150 button-style cursor-pointer" >N</button>
-                    <button tooltip="Siguiente" placement="bottom" (click)='calculeNextThemePosition($event)' value="1" class="my-vinyl-icons-font font-size-150 button-style cursor-pointer">O</button>
-                    <button tooltip="Parar/Reproducir" placement="bottom" (click)='setPlayPause()' class="my-vinyl-icons-font font-size-150 button-style cursor-pointer" style="background-color: {{playButtonColor}};">{{playLogo}}</button>
-                    <button tooltip="Parar" placement="bottom" (click)='stopAudio()' class="my-vinyl-icons-font font-size-150 button-style cursor-pointer {{buttonResponsiveII}}">M</button>
+                    <button tooltip="Anterior" placement="bottom" (click)='calculeNextThemePosition($event)' value="-1" class="my-home-icons-font button-style cursor-pointer button-clear" >$</button>
+                    <button tooltip="Parar/Reproducir" placement="bottom" (click)='setPlayPause()' class="my-home-icons-font cursor-pointer button-style button-clear">{{playLogo}}</button>
+                    <button tooltip="Siguiente" placement="bottom" (click)='calculeNextThemePosition($event)' value="1" class="my-home-icons-font button-style cursor-pointer button-clear">%</button>
                 </ng-container>
             </div>
-            <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
-                <!-- background-color: {{muteColor}};-->
-                <button tooltip="Volumen" placement="bottom" (click)='muteVol()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style button-clear">{{volLogo}}</button>
-                <div style="display: inline-block; vertical-align: bottom;">
-                    <div style="width: {{barVolumeSize}}px;" id='vol-bar-padding' (mousedown)='toClick($event)'></div>
-                    <div style="width: {{barVolumeSizeProgress}}px; background-color: {{barVolColor}};" id='vol-bar-progress'></div>
-                    <div style="width: {{barVolumeSize}}px; background-color: {{barVolColorBack}};" id='vol-bar'>
-                        <div style="margin-left: {{pointVolumePosition}}px; background-color: {{babyMeatballColor}};" id='Baby-Meatball' (mousedown)='mouseDownVolume()'></div>
-                    </div>
-                </div>
-            </div>
-            <div class="display-inline" style="margin-right: 10px; margin-left: 10px; margin-left: 5px; margin-right: 5px;">
-                <span style="color: white; font-weight: bold;">{{time}}</span>
-            </div>
+            
             <ng-container *ngIf='buttonGear'>
                 <div id="button-gear-container" class="display-inline" style="position: relative;">
-                    <button id="button-gear" tooltip="Desplegar opciones" placement="bottom" (click)='showButtonContainer()' class="my-vinyl-icons-font font-size-150 button-style button-clear cursor-pointer {{buttonContainerState}}" style="margin-left: 5px; margin-right: 5px;">J</button>
+                    <button id="button-gear" tooltip="Desplegar opciones" placement="bottom" (click)='showButtonContainer()' class="my-home-icons-font button-style button-clear cursor-pointer {{buttonContainerState}}" style="margin-left: 5px; margin-right: 5px;">J</button>
                     <div style="position: relative; display: inline-block; vertical-align: top;">
                         <div id="button-container" class="{{buttonContainerState}}">
                             <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
                                 <div class="display-inline" style="width: 120px; margin-left: 5px; margin-right: 5px;">
                                     <div style="text-align: left;">
                                         <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Aleatorio:</p>
-                                        <button (click)='randomReproduction()' style="position: absolute; left: 100%; color: {{randomColor}}; transform: translateX(-100%);" class="my-vinyl-icons-font font-size-150 cursor-pointer button-clear">&</button>
+                                        <button (click)='randomReproduction()' style="position: absolute; left: 100%; color: {{randomColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">&</button>
                                     </div>
                                     <div style="text-align: left;">
                                         <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Loop lista:</p>
-                                        <button (click)='loopListReproduction()' style="position: absolute; left: 100%; color: {{loopListColor}}; transform: translateX(-100%);" class="my-vinyl-icons-font font-size-150 cursor-pointer button-clear">'</button>
+                                        <button (click)='loopListReproduction()' style="position: absolute; left: 100%; color: {{loopListColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">'</button>
                                     </div>
                                     <div style="text-align: left;">
                                         <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Loop tema:</p>
-                                        <button (click)='loopAudio()' style="position: absolute; left: 100%; color: {{loopColor}}; transform: translateX(-100%);" class="my-vinyl-icons-font font-size-150 cursor-pointer button-clear">(</button>
+                                        <button (click)='loopAudio()' style="position: absolute; left: 100%; color: {{loopColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">(</button>
                                     </div>
                                     <div style="text-align: left;">
                                         <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Inverso: </p>
-                                        <button (click)='revertAudioImplement()' style="position: absolute; left: 100%; color: {{reverseColor}}; transform: translateX(-100%);" class="my-vinyl-icons-font font-size-150 cursor-pointer button-clear">F</button>
+                                        <button (click)='revertAudioImplement()' style="position: absolute; left: 100%; color: {{reverseColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">F</button>
                                     </div>
                                 </div>
                                 <br><br>
@@ -94,20 +92,20 @@
             </div>
             <div class="display-inline {{buttonResponsiveI}}" style="margin-left: 5px; margin-right: 5px;">
                 <ng-container *ngIf='buttonGear'>
-                    <button tooltip="Aleatorio" placement="bottom" (click)='randomReproduction()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style button-clear" style="color: {{randomColor}};">&</button>
-                    <button tooltip="Repetir lista" placement="bottom" (click)='loopListReproduction()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style button-clear" style="color: {{loopListColor}};">'</button>
-                    <button tooltip="Repetir tema" placement="bottom" (click)='loopAudio()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style button-clear" style="color: {{loopColor}};">(</button>
+                    <button tooltip="Aleatorio" placement="bottom" (click)='randomReproduction()' class="my-home-icons-font cursor-pointer button-style button-clear" style="color: {{randomColor}};">&</button>
+                    <button tooltip="Repetir lista" placement="bottom" (click)='loopListReproduction()' class="my-home-icons-font cursor-pointer button-style button-clear" style="color: {{loopListColor}};">'</button>
+                    <button tooltip="Repetir tema" placement="bottom" (click)='loopAudio()' class="my-home-icons-font cursor-pointer button-style button-clear" style="color: {{loopColor}};">(</button>
                     <div class="display-inline">
-                        <button tooltip="Reproduccion inversa" placement="bottom" (click)='revertAudioImplement()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style button-clear" style="margin-right: 5px; color: {{reverseColor}}">F</button>
+                        <button tooltip="Reproduccion inversa" placement="bottom" (click)='revertAudioImplement()' class="my-home-icons-font cursor-pointer button-style button-clear" style="margin-right: 5px; color: {{reverseColor}}">F</button>
                         <img *ngIf='!buttonGear' style="position: absolute; margin-left: 5px; height: 30px; vertical-align: bottom; visibility: {{loadGif}};" id="loadGif" src="{{mediaPath}}/images/load.gif">
                     </div>
                 </ng-container>
                 <ng-container *ngIf='!buttonGear'>
-                    <button tooltip="Aleatorio" placement="bottom" (click)='randomReproduction()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style" style="background-color: {{randomColor}};">P</button>
-                    <button tooltip="Repetir lista" placement="bottom" (click)='loopListReproduction()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style" style="background-color: {{loopListColor}};">Q</button>
-                    <button tooltip="Repetir tema" placement="bottom" (click)='loopAudio()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style" style="background-color: {{loopColor}};">R</button>
+                    <button tooltip="Aleatorio" placement="bottom" (click)='randomReproduction()' class="my-home-icons-font cursor-pointer button-style" style="background-color: {{randomColor}};">P</button>
+                    <button tooltip="Repetir lista" placement="bottom" (click)='loopListReproduction()' class="my-home-icons-font cursor-pointer button-style" style="background-color: {{loopListColor}};">Q</button>
+                    <button tooltip="Repetir tema" placement="bottom" (click)='loopAudio()' class="my-home-icons-font cursor-pointer button-style" style="background-color: {{loopColor}};">R</button>
                     <div class="display-inline">
-                        <button tooltip="Reproduccion inversa" placement="bottom" (click)='revertAudioImplement()' class="my-vinyl-icons-font font-size-150 cursor-pointer button-style" style="margin-right: 5px; background-color: {{reverseColor}};">S</button>
+                        <button tooltip="Reproduccion inversa" placement="bottom" (click)='revertAudioImplement()' class="my-home-icons-font cursor-pointer button-style" style="margin-right: 5px; background-color: {{reverseColor}};">S</button>
                         <img style="position: absolute; margin-left: 5px; height: 30px; vertical-align: bottom; visibility: {{loadGif}};" id="loadGif" src="{{mediaPath}}/images/load.gif">
                     </div>
                 </ng-container>

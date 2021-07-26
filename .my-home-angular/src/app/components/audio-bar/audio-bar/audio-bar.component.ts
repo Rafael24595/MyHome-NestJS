@@ -132,6 +132,7 @@ export class AudioBarComponent implements OnInit {
   pointAudioPosition = 0;
   speed = 1; 
   time = '00:00';
+  maxTime = '00:00';
   overBar = 'none'
   timePointer = this.time;
   timePointerPosition = 0;

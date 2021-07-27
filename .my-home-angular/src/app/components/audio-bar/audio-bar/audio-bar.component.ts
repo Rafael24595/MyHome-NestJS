@@ -30,7 +30,7 @@ export class AudioBarComponent implements OnInit {
     window.onresize = ()=>{
       let element = document.getElementById('bar-ajustable-width');
       if(element){
-        this.barAudioSize = element.offsetWidth;
+        this.barAudioSize = element.offsetWidth - 30; //TODO: Sacar valor del padding
       }
       if(window.innerWidth > 1520){
         this.gearShow = false;
@@ -48,7 +48,7 @@ export class AudioBarComponent implements OnInit {
     setTimeout(()=>{
       let element = document.getElementById('bar-ajustable-width');
       if(element){
-        this.barAudioSize = element.offsetWidth;
+        this.barAudioSize = element.offsetWidth - 30; //TODO: Sacar valor del padding
       }
       else{
         this.barAudioSize = 525;

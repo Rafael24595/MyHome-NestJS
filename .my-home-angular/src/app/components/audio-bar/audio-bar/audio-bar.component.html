@@ -9,11 +9,11 @@
             </div>
         </div>
     </div>
-    <div>
+    <div style="display: flex;">
         <div style="display: inline-block; margin-right: 10px; margin-left: 10px; margin-left: 5px; margin-right: 5px;">
             <span style="color: white; font-weight: bold;">{{time}}</span>
         </div>
-        <div id="bar-ajustable-width" style="display: inline-block; width: {{greatBar}}%;">
+        <div id="bar-ajustable-width" style="display: inline-block; width: -webkit-fill-available; overflow: hidden; padding-left: 15px; padding-right: 15px;">
             <p class="timeTag" style="margin-left: {{timePointerPosition}}px; display:{{overBar}}; ">{{timePointer}}</p>
             <div style="width: {{barAudioSize}}px;" id='audio-bar-padding' (mousedown)='toClick($event)' (touchstart)='toClick($event)'></div>
             <div style="width: {{barAudioSizeProgress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>

@@ -1,114 +1,79 @@
-<div (mousemove)='mouseDrag($event)' (touchmove)='mouseDrag($event)' (mouseleave)='mouseUpAudio();mouseUpVolume();mouseDrag($event)' (mouseup)='mouseUpAudio();mouseUpVolume()' (touchend)='mouseUpAudio();mouseUpVolume()'>
-    <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
-        <button tooltip="Volumen" placement="bottom" (click)='muteVol()' class="my-home-icons-font cursor-pointer button-style button-clear">{{volLogo}}</button>
-        <div style="display: inline-block; vertical-align: bottom;">
-            <div style="width: {{barVolumeSize}}px;" id='vol-bar-padding' (mousedown)='toClick($event)'></div>
+<div (mousemove)='DragEvent($event, this)' (touchmove)='DragEvent($event, this)' (mouseleave)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this);DragEvent($event, this)' (mouseup)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this)' (touchend)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this);DragEvent($event, this)'>
+    <div class="display-inline" style="display: flex;">
+        <div>
+            <button tooltip="Volumen" placement="bottom" (click)='muteVol()' class="my-home-icons-font cursor-pointer button-style button-clear">{{volLogo}}</button>
+        </div>
+        <div id="bar-ajustable-vol-width" style="position: relative; overflow: hidden; display: inline-block; padding-left: 15px; padding-right: 15px; vertical-align: bottom; width: -webkit-fill-available;">
+            <div style="width: {{barVolumeSize}}px;" id='vol-bar-padding' (mousedown)='ToClick($event, this)' (touchstart)='ToClick($event, this)'></div>
             <div style="width: {{barVolumeSizeProgress}}px; background-color: {{barVolColor}};" id='vol-bar-progress'></div>
             <div style="width: {{barVolumeSize}}px; background-color: {{barVolColorBack}};" id='vol-bar'>
-                <div style="margin-left: {{pointVolumePosition}}px; background-color: {{babyMeatballColor}};" id='Baby-Meatball' (mousedown)='mouseDownVolume()'></div>
+                <div style="margin-left: {{pointVolumePosition}}px; background-color: {{babyMeatballColor}};" id='Baby-Meatball' (mousedown)='DragVolume.mouseDownVolume(this)' (touchstart)='DragVolume.mouseDownVolume(this)'></div>
             </div>
         </div>
     </div>
     <div style="display: flex;">
-        <div style="display: inline-block; margin-right: 10px; margin-left: 10px; margin-left: 5px; margin-right: 5px;">
+        <div style="display: inline-block; margin-left: 5px; margin-right: 5px;">
             <span style="color: white; font-weight: bold;">{{time}}</span>
         </div>
         <div id="bar-ajustable-width" style="display: inline-block; width: -webkit-fill-available; overflow: hidden; padding-left: 15px; padding-right: 15px;">
             <p class="timeTag" style="margin-left: {{timePointerPosition}}px; display:{{overBar}}; ">{{timePointer}}</p>
-            <div style="width: {{barAudioSize}}px;" id='audio-bar-padding' (mousedown)='toClick($event)' (touchstart)='toClick($event)'></div>
+            <div style="width: {{barAudioSize}}px;" id='audio-bar-padding' (mousedown)='ToClick($event, this)' (touchstart)='ToClick($event, this)'></div>
             <div style="width: {{barAudioSizeProgress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>
             <div style="width: {{barAudioSize}}px;" id='audio-bar'>
-                <div style="margin-left: {{pointAudioPosition}}px;" id='Meatball' (mousedown)='mouseDownAudio()'></div>
+                <div style="margin-left: {{pointAudioPosition}}px;" id='Meatball' (mousedown)='DragProgress.mouseDownAudio(this)' (touchstart)='DragProgress.mouseDownAudio(this)'></div>
             </div>
         </div>
         <div style="display: inline-block; margin-right: 10px; margin-left: 10px; margin-left: 5px; margin-right: 5px;">
             <span style="color: white; font-weight: bold;">{{maxTime}}</span>
         </div>
     </div>
-    <div class="buttonsDisplay" style="background-color: rgba(0,0,25,0.3); padding: 10px;">
+    <div class="buttonsDisplay">
         <div>
             <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
-                <ng-container *ngIf='buttonGear'>
-                    <button tooltip="Anterior" placement="bottom" (click)='calculeNextThemePosition($event)' value="-1" class="my-home-icons-font button-style cursor-pointer button-clear" >$</button>
-                    <button tooltip="Parar/Reproducir" placement="bottom" (click)='setPlayPause()' class="my-home-icons-font cursor-pointer button-style button-clear">{{playLogo}}</button>
-                    <button tooltip="Siguiente" placement="bottom" (click)='calculeNextThemePosition($event)' value="1" class="my-home-icons-font button-style cursor-pointer button-clear">%</button>
-                </ng-container>
+                <button tooltip="Anterior" placement="bottom" (click)='calculeNextThemePosition($event)' value="-1" class="my-home-icons-font button-style cursor-pointer button-clear" >$</button>
+                <button tooltip="Parar/Reproducir" placement="bottom" (click)='setPlayPause()' class="my-home-icons-font cursor-pointer button-style button-clear">{{playLogo}}</button>
+                <button tooltip="Siguiente" placement="bottom" (click)='calculeNextThemePosition($event)' value="1" class="my-home-icons-font button-style cursor-pointer button-clear">%</button>
             </div>
-            
-            <ng-container *ngIf='buttonGear'>
-                <div id="button-gear-container" class="display-inline" style="position: relative;">
-                    <button id="button-gear" tooltip="Desplegar opciones" placement="bottom" (click)='showButtonContainer()' class="my-home-icons-font button-style button-clear cursor-pointer {{buttonContainerState}}" style="margin-left: 5px; margin-right: 5px;">J</button>
-                    <div style="position: relative; display: inline-block; vertical-align: top;">
-                        <div id="button-container" class="{{buttonContainerState}}">
-                            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-                                <div class="display-inline" style="width: 120px; margin-left: 5px; margin-right: 5px;">
-                                    <div style="text-align: left;">
-                                        <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Aleatorio:</p>
-                                        <button (click)='randomReproduction()' style="position: absolute; left: 100%; color: {{randomColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">&</button>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Loop lista:</p>
-                                        <button (click)='loopListReproduction()' style="position: absolute; left: 100%; color: {{loopListColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">'</button>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Loop tema:</p>
-                                        <button (click)='loopAudio()' style="position: absolute; left: 100%; color: {{loopColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">(</button>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Inverso: </p>
-                                        <button (click)='revertAudioImplement()' style="position: absolute; left: 100%; color: {{reverseColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">F</button>
-                                    </div>
+            <div id="button-gear-container" class="display-inline" style="position: relative;">
+                <button id="button-gear" tooltip="Desplegar opciones" placement="bottom" (click)='showButtonContainer()' class="my-home-icons-font button-style button-clear cursor-pointer {{buttonContainerState}}" style="margin-left: 5px; margin-right: 5px;">J</button>
+                <div style="position: relative; display: inline-block; vertical-align: top;">
+                    <div id="button-container" class="{{buttonContainerState}}">
+                        <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                            <div class="display-inline" style="width: 120px; margin-left: 5px; margin-right: 5px;">
+                                <div style="text-align: left;">
+                                    <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Aleatorio:</p>
+                                    <button (click)='randomReproduction()' style="position: absolute; left: 100%; color: {{randomColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">&</button>
                                 </div>
-                                <br><br>
-                                <p style="margin-top: 5px; margin-bottom: 5px;">Velocidad:</p>
-                                <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
-                                    <select [(ngModel)]="speed" (change)='updateSpeed()' class="right-button cursor-pointer" style="margin-bottom: 5px;">
-                                        <option value="0.25">x0.25</option>
-                                        <option value="0.5">x0.5</option>
-                                        <option value="0.75">x0.75</option>
-                                        <option value="1" selected='selected' >x1</option>
-                                        <option value="1.25">x1.25</option>
-                                        <option value="1.5">x1.5</option>
-                                        <option value="1.75">x1.75</option>
-                                        <option value="2">x2</option>
-                                    </select>
+                                <div style="text-align: left;">
+                                    <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Loop lista:</p>
+                                    <button (click)='loopListReproduction()' style="position: absolute; left: 100%; color: {{loopListColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">'</button>
                                 </div>
+                                <div style="text-align: left;">
+                                    <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Loop tema:</p>
+                                    <button (click)='loopAudio()' style="position: absolute; left: 100%; color: {{loopColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">(</button>
+                                </div>
+                                <div style="text-align: left;">
+                                    <p style="display: inline-block; margin-top: 5px; margin-bottom: 5px;">Inverso: </p>
+                                    <button (click)='revertAudioImplement()' style="position: absolute; left: 100%; color: {{reverseColor}}; transform: translateX(-100%);" class="my-home-icons-font cursor-pointer button-clear">F</button>
+                                </div>
+                            </div>
+                            <br><br>
+                            <p style="margin-top: 5px; margin-bottom: 5px;">Velocidad:</p>
+                            <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
+                                <select [(ngModel)]="speed" (change)='updateSpeed()' class="right-button cursor-pointer" style="margin-bottom: 5px;">
+                                    <option value="0.25">x0.25</option>
+                                    <option value="0.5">x0.5</option>
+                                    <option value="0.75">x0.75</option>
+                                    <option value="1" selected='selected' >x1</option>
+                                    <option value="1.25">x1.25</option>
+                                    <option value="1.5">x1.5</option>
+                                    <option value="1.75">x1.75</option>
+                                    <option value="2">x2</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-            </ng-container>
-            <div class="display-inline {{buttonResponsiveI}}" style="vertical-align: text-bottom; margin-left: 5px; margin-right: 5px;">
-                <select tooltip="Velocidad" placement="bottom" [(ngModel)]="speed" (change)='updateSpeed()' class="right-button cursor-pointer">
-                    <option value="0.25">x0.25</option>
-                    <option value="0.5">x0.5</option>
-                    <option value="0.75">x0.75</option>
-                    <option value="1" selected='selected' >x1</option>
-                    <option value="1.25">x1.25</option>
-                    <option value="1.5">x1.5</option>
-                    <option value="1.75">x1.75</option>
-                    <option value="2">x2</option>
-                </select>
-            </div>
-            <div class="display-inline {{buttonResponsiveI}}" style="margin-left: 5px; margin-right: 5px;">
-                <ng-container *ngIf='buttonGear'>
-                    <button tooltip="Aleatorio" placement="bottom" (click)='randomReproduction()' class="my-home-icons-font cursor-pointer button-style button-clear" style="color: {{randomColor}};">&</button>
-                    <button tooltip="Repetir lista" placement="bottom" (click)='loopListReproduction()' class="my-home-icons-font cursor-pointer button-style button-clear" style="color: {{loopListColor}};">'</button>
-                    <button tooltip="Repetir tema" placement="bottom" (click)='loopAudio()' class="my-home-icons-font cursor-pointer button-style button-clear" style="color: {{loopColor}};">(</button>
-                    <div class="display-inline">
-                        <button tooltip="Reproduccion inversa" placement="bottom" (click)='revertAudioImplement()' class="my-home-icons-font cursor-pointer button-style button-clear" style="margin-right: 5px; color: {{reverseColor}}">F</button>
-                        <img *ngIf='!buttonGear' style="position: absolute; margin-left: 5px; height: 30px; vertical-align: bottom; visibility: {{loadGif}};" id="loadGif" src="{{mediaPath}}/images/load.gif">
-                    </div>
-                </ng-container>
-                <ng-container *ngIf='!buttonGear'>
-                    <button tooltip="Aleatorio" placement="bottom" (click)='randomReproduction()' class="my-home-icons-font cursor-pointer button-style" style="background-color: {{randomColor}};">P</button>
-                    <button tooltip="Repetir lista" placement="bottom" (click)='loopListReproduction()' class="my-home-icons-font cursor-pointer button-style" style="background-color: {{loopListColor}};">Q</button>
-                    <button tooltip="Repetir tema" placement="bottom" (click)='loopAudio()' class="my-home-icons-font cursor-pointer button-style" style="background-color: {{loopColor}};">R</button>
-                    <div class="display-inline">
-                        <button tooltip="Reproduccion inversa" placement="bottom" (click)='revertAudioImplement()' class="my-home-icons-font cursor-pointer button-style" style="margin-right: 5px; background-color: {{reverseColor}};">S</button>
-                        <img style="position: absolute; margin-left: 5px; height: 30px; vertical-align: bottom; visibility: {{loadGif}};" id="loadGif" src="{{mediaPath}}/images/load.gif">
-                    </div>
-                </ng-container>
             </div>
             <!--<button (click)='audio.pause()'style="background-color: transparent; margin-left: 2.5px; margin-right: 2.5px;">Pause</button>-->
             

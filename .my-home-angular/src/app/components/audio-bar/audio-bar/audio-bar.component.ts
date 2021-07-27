@@ -3,6 +3,10 @@ import { BarThemesListInterface } from '../../../../utils/tools/audio-bar-tools/
 import { AudiobufferToWav } from '../../../../utils/tools/audio-bar-tools/AudionufferToWav';
 import { BarUtils } from '../../../../utils/tools/audio-bar-tools/audio-bar.tools';
 import { Color_Vars } from '../../../../utils/tools/audio-bar-tools/variables/Bar-Variables';
+import { service_config } from 'src/utils/variables/Globals';
+import { ResizeTools } from 'src/utils/tools/audio-bar-tools/resize.tools';
+import { ViewTools } from 'src/utils/tools/audio-bar-tools/view.tools';
+import { DragEvent } from 'src/utils/tools/audio-bar-tools/drag.event.tool';
 
 @Component({
   selector: 'app-audio-bar',
@@ -18,45 +22,15 @@ export class AudioBarComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if(window.innerWidth <= 1520){
-      this.gearShow = true;
-    }
-
+    this.prepareTheme({id:'data//media/video/Anything goes by cole porter.mp3', name:'', views:0});
+    
     window.addEventListener("click", (event)=>{
       let element = event.target as HTMLElement;
       this.checkClickOutGear(element);
     });
 
-    window.onresize = ()=>{
-      let element = document.getElementById('bar-ajustable-width');
-      if(element){
-        this.barAudioSize = element.offsetWidth - 30; //TODO: Sacar valor del padding
-      }
-      if(window.innerWidth > 1520){
-        this.gearShow = false;
-        this.buttonContainerState = '';
-      }
-      else{
-        this.gearShow = true;
-      }
-      this.setRandomList();
-      this.setLoopAudio();
-      this.setLoopList();
-      this.setReverse();
-    }
-
-    setTimeout(()=>{
-      let element = document.getElementById('bar-ajustable-width');
-      if(element){
-        this.barAudioSize = element.offsetWidth - 30; //TODO: Sacar valor del padding
-      }
-      else{
-        this.barAudioSize = 525;
-      }
-    }, 100)
-    
-
-    this.setAjustable();
+    ResizeTools.setInitialSize(this);
+    ResizeTools.screenResize(this);
 
   }
 
@@ -80,31 +54,18 @@ export class AudioBarComponent implements OnInit {
     }
   }
 
-  greatBar = 100;
   buttonContainerState = '';
-  buttonResponsiveII = 'button-responsive-II';
-  buttonResponsiveI = 'button-responsive-I';
-  buttonGear = true;
 
   showButtonContainer(){
     this.buttonContainerState = (this.buttonContainerState == '') ? 'show' : '';
-  }
-
-  setAjustable(){
-    if(!this.ajustableWidth){
-      this.buttonResponsiveII = '';
-      this.buttonResponsiveI = '';
-      this.buttonGear = false;
-      this.greatBar = 90
-      this.playLogo = (this.buttonGear) ? '!' : 'K' ;
-    }
   }
   
   /*/////////////
   | THEMES VARS |
   /////////////*/
 
-  mediaPath:string = '../../../../../assets/media';
+  mediaPath:string = `${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/file`;
+  filePath: string = '';
   lineToolBar:boolean = true;
   isThemeList:Boolean = false;
   audio: HTMLAudioElement | undefined;
@@ -113,7 +74,6 @@ export class AudioBarComponent implements OnInit {
   themesListActive:BarThemesListInterface[] = this.themesList;
   isView = false;
   lastTime:number = 0;
-  secodsPlayed:number = 0;
   position = 0;
   randomList = false;
   loopList = false;
@@ -139,17 +99,16 @@ export class AudioBarComponent implements OnInit {
   audioStatus = true;
   mouseDwnAudio = false;
   isReverse = false;
-  playText = 'Reproducir';
 
   /*/////////////
   | VOlUME VARS |
   /////////////*/
 
-  barVolumeSize = 75;
+  barVolumeSize = 100;
   barVolumeSizeProgress = this.barVolumeSize;
   pointVolumePosition = this.barVolumeSize;
   mouseDwnVolume = false;
-  volLogo = 'B';
+  volLogo = Color_Vars.volume_logo.percentage_75;
   //vol = '100%';
 
   /*////////////
@@ -177,7 +136,7 @@ export class AudioBarComponent implements OnInit {
       if(theme){
         this.isReverse =  false;
         this.reverseSrc = '';
-        this.normalSrc = `${this.mediaPath}/audio/themes/${theme.id}.mp3`;
+        this.normalSrc = `${this.mediaPath}/${theme.id}`;
       }
       
       if(this.audio) {this.audio.pause();}
@@ -189,19 +148,19 @@ export class AudioBarComponent implements OnInit {
         if(this.audio){
           this.audio.onloadeddata = ()=>{
             if(this.audio){
-              this.audio.onpause = ()=>{this.setPlay()}
-              this.audio.onplay = ()=>{this.setPlay()}
+              this.audio.onpause = ()=>{ViewTools.setPlay(this)}
+              this.audio.onplay = ()=>{ViewTools.setPlay(this)}
               this.audio.onvolumechange = ()=>{this.progressBarVolume()};
-              this.audio.ontimeupdate = ()=>{this.progressBarAudio()}
+              this.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio(this)}
               this.audio.onended = ()=>{this.calculeNextThemePosition(1)}
       
               this.setDefaultThemeValues();
-              this.setDefaultInterfaceValues();
+              ViewTools.setDefaultInterfaceValues(this);
             }
           }
         }
       }
-      this.audio.onerror = (err)=>{this.audio = undefined; console.error(`Error: ${err}`)};
+      this.audio.onerror = (err)=>{this.audio = undefined; console.error(`Error: ${err.toString()}`)};
   }
 
   //////////////////////////
@@ -222,19 +181,6 @@ export class AudioBarComponent implements OnInit {
     }
   }
 
-  setDefaultInterfaceValues(){
-
-    this.progressBarAudio();
-    this.setLoopAudio();
-    this.selectVelocity();
-    this.setLoopList();
-    this.setRandomList();
-    this.setReverse();
-    this.setPlay();
-    (this.audio && !this.launchPaused) ? this.audio.play() : '';
-
-  }
-
   setDefaultThemeValues(){
 
     let muted = localStorage.getItem('isMuted');
@@ -245,77 +191,31 @@ export class AudioBarComponent implements OnInit {
     let listRandom = localStorage.getItem('isListRandom');
 
     if(this.audio){
+      this.selectVelocity();
       this.audio.muted = (muted) ? JSON.parse(muted) : this.audio.muted;
       this.audio.loop = (loop) ? JSON.parse(loop) : this.audio.loop;
       this.audio.volume = (volume) ? JSON.parse(volume) : this.audio.volume;
       this.audio.playbackRate = (velocity) ? JSON.parse(velocity) : this.audio.playbackRate;
       this.loopList = (listLoop) ? JSON.parse(listLoop) : false;
       this.randomList = (listRandom) ? JSON.parse(listRandom) : false;
+
+      (this.audio && !this.launchPaused) ? this.audio.play() : '';
+
     }
 
   }
 
   loopListReproduction(){
     this.loopList = !this.loopList;
-    this.setLoopList();
+    ViewTools.setLoopList(this);
     localStorage.setItem('isListLoop', JSON.stringify(this.loopList));
-  }
-
-  setPlay(){
-    if(this.audio){
-      if(this.audio.paused){
-        this.barColor = (this.isReverse) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.pause; 
-        this.playButtonColor = Color_Vars.button_play_color.pause;
-        this.playLogo = (this.buttonGear) ? '!' : 'K' ;
-        this.playText = 'Pausar';
-      }
-      else{
-        this.barColor = (this.isReverse) ? Color_Vars.bar_progress_color.reverse_play : Color_Vars.bar_progress_color.play;
-        this.playButtonColor = Color_Vars.button_play_color.play;
-        this.playLogo = (this.buttonGear) ? '"' : 'L' ;
-        this.playText = 'Reproducir';
-      }
-    }
-  }
-
-  setReverse(){
-    if(this.audio){
-      if(this.isReverse){
-        this.reverseColor = (this.buttonGear) ? (this.gearShow) ? Color_Vars.button_reverse_color.simple : Color_Vars.button_reverse_color.gear : Color_Vars.button_reverse_color.reverse;
-        this.barColor = (this.audio.paused) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.reverse_play;
-      }
-      else{
-        this.reverseColor = (this.buttonGear) ? (this.gearShow) ? Color_Vars.button_loop_list_color.gear : '' : Color_Vars.button_reverse_color.normal;
-        this.barColor = (this.audio.paused) ? Color_Vars.bar_progress_color.pause : Color_Vars.bar_progress_color.play;
-      }
-    }
-  }
-
-  setLoopList(){
-    if(this.loopList){
-      this.loopListColor = (this.buttonGear) ? (this.gearShow) ? '' : Color_Vars.button_loop_list_color.simple : Color_Vars.button_loop_list_color.loop;
-    }
-    else{
-      this.loopListColor = (this.buttonGear) ? (this.gearShow) ? Color_Vars.button_loop_list_color.gear : '' : Color_Vars.button_loop_list_color.normal;
-    }
   }
 
   loopAudio(){
     if(this.audio){
       this.audio.loop = !this.audio.loop;
-      this.setLoopAudio()
+      ViewTools.setLoopAudio(this);
       localStorage.setItem('isLoop', JSON.stringify(this.audio.loop));
-    }
-  }
-
-  setLoopAudio(){
-    if(this.audio){
-      if(this.audio.loop){
-        this.loopColor = (this.buttonGear) ? (this.gearShow) ? '' : Color_Vars.button_loop_color.simple : Color_Vars.button_loop_color.loop;
-      }
-      else{
-        this.loopColor = (this.buttonGear) ? (this.gearShow) ? Color_Vars.button_loop_color.gear : '' : Color_Vars.button_loop_color.normal;
-      }
     }
   }
 
@@ -330,17 +230,8 @@ export class AudioBarComponent implements OnInit {
       this.position = BarUtils.findActualPosition(this.themesListActive, this.position, this.themesList);
       this.themesListActive = this.themesList;
     }
-    this.setRandomList();
+    ViewTools.setRandomList(this);
     localStorage.setItem('isListRandom', JSON.stringify(this.randomList));
-  }
-
-  setRandomList(){
-    if(this.randomList){
-      this.randomColor = (this.buttonGear) ? (this.gearShow) ? '' : Color_Vars.button_random_color.simple : Color_Vars.button_random_color.random;
-    }
-    else{
-      this.randomColor = (this.buttonGear) ? (this.gearShow) ? Color_Vars.button_random_color.gear : '' : Color_Vars.button_random_color.normal;
-    }
   }
 
   ///////////////////
@@ -415,61 +306,14 @@ export class AudioBarComponent implements OnInit {
   //MULTIBAR FUNCTIONS//
   //////////////////////
 
-  mouseDrag(event:MouseEvent | TouchEvent){
-    
-    this.showTimePointer(event);
-
-    if(this.mouseDwnAudio == true){
-      this.audioBarDrag(event);
-    }
-
-    if(this.mouseDwnVolume == true){
-      this.volumeBarDrag(event);
-    }
-
-  }
-
-  toClick(event:MouseEvent | TouchEvent){console.log(event)
-    let itemId = event.target as HTMLElement ;
-    const rect = itemId.getBoundingClientRect();
-    const offsetX = (event instanceof MouseEvent) ? event.offsetX : event.changedTouches[0].clientX - rect.left;console.log(offsetX)
-    if(itemId.id == 'audio-bar-padding'){
-      (!this.isReverse) ? this.calculateAudioPosition(offsetX) : this.calculateAudioPosition(this.barAudioSize - offsetX) ;
-      this.mouseDownAudio();
-    }
-    if(itemId.id == 'vol-bar-padding'){
-      this.calculateVolumePosition(offsetX);
-      this.mouseDownVolume();
-    }
-  }
+  ToClick = DragEvent.toClick;
+  DragEvent = DragEvent.mouseDrag;
+  DragProgress = DragEvent.ProgressBar;
+  DragVolume = DragEvent.VolBar;
 
   ////////////////////
   //VOLUME FUNCTIONS//
   ////////////////////
-
-  volumeBarDrag(event:MouseEvent | TouchEvent){
-    let volBarPosition = document.getElementById('vol-bar');
-    const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;console.log(clientX)
-    let position = BarUtils.positionInBar(clientX, volBarPosition);
-    event.preventDefault();
-
-    if(position >= -1 && position <= this.barVolumeSize + 1){
-      this.pointVolumePosition = position
-      this.barVolumeSizeProgress = position;
-    }
-    this.calculateVolumePosition(this.pointVolumePosition);
-  }
-
-  mouseUpVolume(){
-    if(this.mouseDwnVolume == true){
-      this.calculateVolumePosition(this.pointVolumePosition)
-      this.mouseDwnVolume = false;
-    }
-  }
-
-  mouseDownVolume(){
-    this.mouseDwnVolume = true;
-  }
 
   progressBarVolume(){
     if(this.audio){
@@ -478,31 +322,9 @@ export class AudioBarComponent implements OnInit {
       this.pointVolumePosition = movement;
       this.barVolumeSizeProgress = movement;
 
-      //this.vol = `${Math.round(this.audio.volume * 100)}%`;
-      this.setMuted();
-      this.setVolLogo();
+      ViewTools.setMuted(this);
+      ViewTools.setVolLogo(this);
       localStorage.setItem('volVal', JSON.stringify(this.audio.volume));
-    }
-  }
-
-  setVolLogo(){
-    if(this.audio){
-      let volActual = this.audio.volume;
-      let percentage = volActual * 100 / 25;
-      
-      if(percentage <= 0){
-        this.volLogo = (this.audio.muted) ? Color_Vars.volume_logo.percentage_0_muted : Color_Vars.volume_logo.percentage_0;
-      }
-      if(percentage > 0 && percentage <= 1){
-        this.volLogo = (this.audio.muted) ? Color_Vars.volume_logo.percentage_25_muted : Color_Vars.volume_logo.percentage_25;
-      }
-      if(percentage > 1 && percentage < 3){
-        this.volLogo = (this.audio.muted) ? Color_Vars.volume_logo.percentage_50_muted : Color_Vars.volume_logo.percentage_50;
-      }
-      if(percentage >= 3){
-        this.volLogo = (this.audio.muted) ? Color_Vars.volume_logo.percentage_75_muted : Color_Vars.volume_logo.percentage_75;
-      }
-
     }
   }
 
@@ -513,104 +335,9 @@ export class AudioBarComponent implements OnInit {
     }
   }
 
-  setMuted(){
-    if(this.audio && this.audio.muted){
-      //this.vol = `<del>${this.vol}</del>`;
-      this.muteColor = Color_Vars.button_mute_color.muted;
-      this.barVolColor = Color_Vars.bar_volume_color.front.muted;
-      this.barVolColorBack = Color_Vars.bar_volume_color.background.muted;
-      this.babyMeatballColor = Color_Vars.meatball_color.baby.muted;
-    }
-    else{
-      //this.vol = this.vol.replace(/(<([^>]+)>)/gi, "");
-      this.muteColor = Color_Vars.button_mute_color.unmuted;
-      this.barVolColor = Color_Vars.bar_volume_color.front.unmuted;
-      this.barVolColorBack = Color_Vars.bar_volume_color.background.unmuted;
-      this.babyMeatballColor = Color_Vars.meatball_color.baby.unmuted;
-    }
-  }
-
-   /*incrementVol(){
-
-    let increment = Math.round((this.audio.volume + 0.1) * 10) / 10;
-    increment = (increment < 1) ? increment : 1;
-
-    this.audio.volume = increment;
-  }
-
-  decrementVol(){
-
-    let decrement = Math.round((this.audio.volume - 0.1) * 10) / 10;
-    decrement = (decrement > 0) ? decrement : 0;
- 
-    this.audio.volume = decrement;
-  }*/
-
   ///////////////////
   // BAR FUNCTIONS //
   ///////////////////
-
-  audioBarDrag(event:MouseEvent | TouchEvent){
-      let audioBarPosition = document.getElementById('audio-bar-padding');
-      let position = (audioBarPosition) ? audioBarPosition.offsetLeft : 0;
-      event.preventDefault();
-      const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;console.log(clientX)
-      if(clientX - position >= 0 && clientX - position <= this.barAudioSize){
-        let movement = BarUtils.positionInBar(clientX, audioBarPosition)
-        this.pointAudioPosition = movement;
-        this.barAudioSizeProgress = movement;
-      }
-  }
-
-  mouseDownAudio(){
-    if(this.audio){
-      this.audioStatus = (this.audio.paused) ? false : true; 
-      this.audio.pause();
-      this.mouseDwnAudio = true;
-    }
-  }
-
-  mouseUpAudio(){
-    if(this.audio && this.mouseDwnAudio == true){
-      (!this.isReverse) ? this.calculateAudioPosition(this.pointAudioPosition) : this.calculateAudioPosition(this.barAudioSize - this.pointAudioPosition);
-      (this.audioStatus) ? this.audio.play(): this.audio.pause();
-      this.mouseDwnAudio = false;
-    }
-  }
-
-  progressBarAudio(){
-    if(this.audio){
-      let movement = (!this.isReverse) ? this.calculeTimeBySeconds() : this.calculeTimeBySeconds(this.audio.duration - this.audio.currentTime);
-      this.pointAudioPosition = movement;
-      this.barAudioSizeProgress = movement;
-      this.time = BarUtils.getSeconds((!this.isReverse) ? Math.trunc(this.audio.currentTime) : Math.trunc(this.audio.duration - this.audio.currentTime));
-      let timePast = this.audio.currentTime - this.lastTime;
-      this.lastTime = this.audio.currentTime
-      this.secodsPlayed = this.secodsPlayed + timePast;
-      if(!this.isView && this.secodsPlayed >= this.audio.duration / 2){
-        this.isView = true;
-      }
-    }
-  }
-
-  showTimePointer(event:MouseEvent | TouchEvent){
-    if(this.audio){
-      let item:HTMLElement | string = event.target as HTMLElement;
-      let itemId = item.id;
-      const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;
-      item = (itemId == 'Meatball' && item.parentElement) ? item.parentElement : item;
-      if(itemId == 'audio-bar-padding' || itemId == 'Meatball' ){
-        this.overBar = 'block';
-        let positionInPage = BarUtils.positionInBar(clientX, item);
-        let time = this.calculeTimeByPixel(positionInPage);
-        this.timePointer = BarUtils.getSeconds(time);
-        this.timePointerPosition = positionInPage;
-      }
-      else{
-        this.overBar = 'none';
-      }
-    }
-  }
 
   selectVelocity(){
     if(this.audio){
@@ -624,25 +351,6 @@ export class AudioBarComponent implements OnInit {
       localStorage.setItem('velVal', JSON.stringify(this.audio.playbackRate));
     }
   }
-
-  stopAudio(){
-    if(this.audio){
-      this.audio.pause();
-      this.audio.currentTime = 0;
-    }
-}
-
-  /*incrementTime(){
-
-    this.audio.currentTime = this.audio.currentTime + 5;
-
-  }
-
-  decremenTime(){
-
-    this.audio.currentTime = this.audio.currentTime - 5;
-
-  }*/
 
   /////////////////////
   // BETA FUNCTIONS //
@@ -686,7 +394,7 @@ export class AudioBarComponent implements OnInit {
   
       }
   
-      this.setReverse();
+      ViewTools.setReverse(this);
       (this.audioStatus) ? this.audio.play() : this.audio.pause();
       this.audioStatus = (this.audio.paused) ? false : true; 
     }

@@ -70,3 +70,11 @@ export const Color_Vars = {
       percentage_0_muted:'W'
     }
 }
+
+export const Elements_Id = {
+    progress_bar_area: 'audio-bar-padding',
+    progress_bar: 'bar-ajustable-width',
+    vol_bar_area: 'vol-bar-padding',
+    vol_bar: 'bar-ajustable-vol-width',
+    vol_bar_small: 'vol-bar'
+}

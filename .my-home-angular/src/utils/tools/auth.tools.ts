@@ -25,7 +25,7 @@ export class AuthTools{
     }
 
     public setCookie(token: string):void{
-        document.cookie = `token=${token}`;
+        document.cookie = `token=${token};path=/`;
         this.authService.setCookies().subscribe(
             sucess=>{
                 console.log(sucess.message);

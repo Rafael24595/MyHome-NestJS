@@ -83,8 +83,6 @@
     display: inline-block; 
     margin-top: 10px; 
     margin-bottom: 10px; 
-    margin-left: 10px; 
-    margin-right: 10px;  
     height: 5px; 
     background-color: #bfbfbf;
     cursor: pointer;
@@ -94,9 +92,7 @@
     vertical-align: bottom; 
     display: inline-block; 
     margin-top: 10px; 
-    margin-bottom: 10px; 
-    margin-left: 10px; 
-    margin-right: 10px;  
+    margin-bottom: 10px;  
     height: 5px; 
     cursor: pointer;
 }
@@ -105,9 +101,7 @@
     vertical-align: bottom; 
     display: inline-block; 
     margin-top: 10px; 
-    margin-bottom: 10px; 
-    margin-left: 10px; 
-    margin-right: 10px;  
+    margin-bottom: 10px;   
     height: 5px; 
     cursor: pointer;
     z-index: 2;

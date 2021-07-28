@@ -22,9 +22,10 @@ export class ViewTools{
           item = (itemId == 'Meatball' && item.parentElement) ? item.parentElement : item;
           if((itemId == Elements_Id.progress_bar_area || itemId == 'Meatball') && event.type != 'touchend'){
             instance.overBar = 'block';
-            let positionInPage = BarUtils.positionInBar(clientX, item);
+            const positionInPage = BarUtils.positionInBar(clientX, item);
             let time = instance.calculeTimeByPixel(positionInPage);
-            instance.timePointer = BarUtils.getSeconds(time);
+            time = (time <= instance.audio.duration) ? time : instance.audio.duration;
+              instance.timePointer = BarUtils.getSeconds(time);
             instance.timePointerPosition = positionInPage;
           }
           else{
@@ -99,10 +100,12 @@ export class ViewTools{
           if(instance.audio.paused){
             instance.barColor = (instance.isReverse) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.pause; 
             instance.playButtonColor = Color_Vars.button_play_color.pause;
+            instance.playLogo = '!';
           }
           else{
             instance.barColor = (instance.isReverse) ? Color_Vars.bar_progress_color.reverse_play : Color_Vars.bar_progress_color.play;
             instance.playButtonColor = Color_Vars.button_play_color.play;
+            instance.playLogo = '"';
           }
         }
     }

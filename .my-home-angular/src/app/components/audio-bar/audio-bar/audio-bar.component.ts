@@ -22,7 +22,7 @@ export class AudioBarComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.prepareTheme({id:'data//media/video/Anything goes by cole porter.mp3', name:'', views:0});
+    this.prepareTheme({id:'data//media/video/Anything goes by cole porter.mp3', name:'Anything goes by cole porter', views:0});
     
     window.addEventListener("click", (event)=>{
       let element = event.target as HTMLElement;
@@ -72,6 +72,7 @@ export class AudioBarComponent implements OnInit {
   themesList:BarThemesListInterface[] = [];
   themesListRandom:BarThemesListInterface[] = [];
   themesListActive:BarThemesListInterface[] = this.themesList;
+  themeName = '';
   isView = false;
   lastTime:number = 0;
   position = 0;
@@ -140,6 +141,7 @@ export class AudioBarComponent implements OnInit {
       }
       
       if(this.audio) {this.audio.pause();}
+      this.themeName = theme?.name as string;
       this.audio = new Audio();
       this.audio.src = (this.isReverse) ? this.reverseSrc : this.normalSrc;
       this.audio.classList.add('reproductor-audio');

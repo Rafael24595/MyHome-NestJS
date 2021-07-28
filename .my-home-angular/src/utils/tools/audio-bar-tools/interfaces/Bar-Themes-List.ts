@@ -1,5 +1,12 @@
 export interface BarThemesListInterface{
-    id:string,
-    name:string,
-    views:number
+    id: string;
+    path:string;
+    directory: string;
+    name: string;
+    extension: string;
+    createdBy: string;
+    autor:{id:string, name:string};
+    dateCreated: number;
+    dateModify: number;
+    tags: string[];
 }

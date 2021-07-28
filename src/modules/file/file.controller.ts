@@ -18,7 +18,6 @@ export class FileController {
 
     constructor(private fileService:FileService, private fileUtils:FileUtils, private appUtils:AppUtils){}
 
-    
     @UseGuards(JwtCookieAuthGuard)
     @Get(`${get_file_Controller}/*`)
     async getFile(@Request() req, @Res() res){
@@ -80,6 +79,5 @@ export class FileController {
     async deleteFile(){
         //TODO Añadir toda la lógica
     }
-
 
 }

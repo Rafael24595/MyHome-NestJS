@@ -2,8 +2,17 @@ import { FileAbstract } from "./FileAbstract";
 
 export class Theme extends FileAbstract{
 
-    constructor(id: string,path:string,name: string,extension: string,createdBy: string,autor:{id:string, name:string},dateCreated: number,dateModify: number,tags: string[]){
-        super(id,path,name,extension,createdBy,autor,dateCreated,dateModify,tags);
+    audio: HTMLAudioElement | undefined;
+    reverseSrc: string;
+
+    constructor(id: string,path:string,createdBy: string,autor:{id:string, name:string},dateCreated: number,dateModify: number,tags: string[], audio?: HTMLAudioElement, reverseSrc?: string){
+        super(id,path,createdBy,autor,dateCreated,dateModify,tags);
+        this.audio = (audio) ? audio : undefined;
+        this.reverseSrc = (reverseSrc) ? reverseSrc : '';
+    }
+
+    static getEmptyTheme(): Theme{
+        return new Theme('','','',{id:'',name:''},0,0,[]);
     }
 
 }

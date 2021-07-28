@@ -20,6 +20,7 @@ import { ModalSimpleComponent } from './components/modal-components/modal-simple
 import { BottomAuxMenuComponent } from './components/body/file-manager/bottom-aux-menu/bottom-aux-menu.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AudioBarComponent } from './components/audio-bar/audio-bar/audio-bar.component';
+import { AudioBarModalComponent } from './components/audio-bar/audio-bar-modal/audio-bar-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AudioBarComponent } from './components/audio-bar/audio-bar/audio-bar.co
     ModalBaseComponent,
     ModalSimpleComponent,
     BottomAuxMenuComponent,
-    AudioBarComponent
+    AudioBarComponent,
+    AudioBarModalComponent
   ],
   imports: [
     BrowserModule,

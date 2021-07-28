@@ -1,6 +1,7 @@
 import { AudioBarComponent } from "src/app/components/audio-bar/audio-bar/audio-bar.component";
 import { MiscTools } from "./misc.tools";
 import { Elements_Id } from "./variables/Bar-Variables";
+import { ViewTools } from "./view.tools";
 
 export class ResizeTools{
 
@@ -25,12 +26,10 @@ export class ResizeTools{
           const paddingLeft = MiscTools.cleanPxValue(progressBar.style.paddingLeft);
           const paddingRight = MiscTools.cleanPxValue(progressBar.style.paddingRight);
     
-          instance.barAudioSize = progressBar.offsetWidth - (paddingLeft + paddingRight);
-          if(instance.audio){
-            const progressPercentage = ((instance.audio.currentTime * 100 / instance.audio.duration) / 100) * instance.barAudioSize;
-    
-            instance.pointAudioPosition = progressPercentage;
-            instance.barAudioSizeProgress = progressPercentage;
+          ViewTools.progressBars.media.size = progressBar.offsetWidth - (paddingLeft + paddingRight);
+          if(instance.theme.audio){
+            const progressPercentage = ((instance.theme.audio.currentTime * 100 / instance.theme.audio.duration) / 100) * ViewTools.progressBars.media.size;
+            ViewTools.progressBars.media.progress = progressPercentage;
           }
         }
     }
@@ -41,12 +40,10 @@ export class ResizeTools{
           const paddingLeft = MiscTools.cleanPxValue(volBar.style.paddingLeft);
           const paddingRight = MiscTools.cleanPxValue(volBar.style.paddingRight);
 
-          instance.barVolumeSize = volBar.offsetWidth - (paddingLeft + paddingRight);
-          if(instance.audio){
-            const volPercentage = instance.audio.volume * instance.barVolumeSize;
-          
-            instance.pointVolumePosition = volPercentage; 
-            instance.barVolumeSizeProgress = volPercentage;
+          ViewTools.progressBars.volume.size = volBar.offsetWidth - (paddingLeft + paddingRight);
+          if(instance.theme.audio){
+            const volPercentage = instance.theme.audio.volume * ViewTools.progressBars.volume.size;
+            ViewTools.progressBars.volume.progress = volPercentage;
           } 
         }
     }

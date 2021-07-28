@@ -1,3 +1,4 @@
+import { Theme } from "src/classes/File/Theme";
 import { BarThemesListInterface } from "./interfaces/Bar-Themes-List";
 
 export class BarUtils{
@@ -12,9 +13,9 @@ export class BarUtils{
     return cuersorPosition + overflow;
   }
 
-    public static randomizeList(themesList:BarThemesListInterface[],position:number){
-        let randomList:BarThemesListInterface[] = [];
-        let themeListTransition:BarThemesListInterface[] = this.copyArray(themesList) as BarThemesListInterface[];
+    public static randomizeList(themesList:Theme[],position:number){
+        let randomList:Theme[] = [];
+        let themeListTransition:Theme[] = this.copyArray(themesList) as Theme[];
         randomList.push(themeListTransition[position]);
         themeListTransition.splice(position, 1);
         while(themeListTransition.length > 0){

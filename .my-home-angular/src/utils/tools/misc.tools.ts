@@ -29,9 +29,23 @@ export class MiscTools{
         return JSON.stringify(path?.split('/'));
     }
 
+    static getFileDir(path: string): string{
+        let pathArray = path.split('/');
+        pathArray.pop();
+        return pathArray.join('/');
+    }
+
     static getFileExtname(path:string): string{
         if(MiscTools.isFile(path)){
             return path.split('.').pop()?.toLowerCase() as string;
+        }
+        return '';
+    }
+
+    static getFileName(path:string): string{
+        if(MiscTools.isFile(path)){
+            let fileName = path.split('/').pop();
+            return fileName?.split('.').shift() as string;
         }
         return '';
     }

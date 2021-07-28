@@ -1,12 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BarThemesListInterface } from '../../../../utils/tools/audio-bar-tools/interfaces/Bar-Themes-List';
 import { AudiobufferToWav } from '../../../../utils/tools/audio-bar-tools/AudionufferToWav';
 import { BarUtils } from '../../../../utils/tools/audio-bar-tools/audio-bar.tools';
-import { Color_Vars } from '../../../../utils/tools/audio-bar-tools/variables/Bar-Variables';
-import { service_config } from 'src/utils/variables/Globals';
+import { Color_Vars, Icons, Media } from '../../../../utils/tools/audio-bar-tools/variables/Bar-Variables';
 import { ResizeTools } from 'src/utils/tools/audio-bar-tools/resize.tools';
 import { ViewTools } from 'src/utils/tools/audio-bar-tools/view.tools';
 import { DragEvent } from 'src/utils/tools/audio-bar-tools/drag.event.tool';
+import { AudioBarModalComponent } from '../audio-bar-modal/audio-bar-modal.component';
+import { Theme } from 'src/classes/File/Theme';
+import { LocalStorage } from 'src/utils/tools/audio-bar-tools/variables/storage.const';
+import { MiscTools } from 'src/utils/tools/audio-bar-tools/misc.tools';
 
 @Component({
   selector: 'app-audio-bar',
@@ -17,107 +19,62 @@ export class AudioBarComponent implements OnInit {
 
   @Input() ajustableWidth: boolean = true;
 
+  ToClick = DragEvent.toClick;
+  DragEvent = DragEvent.mouseDrag;
+  DragProgress = DragEvent.ProgressBar;
+  DragVolume = DragEvent.VolBar;
+
+  AudioBarModal = AudioBarModalComponent;
+
+  ViewResources = ViewTools.viewStatus;
+  ProgressBars = ViewTools.progressBars;
+
   constructor() {
   }
 
   ngOnInit(): void {
-
-    this.prepareTheme({id:'data//media/video/Anything goes by cole porter.mp3', name:'Anything goes by cole porter', views:0});
-    
-    window.addEventListener("click", (event)=>{
-      let element = event.target as HTMLElement;
-      this.checkClickOutGear(element);
-    });
-
+    this.prepareTheme(new Theme('', '/media/video/Anything goes by cole porter.mp3', '', {id: '', name: ''}, 0, 0, []));
     ResizeTools.setInitialSize(this);
     ResizeTools.screenResize(this);
-
   }
 
   ngOnDestroy() {
-    if(this.audio){
-      this.audio.pause();
-    }
-  }
-
-  checkClickOutGear(element: HTMLElement){
-    if(element){
-      if(element.id != 'button-gear-container'){
-        let parentElement = element.parentElement;
-        if(parentElement){
-          this.checkClickOutGear(parentElement)
-        }
-        else if(this.buttonContainerState == 'show'){
-          this.showButtonContainer();
-        }
-      }
-    }
-  }
-
-  buttonContainerState = '';
-
-  showButtonContainer(){
-    this.buttonContainerState = (this.buttonContainerState == '') ? 'show' : '';
+    if(this.theme.audio) this.theme.audio.pause();
   }
   
   /*/////////////
   | THEMES VARS |
   /////////////*/
 
-  mediaPath:string = `${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/file`;
-  filePath: string = '';
-  lineToolBar:boolean = true;
-  isThemeList:Boolean = false;
-  audio: HTMLAudioElement | undefined;
-  themesList:BarThemesListInterface[] = [];
-  themesListRandom:BarThemesListInterface[] = [];
-  themesListActive:BarThemesListInterface[] = this.themesList;
-  themeName = '';
-  isView = false;
-  lastTime:number = 0;
-  position = 0;
+  theme: {audio: HTMLAudioElement | undefined, data: Theme} = {
+    audio: new Audio(),
+    data: Theme.getEmptyTheme(),
+  }
+  themesLists: {normal: Theme[],random: Theme[],active: Theme[], position: number} = {
+    normal: [],
+    random: [],
+    active: [],
+    position: 0
+  }
   randomList = false;
   loopList = false;
   launchPaused = true;
-  normalSrc = '';
   reverseSrc = '';
-  playLogo = '!';
-  gearShow = false;
 
   /*////////////
   | AUDIO VARS |
   ////////////*/
 
-  barAudioSize = 0;
-  barAudioSizeProgress = 0
-  pointAudioPosition = 0;
   speed = 1; 
-  time = '00:00';
-  maxTime = '00:00';
-  overBar = 'none'
-  timePointer = this.time;
   timePointerPosition = 0;
   audioStatus = true;
-  mouseDwnAudio = false;
   isReverse = false;
-
-  /*/////////////
-  | VOlUME VARS |
-  /////////////*/
-
-  barVolumeSize = 100;
-  barVolumeSizeProgress = this.barVolumeSize;
-  pointVolumePosition = this.barVolumeSize;
-  mouseDwnVolume = false;
-  volLogo = Color_Vars.volume_logo.percentage_75;
-  //vol = '100%';
 
   /*////////////
   | COLOR VARS |
   ////////////*/
 
   loadGif = Color_Vars.load_gif_status.hidden;
-  playButtonColor = Color_Vars.button_play_color.pause;
   barColor = Color_Vars.bar_progress_color.pause;
   barVolColorBack = Color_Vars.bar_volume_color.background.unmuted;
   barVolColor = Color_Vars.bar_volume_color.front.unmuted;
@@ -132,37 +89,42 @@ export class AudioBarComponent implements OnInit {
   //PREPARATION FUNCTIONS//
   /////////////////////////
 
-  prepareTheme(theme?:BarThemesListInterface){
+  prepareTheme(theme?:Theme){
 
-      if(theme){
-        this.isReverse =  false;
-        this.reverseSrc = '';
-        this.normalSrc = `${this.mediaPath}/${theme.id}`;
-      }
-      
-      if(this.audio) {this.audio.pause();}
-      this.themeName = theme?.name as string;
-      this.audio = new Audio();
-      this.audio.src = (this.isReverse) ? this.reverseSrc : this.normalSrc;
-      this.audio.classList.add('reproductor-audio');
-      this.audio.load();
-      this.audio.onloadedmetadata = ()=>{
-        if(this.audio){
-          this.audio.onloadeddata = ()=>{
-            if(this.audio){
-              this.audio.onpause = ()=>{ViewTools.setPlay(this)}
-              this.audio.onplay = ()=>{ViewTools.setPlay(this)}
-              this.audio.onvolumechange = ()=>{this.progressBarVolume()};
-              this.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio(this)}
-              this.audio.onended = ()=>{this.calculeNextThemePosition(1)}
-      
-              this.setDefaultThemeValues();
-              ViewTools.setDefaultInterfaceValues(this);
-            }
+    let src = ''; 
+
+    if(theme){
+      this.isReverse =  false;
+      this.reverseSrc = '';
+      src = `${Media.path}/${theme.path}`;
+      this.theme.data = theme;
+    }
+    else{
+      src = (this.isReverse) ? this.reverseSrc : this.theme.data.path;
+    }
+    
+    if(this.theme.audio) {this.theme.audio.pause();}
+    this.theme.audio = new Audio();
+    this.theme.audio.src = src;
+    this.theme.audio.classList.add('reproductor-audio');
+    this.theme.audio.load();
+    this.theme.audio.onloadedmetadata = ()=>{
+      if(this.theme.audio){
+        this.theme.audio.onloadeddata = ()=>{
+          if(this.theme.audio){
+            this.theme.audio.onpause = ()=>{ViewTools.setPlay(this)}
+            this.theme.audio.onplay = ()=>{ViewTools.setPlay(this)}
+            this.theme.audio.onvolumechange = ()=>{ViewTools.progressBarVolume(this)};
+            this.theme.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio(this)}
+            this.theme.audio.onended = ()=>{this.calculeNextThemePosition(1)}
+    
+            this.setDefaultThemeValues();
+            ViewTools.setDefaultInterfaceValues(this);
           }
         }
       }
-      this.audio.onerror = (err)=>{this.audio = undefined; console.error(`Error: ${err.toString()}`)};
+    }
+    this.theme.audio.onerror = (err)=>{this.theme.audio = undefined; console.error(`Error: ${err.toString()}`)};
   }
 
   //////////////////////////
@@ -170,16 +132,16 @@ export class AudioBarComponent implements OnInit {
   //////////////////////////
 
   setPlayPause(mode?:string){
-    if(!this.audio && this.themesList){
-      this.prepareTheme(this.themesList[this.position])
+    if(this.theme.audio){
+      if(this.theme.audio.paused || mode == 'play'){
+        this.theme.audio.play();
+      }
+      else if(!this.theme.audio.paused || mode == 'stop'){
+        this.theme.audio.pause();
+      }
     }
-    if(this.audio){
-      if(this.audio.paused || mode == 'play'){
-        this.audio.play();
-      }
-      else if(!this.audio.paused || mode == 'stop'){
-        this.audio.pause();
-      }
+    else if(mode != 'stop' && this.themesLists.active){
+      this.prepareTheme(this.themesLists.active[this.themesLists.position]);
     }
   }
 
@@ -187,21 +149,21 @@ export class AudioBarComponent implements OnInit {
 
     let muted = localStorage.getItem('isMuted');
     let loop = localStorage.getItem('isLoop');
-    let volume = localStorage.getItem('volVal');
+    let volume = MiscTools.getLocalStorage(LocalStorage.volume_status);
     let velocity = localStorage.getItem('velVal');
     let listLoop = localStorage.getItem('isListLoop');
     let listRandom = localStorage.getItem('isListRandom');
 
-    if(this.audio){
+    if(this.theme.audio){
       this.selectVelocity();
-      this.audio.muted = (muted) ? JSON.parse(muted) : this.audio.muted;
-      this.audio.loop = (loop) ? JSON.parse(loop) : this.audio.loop;
-      this.audio.volume = (volume) ? JSON.parse(volume) : this.audio.volume;
-      this.audio.playbackRate = (velocity) ? JSON.parse(velocity) : this.audio.playbackRate;
+      this.theme.audio.muted = (muted) ? JSON.parse(muted) : this.theme.audio.muted;
+      this.theme.audio.loop = (loop) ? JSON.parse(loop) : this.theme.audio.loop;
+      this.theme.audio.volume = (volume) ? JSON.parse(volume) : this.theme.audio.volume;
+      this.theme.audio.playbackRate = (velocity) ? JSON.parse(velocity) : this.theme.audio.playbackRate;
       this.loopList = (listLoop) ? JSON.parse(listLoop) : false;
       this.randomList = (listRandom) ? JSON.parse(listRandom) : false;
 
-      (this.audio && !this.launchPaused) ? this.audio.play() : '';
+      (this.theme.audio && !this.launchPaused) ? this.theme.audio.play() : '';
 
     }
 
@@ -214,23 +176,23 @@ export class AudioBarComponent implements OnInit {
   }
 
   loopAudio(){
-    if(this.audio){
-      this.audio.loop = !this.audio.loop;
+    if(this.theme.audio){
+      this.theme.audio.loop = !this.theme.audio.loop;
       ViewTools.setLoopAudio(this);
-      localStorage.setItem('isLoop', JSON.stringify(this.audio.loop));
+      localStorage.setItem('isLoop', JSON.stringify(this.theme.audio.loop));
     }
   }
 
   randomReproduction(){
     this.randomList = !this.randomList;
     if(this.randomList){
-      this.themesListRandom = BarUtils.randomizeList(this.themesList, this.position);
-      this.position = 0;
-      this.themesListActive = this.themesListRandom;
+      this.themesLists.random = BarUtils.randomizeList(this.themesLists.normal, this.themesLists.position);
+      this.themesLists.position = 0;
+      this.themesLists.active = this.themesLists.random;
     }
     else{
-      this.position = BarUtils.findActualPosition(this.themesListActive, this.position, this.themesList);
-      this.themesListActive = this.themesList;
+      this.themesLists.position = BarUtils.findActualPosition(this.themesLists.active, this.themesLists.position, this.themesLists.normal);
+      this.themesLists.active = this.themesLists.normal;
     }
     ViewTools.setRandomList(this);
     localStorage.setItem('isListRandom', JSON.stringify(this.randomList));
@@ -251,89 +213,67 @@ export class AudioBarComponent implements OnInit {
         action = event;
       }
       if(this.loopList){
-        action = (this.position + action < 0) ? this.themesListActive.length -1 : (this.position + action > this.themesList.length -1) ? 0 : this.position + action;
+        action = (this.themesLists.position + action < 0) ? this.themesLists.active.length -1 : (this.themesLists.position + action > this.themesLists.normal.length -1) ? 0 : this.themesLists.position + action;
         this.launchPaused = false;
       }
       else{
-        (this.position + action < 0) ? 
+        (this.themesLists.position + action < 0) ? 
           (action = 0, this.launchPaused = true) : 
-          (this.position + action > this.themesListActive.length -1) ? 
-            (action = this.themesListActive.length -1, this.launchPaused = true) : 
-            (action = this.position + action, this.launchPaused = false);
+          (this.themesLists.position + action > this.themesLists.active.length -1) ? 
+            (action = this.themesLists.active.length -1, this.launchPaused = true) : 
+            (action = this.themesLists.position + action, this.launchPaused = false);
       }
     }
     if(isCalculed){
       action = event as number;
     }
-    this.position = action;
-    this.prepareTheme(this.themesListActive[this.position]);
+    this.themesLists.position = action;
+    this.prepareTheme(this.themesLists.active[this.themesLists.position]);
   }
 
   calculeTimeByPixel(position:number){
-    if(this.audio){
-      let timeTotal = this.audio.duration
-      return position * timeTotal / this.barAudioSize ;
+    if(this.theme.audio){
+      let timeTotal = this.theme.audio.duration
+      return position * timeTotal / ViewTools.progressBars.media.size;
     }
     return 0;
   }
 
   calculeTimeBySeconds(position?:number){
-    if(this.audio){
-      let timeActual = (position) ? position : this.audio.currentTime;
-      let timeTotal = this.audio.duration;
-      return timeActual * this.barAudioSize / timeTotal;
+    if(this.theme.audio){
+      let timeActual = (position) ? position : this.theme.audio.currentTime;
+      let timeTotal = this.theme.audio.duration;
+      return timeActual * ViewTools.progressBars.media.size / timeTotal;
     }
     return 0;
   }
 
   calculateAudioPosition(coorY:number){
-    if(this.audio){
-      this.audio.currentTime = coorY * this.audio.duration / this.barAudioSize;
+    if(this.theme.audio){
+      this.theme.audio.currentTime = coorY * this.theme.audio.duration / ViewTools.progressBars.media.size;
     }
   }
 
   calculateVolumePosition(coorY:number){
-    if(this.audio){
+    if(this.theme.audio){
       let vol = 
-      (coorY / this.barVolumeSize > 1) 
+      (coorY / ViewTools.progressBars.volume.size > 1) 
         ? 1 
-        : (coorY / this.barVolumeSize < 0.001)
+        : (coorY / ViewTools.progressBars.volume.size < 0.001)
           ? 0
-          : coorY / this.barVolumeSize;
-      this.audio.volume = vol;
+          : coorY / ViewTools.progressBars.volume.size;
+      this.theme.audio.volume = vol;
     }
   }
-
-  //////////////////////
-  //MULTIBAR FUNCTIONS//
-  //////////////////////
-
-  ToClick = DragEvent.toClick;
-  DragEvent = DragEvent.mouseDrag;
-  DragProgress = DragEvent.ProgressBar;
-  DragVolume = DragEvent.VolBar;
 
   ////////////////////
   //VOLUME FUNCTIONS//
   ////////////////////
 
-  progressBarVolume(){
-    if(this.audio){
-      let volActual = this.audio.volume;
-      let movement = volActual * this.barVolumeSize;
-      this.pointVolumePosition = movement;
-      this.barVolumeSizeProgress = movement;
-
-      ViewTools.setMuted(this);
-      ViewTools.setVolLogo(this);
-      localStorage.setItem('volVal', JSON.stringify(this.audio.volume));
-    }
-  }
-
   muteVol(){
-    if(this.audio){
-      this.audio.muted = !this.audio.muted;
-      localStorage.setItem('isMuted', JSON.stringify(this.audio.muted));
+    if(this.theme.audio){
+      this.theme.audio.muted = !this.theme.audio.muted;
+      localStorage.setItem('isMuted', JSON.stringify(this.theme.audio.muted));
     }
   }
 
@@ -342,15 +282,15 @@ export class AudioBarComponent implements OnInit {
   ///////////////////
 
   selectVelocity(){
-    if(this.audio){
-      this.speed = this.audio.playbackRate;
+    if(this.theme.audio){
+      this.speed = this.theme.audio.playbackRate;
     }
   }
 
   updateSpeed(){
-    if(this.audio){
-      this.audio.playbackRate = this.speed;
-      localStorage.setItem('velVal', JSON.stringify(this.audio.playbackRate));
+    if(this.theme.audio){
+      this.theme.audio.playbackRate = this.speed;
+      localStorage.setItem('velVal', JSON.stringify(this.theme.audio.playbackRate));
     }
   }
 
@@ -359,14 +299,14 @@ export class AudioBarComponent implements OnInit {
   ////////////////////
 
   revertAudioImplement(){
-    if(this.audio){
+    if(this.theme.audio){
       this.loadGif = Color_Vars.load_gif_status.visible;
-      this.audioStatus = (this.audio.paused) ? false : true;
+      this.audioStatus = (this.theme.audio.paused) ? false : true;
 
-      if(this.audio.src != this.reverseSrc){
-        this.audio.pause();
+      if(this.theme.audio.src != this.reverseSrc){
+        this.theme.audio.pause();
         (this.reverseSrc == '')
-          ? this.revertAudio(this.audio.src).then(()=>{this.isReverse = true; this.switchSRC()})
+          ? this.revertAudio(this.theme.audio.src).then(()=>{this.isReverse = true; this.switchSRC()})
           : (this.isReverse = true, this.switchSRC()) ;  
       }
       else{
@@ -378,27 +318,27 @@ export class AudioBarComponent implements OnInit {
 
   switchSRC(){
 
-    if(this.audio){
+    if(this.theme.audio){
       if(this.isReverse){
 
         this.loadGif = Color_Vars.load_gif_status.hidden;
-        let time = this.audio.duration - this.audio.currentTime;
+        let time = this.theme.audio.duration - this.theme.audio.currentTime;
         this.prepareTheme();
-        this.audio.currentTime = time;
-        this.audio.play();
+        this.theme.audio.currentTime = time;
+        this.theme.audio.play();
   
       }else{
   
         this.loadGif = Color_Vars.load_gif_status.hidden;
-        let time = this.audio.duration - this.audio.currentTime;
+        let time = this.theme.audio.duration - this.theme.audio.currentTime;
         this.prepareTheme();
-        this.audio.currentTime = time;
+        this.theme.audio.currentTime = time;
   
       }
   
       ViewTools.setReverse(this);
-      (this.audioStatus) ? this.audio.play() : this.audio.pause();
-      this.audioStatus = (this.audio.paused) ? false : true; 
+      (this.audioStatus) ? this.theme.audio.play() : this.theme.audio.pause();
+      this.audioStatus = (this.theme.audio.paused) ? false : true; 
     }
 
   }

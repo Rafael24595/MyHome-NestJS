@@ -1,3 +1,5 @@
+import { service_config } from "src/utils/variables/Globals"
+
 export const Color_Vars = {
     load_gif_status:{
         hidden: 'hidden',
@@ -69,6 +71,15 @@ export const Color_Vars = {
       percentage_25_muted:'V',
       percentage_0_muted:'W'
     }
+}
+
+export const Icons = {
+    play: '!',
+    pause: '"'
+}
+
+export const Media = {
+    path: `${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/file/data`
 }
 
 export const Elements_Id = {

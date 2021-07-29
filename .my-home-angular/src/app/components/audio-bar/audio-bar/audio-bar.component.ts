@@ -1,14 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AudiobufferToWav } from '../../../../utils/tools/audio-bar-tools/AudionufferToWav';
-import { BarUtils } from '../../../../utils/tools/audio-bar-tools/audio-bar.tools';
-import { Color_Vars, Icons, Media } from '../../../../utils/tools/audio-bar-tools/variables/Bar-Variables';
-import { ResizeTools } from 'src/utils/tools/audio-bar-tools/resize.tools';
-import { ViewTools } from 'src/utils/tools/audio-bar-tools/view.tools';
-import { DragEvent } from 'src/utils/tools/audio-bar-tools/drag.event.tool';
+import { AudiobufferToWav } from './utils/tools/AudionufferToWav';
+import { BarUtils } from './utils/tools/audio-bar.tools';
+import { Color_Vars, Media } from './utils/variables/Bar-Variables';
+import { ResizeTools } from './utils/tools/resize.tools';
+import { ViewTools } from './utils/tools/view.tools';
+import { DragEvent } from './utils/tools/drag.event.tool';
 import { AudioBarModalComponent } from '../audio-bar-modal/audio-bar-modal.component';
 import { Theme } from 'src/classes/File/Theme';
-import { LocalStorage } from 'src/utils/tools/audio-bar-tools/variables/storage.const';
-import { MiscTools } from 'src/utils/tools/audio-bar-tools/misc.tools';
+import { LocalStorage } from './utils/variables/storage.const';
+import { MiscToolsProgress } from './utils/tools/misc.tools';
+import { ProgressBarListener } from './utils/services/listener.service';
+import { MiscTools } from 'src/utils/tools/misc.tools';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-audio-bar',
@@ -29,19 +32,47 @@ export class AudioBarComponent implements OnInit {
   ViewResources = ViewTools.viewStatus;
   ProgressBars = ViewTools.progressBars;
 
-  constructor() {
-  }
+  constructor(private progressBarListener: ProgressBarListener, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.prepareTheme(new Theme('', '/media/video/Anything goes by cole porter.mp3', '', {id: '', name: ''}, 0, 0, []));
     ResizeTools.setInitialSize(this);
     ResizeTools.screenResize(this);
+    this.setTheme();
+    this.themeListListener();
   }
 
   ngOnDestroy() {
     if(this.theme.audio) this.theme.audio.pause();
+    this.progressBarListener.unsubscribe();
   }
   
+  setTheme(){
+    const path = MiscTools.getChildPath(this.route);
+    this.prepareTheme(new Theme('', path, '', {id: '', name: ''}, 0, 0, []));
+  }
+
+  themeListListener(){
+    this.progressBarListener.themeListObservable.subscribe((themeList: Theme[])=>{
+      if(themeList){
+        this.themesLists.normal = themeList;
+        this.themesLists.active = this.themesLists.normal;
+        this.themesLists.position = this.searchThemePositionInListByPath();
+        if(MiscToolsProgress.getLocalStorage('isListRandom')) this.randomReproduction()
+      }
+    });
+  }
+
+  searchThemePositionInListByPath(): number{
+    let count = 0;
+    while (count < this.themesLists.active.length){
+      if(this.theme.data.path == this.themesLists.active[count].path){
+        return count;
+      }
+      count = count + 1; 
+    }
+    return -1;
+  }
+
   /*/////////////
   | THEMES VARS |
   /////////////*/
@@ -149,7 +180,7 @@ export class AudioBarComponent implements OnInit {
 
     let muted = localStorage.getItem('isMuted');
     let loop = localStorage.getItem('isLoop');
-    let volume = MiscTools.getLocalStorage(LocalStorage.volume_status);
+    let volume = MiscToolsProgress.getLocalStorage(LocalStorage.volume_status);
     let velocity = localStorage.getItem('velVal');
     let listLoop = localStorage.getItem('isListLoop');
     let listRandom = localStorage.getItem('isListRandom');
@@ -203,32 +234,34 @@ export class AudioBarComponent implements OnInit {
   ///////////////////
 
   calculeNextThemePosition(event:Event | number, isCalculed?: boolean){
-    let action:HTMLInputElement | number = -1;
-    if(event && !isCalculed){
-      if(typeof event != 'number' && event.target){
-        action = event.target as HTMLInputElement;
-        action = parseInt(action.value);
+    if(this.themesLists.active.length > 1){
+      let action:HTMLInputElement | number = -1;
+      if(event && !isCalculed){
+        if(typeof event != 'number' && event.target){
+          action = event.target as HTMLInputElement;
+          action = parseInt(action.value);
+        }
+        else if(typeof event == 'number'){
+          action = event;
+        }
+        if(this.loopList){
+          action = (this.themesLists.position + action < 0) ? this.themesLists.active.length -1 : (this.themesLists.position + action > this.themesLists.normal.length -1) ? 0 : this.themesLists.position + action;
+          this.launchPaused = false;
+        }
+        else{
+          (this.themesLists.position + action < 0) ? 
+            (action = 0, this.launchPaused = true) : 
+            (this.themesLists.position + action > this.themesLists.active.length -1) ? 
+              (action = this.themesLists.active.length -1, this.launchPaused = true) : 
+              (action = this.themesLists.position + action, this.launchPaused = false);
+        }
       }
-      else if(typeof event == 'number'){
-        action = event;
+      if(isCalculed){
+        action = event as number;
       }
-      if(this.loopList){
-        action = (this.themesLists.position + action < 0) ? this.themesLists.active.length -1 : (this.themesLists.position + action > this.themesLists.normal.length -1) ? 0 : this.themesLists.position + action;
-        this.launchPaused = false;
-      }
-      else{
-        (this.themesLists.position + action < 0) ? 
-          (action = 0, this.launchPaused = true) : 
-          (this.themesLists.position + action > this.themesLists.active.length -1) ? 
-            (action = this.themesLists.active.length -1, this.launchPaused = true) : 
-            (action = this.themesLists.position + action, this.launchPaused = false);
-      }
+      this.themesLists.position = action;
+      this.prepareTheme(this.themesLists.active[this.themesLists.position]);
     }
-    if(isCalculed){
-      action = event as number;
-    }
-    this.themesLists.position = action;
-    this.prepareTheme(this.themesLists.active[this.themesLists.position]);
   }
 
   calculeTimeByPixel(position:number){

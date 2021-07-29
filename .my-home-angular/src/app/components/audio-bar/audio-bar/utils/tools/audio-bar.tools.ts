@@ -1,5 +1,5 @@
 import { Theme } from "src/classes/File/Theme";
-import { BarThemesListInterface } from "./interfaces/Bar-Themes-List";
+import { BarThemesListInterface } from "../interfaces/theme-list.interface";
 
 export class BarUtils{
 

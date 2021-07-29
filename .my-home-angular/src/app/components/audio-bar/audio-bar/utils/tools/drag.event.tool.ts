@@ -1,7 +1,7 @@
 import { AudioBarComponent } from "src/app/components/audio-bar/audio-bar/audio-bar.component";
 import { BarUtils } from "./audio-bar.tools";
-import { MiscTools } from "./misc.tools";
-import { Elements_Id } from "./variables/Bar-Variables";
+import { MiscToolsProgress } from "./misc.tools";
+import { Elements_Id } from "../variables/Bar-Variables";
 import { ViewTools } from "./view.tools";
 
 export class DragEvent{
@@ -35,7 +35,7 @@ export class DragEvent{
 
     static ProgressBar = {
         audioBarDrag(event:MouseEvent | TouchEvent, instance: AudioBarComponent){
-            let audioBarPosition = MiscTools.getElementById(Elements_Id.progress_bar_area);
+            let audioBarPosition = MiscToolsProgress.getElementById(Elements_Id.progress_bar_area);
             let position = (audioBarPosition) ? audioBarPosition.getBoundingClientRect().left : 0;
             event.preventDefault();
             const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;
@@ -64,7 +64,7 @@ export class DragEvent{
 
     static VolBar = {
         volumeBarDrag(event:MouseEvent | TouchEvent, instance: AudioBarComponent){
-            const volBarPosition = MiscTools.getElementById(Elements_Id.vol_bar_small);
+            const volBarPosition = MiscToolsProgress.getElementById(Elements_Id.vol_bar_small);
             const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;
             const position = BarUtils.positionInBar(clientX, volBarPosition);
             event.preventDefault();

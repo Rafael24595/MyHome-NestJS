@@ -1,6 +1,6 @@
 import { AudioBarComponent } from "src/app/components/audio-bar/audio-bar/audio-bar.component";
-import { MiscTools } from "./misc.tools";
-import { Elements_Id } from "./variables/Bar-Variables";
+import { MiscToolsProgress } from "./misc.tools";
+import { Elements_Id } from "../variables/Bar-Variables";
 import { ViewTools } from "./view.tools";
 
 export class ResizeTools{
@@ -20,11 +20,11 @@ export class ResizeTools{
     }
 
     protected static resizeProgress(instance: AudioBarComponent): void{
-        const progressBar = MiscTools.getElementById(Elements_Id.progress_bar);
+        const progressBar = MiscToolsProgress.getElementById(Elements_Id.progress_bar);
         
         if(progressBar){
-          const paddingLeft = MiscTools.cleanPxValue(progressBar.style.paddingLeft);
-          const paddingRight = MiscTools.cleanPxValue(progressBar.style.paddingRight);
+          const paddingLeft = MiscToolsProgress.cleanPxValue(progressBar.style.paddingLeft);
+          const paddingRight = MiscToolsProgress.cleanPxValue(progressBar.style.paddingRight);
     
           ViewTools.progressBars.media.size = progressBar.offsetWidth - (paddingLeft + paddingRight);
           if(instance.theme.audio){
@@ -35,10 +35,10 @@ export class ResizeTools{
     }
 
     protected static resizeVol(instance: AudioBarComponent): void{
-        const volBar = MiscTools.getElementById(Elements_Id.vol_bar);
+        const volBar = MiscToolsProgress.getElementById(Elements_Id.vol_bar);
         if(volBar){
-          const paddingLeft = MiscTools.cleanPxValue(volBar.style.paddingLeft);
-          const paddingRight = MiscTools.cleanPxValue(volBar.style.paddingRight);
+          const paddingLeft = MiscToolsProgress.cleanPxValue(volBar.style.paddingLeft);
+          const paddingRight = MiscToolsProgress.cleanPxValue(volBar.style.paddingRight);
 
           ViewTools.progressBars.volume.size = volBar.offsetWidth - (paddingLeft + paddingRight);
           if(instance.theme.audio){

@@ -1,9 +1,9 @@
 import { AudioBarComponent } from "src/app/components/audio-bar/audio-bar/audio-bar.component";
 import { BarUtils } from "./audio-bar.tools";
-import { MiscTools } from "./misc.tools";
-import { Color_Vars, Elements_Id, Icons } from "./variables/Bar-Variables";
-import { Time } from "./variables/interface.const";
-import { LocalStorage } from "./variables/storage.const";
+import { MiscToolsProgress } from "./misc.tools";
+import { Color_Vars, Elements_Id, Icons } from "../variables/Bar-Variables";
+import { Time } from "../variables/interface.const";
+import { LocalStorage } from "../variables/storage.const";
 
 export class ViewTools{
 
@@ -77,7 +77,7 @@ export class ViewTools{
   
         ViewTools.setMuted(instance);
         ViewTools.setVolLogo(instance);
-        MiscTools.setLocalStorage(LocalStorage.volume_status, instance.theme.audio.volume);
+        MiscToolsProgress.setLocalStorage(LocalStorage.volume_status, instance.theme.audio.volume);
       }
     }
 

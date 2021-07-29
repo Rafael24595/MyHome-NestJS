@@ -1,4 +1,4 @@
-export class MiscTools{
+export class MiscToolsProgress{
 
     static getElementById(id: string): HTMLElement | null {
         return document.getElementById(id);

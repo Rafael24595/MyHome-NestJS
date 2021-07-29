@@ -19,7 +19,7 @@ export class MediaViewComponent implements OnInit {
   connection = service_config.connection;
   logos_name = logos_name;
 
-  constructor(private authTools:AuthTools, private miscTools:MiscTools, private route: ActivatedRoute,) { }
+  constructor(private authTools:AuthTools, private miscTools:MiscTools, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.authTools.checkSession();

@@ -10,7 +10,7 @@
         </div>
         <div class="display-inline" style="display: flex; align-items: center; width: 100%;">
             <div>
-                <button tooltip="Volumen" placement="bottom" (click)='muteVol()' class="my-home-icons-font cursor-pointer button-style button-clear">{{ViewResources.volLogo}}</button>
+                <button tooltip="Volumen" placement="bottom" (click)='Operations.muteVol(this)' class="my-home-icons-font cursor-pointer button-style button-clear">{{ViewResources.volLogo}}</button>
             </div>
             <div id="bar-ajustable-vol-width" style="position: relative; overflow: hidden; display: inline-block; padding-left: 25px; padding-right: 25px; vertical-align: bottom; width: -webkit-fill-available;">
                 <div style="width: {{ProgressBars.volume.size}}px;" id='vol-bar-padding' (mousedown)='ToClick($event, this)' (touchstart)='ToClick($event, this)'></div>
@@ -55,7 +55,7 @@
             </div>
             <div style="display: flex; margin-left: 5px; margin-right: 5px;">
                 <button (click)='calculeNextThemePosition($event)' value="-1" class="button button-style button-clear next-button">$</button>
-                <button (click)='setPlayPause()' class="button button-style button-clear play-button">{{ViewResources.playLogo}}</button>
+                <button (click)='Operations.setPlayPause(this)' class="button button-style button-clear play-button">{{ViewResources.playLogo}}</button>
                 <button (click)='calculeNextThemePosition($event)' value="1" class="button button-style button-clear next-button">%</button>
             </div>
             <div>

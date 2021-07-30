@@ -48,7 +48,7 @@ export class ViewTools{
           if((itemId == Elements_Id.progress_bar_area || itemId == 'Meatball') && event.type != 'touchend'){
             ViewTools.viewStatus.timeToolTip.display = 'block';
             const positionInPage = BarUtils.positionInBar(clientX, item);
-            let time = instance.calculeTimeByPixel(positionInPage);
+            let time = BarUtils.calculeTimeByPixel(instance.theme.audio, positionInPage, ViewTools.progressBars.media.size);
             time = (time <= instance.theme.audio.duration) ? time : instance.theme.audio.duration;
             ViewTools.viewStatus.timeToolTip.value = BarUtils.getSeconds(time);
             instance.timePointerPosition = positionInPage;
@@ -62,7 +62,7 @@ export class ViewTools{
     public static progressBarAudio(instance: AudioBarComponent): void{
         if(instance.theme.audio){
           const currentTimeReverse = instance.theme.audio.duration - instance.theme.audio.currentTime;
-          const movement = (!instance.isReverse) ? instance.calculeTimeBySeconds() : instance.calculeTimeBySeconds(currentTimeReverse);
+          const movement = (!instance.isReverse) ? BarUtils.calculeTimeBySeconds(instance.theme.audio, ViewTools.progressBars.media.size) : BarUtils.calculeTimeBySeconds(instance.theme.audio, ViewTools.progressBars.media.size, currentTimeReverse);
 
           ViewTools.progressBars.media.progress = movement;
           ViewTools.viewStatus.time = BarUtils.getSeconds((!instance.isReverse) ? Math.trunc(instance.theme.audio.currentTime) : Math.trunc(currentTimeReverse));

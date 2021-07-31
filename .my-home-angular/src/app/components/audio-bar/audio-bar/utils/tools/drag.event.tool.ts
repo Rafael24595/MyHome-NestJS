@@ -3,6 +3,7 @@ import { BarUtils } from "./audio-bar.tools";
 import { MiscToolsProgress } from "./misc.tools";
 import { Elements_Id } from "../variables/Bar-Variables";
 import { ViewTools } from "./view.tools";
+import { OperationsTools } from "./operations.tools";
 
 export class DragEvent{
 
@@ -14,8 +15,8 @@ export class DragEvent{
         const rect = itemId.getBoundingClientRect();
         const offsetX = (event instanceof MouseEvent) ? event.offsetX : event.changedTouches[0].clientX - rect.left;
         if(itemId.id == Elements_Id.progress_bar_area){
-          (!instance.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(instance, offsetX) : DragEvent.ProgressBar.calculateAudioPosition(instance, ViewTools.progressBars.media.size - offsetX) ;
-          instance.DragProgress.mouseDownAudio(instance);
+          (!instance.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(offsetX) : DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.size - offsetX) ;
+          instance.DragProgress.mouseDownAudio();
         }
         if(itemId.id == Elements_Id.vol_bar_area){
             DragEvent.VolBar.calculateVolumePosition(instance, offsetX);
@@ -45,24 +46,24 @@ export class DragEvent{
             }
         },
       
-        mouseDownAudio(instance: AudioBarComponent){
-          if(instance.theme.audio){
-            instance.audioStatus = (instance.theme.audio.paused) ? false : true; 
-            instance.theme.audio.pause();
+        mouseDownAudio(){
+          if(OperationsTools.theme.audio){
+            OperationsTools.audioPlaying = (OperationsTools.theme.audio.paused) ? false : true; 
+            OperationsTools.theme.audio.pause();
             DragEvent.mouseDwnAudio = true;
           }
         },
       
         mouseUpAudio(instance: AudioBarComponent){
-          if(instance.theme.audio && DragEvent.mouseDwnAudio == true){
-            (!instance.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(instance, ViewTools.progressBars.media.progress) : DragEvent.ProgressBar.calculateAudioPosition(instance, ViewTools.progressBars.media.size - ViewTools.progressBars.media.progress);
-            (instance.audioStatus) ? instance.theme.audio.play(): instance.theme.audio.pause();
+          if(OperationsTools.theme.audio && DragEvent.mouseDwnAudio == true){
+            (!instance.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.progress) : DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.size - ViewTools.progressBars.media.progress);
+            (OperationsTools.audioPlaying) ? OperationsTools.theme.audio.play(): OperationsTools.theme.audio.pause();
             DragEvent.mouseDwnAudio = false;
           }
         },
-        calculateAudioPosition(instance: AudioBarComponent, coorY:number){
-          if(instance.theme.audio){
-            instance.theme.audio.currentTime = coorY * instance.theme.audio.duration / ViewTools.progressBars.media.size;
+        calculateAudioPosition(coorY:number){
+          if(OperationsTools.theme.audio){
+            OperationsTools.theme.audio.currentTime = coorY * OperationsTools.theme.audio.duration / ViewTools.progressBars.media.size;
           }
         }
     }
@@ -91,14 +92,14 @@ export class DragEvent{
             DragEvent.mouseDwnVolume = true;
           },
           calculateVolumePosition(instance: AudioBarComponent, coorY:number){
-            if(instance.theme.audio){
+            if(OperationsTools.theme.audio){
               let vol = 
               (coorY / ViewTools.progressBars.volume.size > 1) 
                 ? 1 
                 : (coorY / ViewTools.progressBars.volume.size < 0.001)
                   ? 0
                   : coorY / ViewTools.progressBars.volume.size;
-                  instance.theme.audio.volume = vol;
+                  OperationsTools.theme.audio.volume = vol;
             }
           }
     }

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AudioBarComponent } from '../audio-bar/audio-bar.component';
 import { ProgressBarListener } from '../audio-bar/utils/services/listener.service';
 import { OperationsTools } from '../audio-bar/utils/tools/operations.tools';
+import { ReproductionTools } from '../audio-bar/utils/tools/reproduction.tools';
 
 @Component({
   selector: 'app-audio-bar-modal',
@@ -14,7 +15,9 @@ export class AudioBarModalComponent implements OnInit {
   @Input() AudioBarInstance: AudioBarComponent = new AudioBarComponent(new ProgressBarListener(), new ActivatedRoute());
 
   static modalState = '';
+  
   Operations = OperationsTools;
+  Reproduction = ReproductionTools;
 
   constructor() { }
 

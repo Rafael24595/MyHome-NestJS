@@ -4,8 +4,8 @@
 <div class="smathphone-display" style="height: -webkit-fill-available; padding: 15px; background-color: black;" (mousemove)='DragEvent($event, this)' (touchmove)='DragEvent($event, this)' (mouseleave)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this);DragEvent($event, this)' (mouseup)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this)' (touchend)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this);DragEvent($event, this)'>
     <div style="width: 100%; text-align: center;">
         <div style="display: flex; justify-content: space-between;">
-            <span class="reproductor-icon" [routerLink]='["/Manage" + theme.data.directory]'>Z</span>
-            <p style="color: white;">{{theme.data.name}}</p>
+            <span class="reproductor-icon" [routerLink]='["/Manage" + Operations.theme.data.directory]'>Z</span>
+            <p style="color: white;">{{Operations.theme.data.name}}</p>
             <span class="reproductor-icon empty">Z</span>
         </div>
         <div class="display-inline" style="display: flex; align-items: center; width: 100%;">
@@ -35,12 +35,12 @@
                 <span style="color: white; font-weight: bold;">{{ViewResources.time}}</span>
             </div>
             <div style="position: relative; width: 100%;">
-                <p class="timeTag" style="margin-left: {{timePointerPosition}}px; display:{{ViewResources.timeToolTip.display}}; ">{{ViewResources.timeToolTip.value}}</p>
+                <p class="timeTag" style="margin-left: {{ViewResources.timeToolTip.position}}px; display:{{ViewResources.timeToolTip.display}}; ">{{ViewResources.timeToolTip.value}}</p>
                 <div id="bar-ajustable-width" style="position: relative; display: inline-block; width: -webkit-fill-available; overflow: hidden; padding-left: 15px; padding-right: 15px;">
                     <div style="width: {{ProgressBars.media.size}}px;" id='audio-bar-padding' (mousedown)='ToClick($event, this)' (touchstart)='ToClick($event, this)'></div>
                     <div style="width: {{ProgressBars.media.progress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>
                     <div style="width: {{ProgressBars.media.size}}px;" id='audio-bar'>
-                        <div style="margin-left: {{ProgressBars.media.progress}}px;" id='Meatball' (mousedown)='DragProgress.mouseDownAudio(this)' (touchstart)='DragProgress.mouseDownAudio(this)'></div>
+                        <div style="margin-left: {{ProgressBars.media.progress}}px;" id='Meatball' (mousedown)='DragProgress.mouseDownAudio()' (touchstart)='DragProgress.mouseDownAudio()'></div>
                     </div>
                 </div>
             </div>
@@ -54,9 +54,9 @@
                 <span class="reproductor-icon empty">[</span>
             </div>
             <div style="display: flex; margin-left: 5px; margin-right: 5px;">
-                <button (click)='calculeNextThemePosition($event)' value="-1" class="button button-style button-clear next-button">$</button>
+                <button (click)='Reproduction.nextTheme(this,$event)' value="-1" class="button button-style button-clear next-button">$</button>
                 <button (click)='Operations.setPlayPause(this)' class="button button-style button-clear play-button">{{ViewResources.playLogo}}</button>
-                <button (click)='calculeNextThemePosition($event)' value="1" class="button button-style button-clear next-button">%</button>
+                <button (click)='Reproduction.nextTheme(this,$event)' value="1" class="button button-style button-clear next-button">%</button>
             </div>
             <div>
                 <span class="reproductor-icon">[</span>

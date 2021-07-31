@@ -4,5 +4,5 @@ export const LocalStorage = {
     volume_status: 'volume_status',
     velocity_status: 'velocity_status',
     loop_list_status: 'loop_list_status',
-    random_list_status: 'loop_list_status'
+    random_list_status: 'random_list_status'
 }

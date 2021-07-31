@@ -4,15 +4,18 @@ import { MiscToolsProgress } from "./misc.tools";
 import { Color_Vars, Elements_Id, Icons } from "../variables/Bar-Variables";
 import { Time } from "../variables/interface.const";
 import { LocalStorage } from "../variables/storage.const";
+import { OperationsTools } from "./operations.tools";
+import { ReproductionTools } from "./reproduction.tools";
 
 export class ViewTools{
 
-    static viewStatus: {playLogo: string, volLogo: string, time: string, maxTime: string, timeToolTip: {value: string, display: string}} = {
+    static viewStatus: {playLogo: string, volLogo: string, time: string, maxTime: string, timeToolTip: {position:number ,value: string, display: string}} = {
       playLogo: Icons.play,
       volLogo: Color_Vars.volume_logo.percentage_75,
       time: Time.default,
       maxTime: Time.default,
       timeToolTip: {
+        position: 0,
         value: Time.default,
         display: 'none'
       }
@@ -32,7 +35,7 @@ export class ViewTools{
     public static setDefaultInterfaceValues(instance: AudioBarComponent){
         ViewTools.progressBarAudio(instance);
         ViewTools.setLoopAudio(instance);
-        ViewTools.setTime(instance);
+        ViewTools.setTime();
         ViewTools.setLoopList(instance);
         ViewTools.setRandomList(instance);
         ViewTools.setReverse(instance);
@@ -40,7 +43,7 @@ export class ViewTools{
     }
 
     public static showTimePointer(event:MouseEvent | TouchEvent, instance: AudioBarComponent): void{
-        if(instance.theme.audio){
+        if(OperationsTools.theme.audio){
           let item:HTMLElement | string = event.target as HTMLElement;
           const itemId = item.id;
           const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;
@@ -48,10 +51,10 @@ export class ViewTools{
           if((itemId == Elements_Id.progress_bar_area || itemId == 'Meatball') && event.type != 'touchend'){
             ViewTools.viewStatus.timeToolTip.display = 'block';
             const positionInPage = BarUtils.positionInBar(clientX, item);
-            let time = BarUtils.calculeTimeByPixel(instance.theme.audio, positionInPage, ViewTools.progressBars.media.size);
-            time = (time <= instance.theme.audio.duration) ? time : instance.theme.audio.duration;
+            let time = BarUtils.calculeTimeByPixel(OperationsTools.theme.audio, positionInPage, ViewTools.progressBars.media.size);
+            time = (time <= OperationsTools.theme.audio.duration) ? time : OperationsTools.theme.audio.duration;
             ViewTools.viewStatus.timeToolTip.value = BarUtils.getSeconds(time);
-            instance.timePointerPosition = positionInPage;
+            ViewTools.viewStatus.timeToolTip.position = positionInPage;
           }
           else{
             ViewTools.viewStatus.timeToolTip.display = 'none';
@@ -60,30 +63,30 @@ export class ViewTools{
       }
 
     public static progressBarAudio(instance: AudioBarComponent): void{
-        if(instance.theme.audio){
-          const currentTimeReverse = instance.theme.audio.duration - instance.theme.audio.currentTime;
-          const movement = (!instance.isReverse) ? BarUtils.calculeTimeBySeconds(instance.theme.audio, ViewTools.progressBars.media.size) : BarUtils.calculeTimeBySeconds(instance.theme.audio, ViewTools.progressBars.media.size, currentTimeReverse);
+        if(OperationsTools.theme.audio){
+          const currentTimeReverse = OperationsTools.theme.audio.duration - OperationsTools.theme.audio.currentTime;
+          const movement = (!instance.isReverse) ? BarUtils.calculeTimeBySeconds(OperationsTools.theme.audio, ViewTools.progressBars.media.size) : BarUtils.calculeTimeBySeconds(OperationsTools.theme.audio, ViewTools.progressBars.media.size, currentTimeReverse);
 
           ViewTools.progressBars.media.progress = movement;
-          ViewTools.viewStatus.time = BarUtils.getSeconds((!instance.isReverse) ? Math.trunc(instance.theme.audio.currentTime) : Math.trunc(currentTimeReverse));
+          ViewTools.viewStatus.time = BarUtils.getSeconds((!instance.isReverse) ? Math.trunc(OperationsTools.theme.audio.currentTime) : Math.trunc(currentTimeReverse));
         }
     }
 
     public static progressBarVolume(instance: AudioBarComponent): void{
-      if(instance.theme.audio){
-        let volActual = instance.theme.audio.volume;
+      if(OperationsTools.theme.audio){
+        let volActual = OperationsTools.theme.audio.volume;
         let movement = volActual * ViewTools.progressBars.volume.size;
         ViewTools.progressBars.volume.progress = movement;
   
         ViewTools.setMuted(instance);
         ViewTools.setVolLogo(instance);
-        MiscToolsProgress.setLocalStorage(LocalStorage.volume_status, instance.theme.audio.volume);
+        MiscToolsProgress.setLocalStorage(LocalStorage.volume_status, OperationsTools.theme.audio.volume);
       }
     }
 
     public static setLoopAudio(instance: AudioBarComponent): void{
-        if(instance.theme.audio){
-          if(instance.theme.audio.loop){
+        if(OperationsTools.theme.audio){
+          if(OperationsTools.theme.audio.loop){
             instance.loopColor = Color_Vars.button_loop_color.loop;
           }
           else{
@@ -92,14 +95,14 @@ export class ViewTools{
         }
     }
 
-    public static setTime(instance: AudioBarComponent): void{
-        if(instance.theme.audio){
-          ViewTools.viewStatus.maxTime =  BarUtils.getSeconds(instance.theme.audio.duration);
+    public static setTime(): void{
+        if(OperationsTools.theme.audio){
+          ViewTools.viewStatus.maxTime =  BarUtils.getSeconds(OperationsTools.theme.audio.duration);
         }
     }
 
     public static setLoopList(instance: AudioBarComponent): void{
-        if(instance.loopList){
+        if(ReproductionTools.loopList){
             instance.loopListColor = Color_Vars.button_loop_list_color.loop;
         }
         else{
@@ -108,7 +111,7 @@ export class ViewTools{
     }
 
     public static setRandomList(instance: AudioBarComponent): void{
-        if(instance.randomList){
+        if(ReproductionTools.randomList){
             instance.randomColor = Color_Vars.button_random_color.random;
         }
         else{
@@ -117,21 +120,21 @@ export class ViewTools{
     }
 
     public static setReverse(instance: AudioBarComponent): void{
-        if(instance.theme.audio){
+        if(OperationsTools.theme.audio){
           if(instance.isReverse){
             instance.reverseColor = Color_Vars.button_reverse_color.reverse;
-            instance.barColor = (instance.theme.audio.paused) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.reverse_play;
+            instance.barColor = (OperationsTools.theme.audio.paused) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.reverse_play;
           }
           else{
             instance.reverseColor = Color_Vars.button_reverse_color.normal;
-            instance.barColor = (instance.theme.audio.paused) ? Color_Vars.bar_progress_color.pause : Color_Vars.bar_progress_color.play;
+            instance.barColor = (OperationsTools.theme.audio.paused) ? Color_Vars.bar_progress_color.pause : Color_Vars.bar_progress_color.play;
           }
         }
     }
 
     public static setPlay(instance: AudioBarComponent): void{
-        if(instance.theme.audio){
-          if(instance.theme.audio.paused){
+        if(OperationsTools.theme.audio){
+          if(OperationsTools.theme.audio.paused){
             instance.barColor = (instance.isReverse) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.pause; 
             ViewTools.viewStatus.playLogo = Icons.play;
           }
@@ -143,28 +146,28 @@ export class ViewTools{
     }
 
     public static setVolLogo(instance: AudioBarComponent): void{
-        if(instance.theme.audio){
-          const volActual = instance.theme.audio.volume;
+        if(OperationsTools.theme.audio){
+          const volActual = OperationsTools.theme.audio.volume;
           const percentage = volActual * 100 / 25;
           
           if(percentage <= 0){
-            ViewTools.viewStatus.volLogo = (instance.theme.audio.muted) ? Color_Vars.volume_logo.percentage_0_muted : Color_Vars.volume_logo.percentage_0;
+            ViewTools.viewStatus.volLogo = (OperationsTools.theme.audio.muted) ? Color_Vars.volume_logo.percentage_0_muted : Color_Vars.volume_logo.percentage_0;
           }
           if(percentage > 0 && percentage <= 1){
-            ViewTools.viewStatus.volLogo = (instance.theme.audio.muted) ? Color_Vars.volume_logo.percentage_25_muted : Color_Vars.volume_logo.percentage_25;
+            ViewTools.viewStatus.volLogo = (OperationsTools.theme.audio.muted) ? Color_Vars.volume_logo.percentage_25_muted : Color_Vars.volume_logo.percentage_25;
           }
           if(percentage > 1 && percentage < 3){
-            ViewTools.viewStatus.volLogo = (instance.theme.audio.muted) ? Color_Vars.volume_logo.percentage_50_muted : Color_Vars.volume_logo.percentage_50;
+            ViewTools.viewStatus.volLogo = (OperationsTools.theme.audio.muted) ? Color_Vars.volume_logo.percentage_50_muted : Color_Vars.volume_logo.percentage_50;
           }
           if(percentage >= 3){
-            ViewTools.viewStatus.volLogo = (instance.theme.audio.muted) ? Color_Vars.volume_logo.percentage_75_muted : Color_Vars.volume_logo.percentage_75;
+            ViewTools.viewStatus.volLogo = (OperationsTools.theme.audio.muted) ? Color_Vars.volume_logo.percentage_75_muted : Color_Vars.volume_logo.percentage_75;
           }
     
         }
     }
 
     public static setMuted(instance: AudioBarComponent): void{
-        if(instance.theme.audio && instance.theme.audio.muted){
+        if(OperationsTools.theme.audio && OperationsTools.theme.audio.muted){
             instance.muteColor = Color_Vars.button_mute_color.muted;
             instance.barVolColor = Color_Vars.bar_volume_color.front.muted;
             instance.barVolColorBack = Color_Vars.bar_volume_color.background.muted;
@@ -174,7 +177,7 @@ export class ViewTools{
             instance.muteColor = Color_Vars.button_mute_color.unmuted;
             instance.barVolColor = Color_Vars.bar_volume_color.front.unmuted;
             instance.barVolColorBack = Color_Vars.bar_volume_color.background.unmuted;
-          instance.babyMeatballColor = Color_Vars.meatball_color.baby.unmuted;
+            instance.babyMeatballColor = Color_Vars.meatball_color.baby.unmuted;
         }
       }
 

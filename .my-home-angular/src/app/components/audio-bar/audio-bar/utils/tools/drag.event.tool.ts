@@ -15,27 +15,28 @@ export class DragEvent{
         const rect = itemId.getBoundingClientRect();
         const offsetX = (event instanceof MouseEvent) ? event.offsetX : event.changedTouches[0].clientX - rect.left;
         if(itemId.id == Elements_Id.progress_bar_area){
-          (!instance.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(offsetX) : DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.size - offsetX) ;
+          (!OperationsTools.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(offsetX) : DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.size - offsetX) ;
           instance.DragProgress.mouseDownAudio();
         }
         if(itemId.id == Elements_Id.vol_bar_area){
-            DragEvent.VolBar.calculateVolumePosition(instance, offsetX);
-            instance.DragVolume.mouseDownVolume(instance);
+            DragEvent.VolBar.calculateVolumePosition(offsetX);
+            instance.DragVolume.mouseDownVolume();
         }
+        event.preventDefault();
     }
 
     static mouseDrag(event:MouseEvent | TouchEvent, instance: AudioBarComponent){
-        ViewTools.showTimePointer(event, instance);
+        ViewTools.showTimePointer(event);
         if(DragEvent.mouseDwnAudio == true){
-            instance.DragProgress.audioBarDrag(event, instance);
+            instance.DragProgress.audioBarDrag(event);
         }
         if(DragEvent.mouseDwnVolume == true){
-            instance.DragVolume.volumeBarDrag(event, instance);
+            instance.DragVolume.volumeBarDrag(event);
         }
     }
 
     static ProgressBar = {
-        audioBarDrag(event:MouseEvent | TouchEvent, instance: AudioBarComponent){
+        audioBarDrag(event:MouseEvent | TouchEvent){
             let audioBarPosition = MiscToolsProgress.getElementById(Elements_Id.progress_bar_area);
             let position = (audioBarPosition) ? audioBarPosition.getBoundingClientRect().left : 0;
             event.preventDefault();
@@ -54,9 +55,9 @@ export class DragEvent{
           }
         },
       
-        mouseUpAudio(instance: AudioBarComponent){
+        mouseUpAudio(){
           if(OperationsTools.theme.audio && DragEvent.mouseDwnAudio == true){
-            (!instance.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.progress) : DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.size - ViewTools.progressBars.media.progress);
+            (!OperationsTools.isReverse) ? DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.progress) : DragEvent.ProgressBar.calculateAudioPosition(ViewTools.progressBars.media.size - ViewTools.progressBars.media.progress);
             (OperationsTools.audioPlaying) ? OperationsTools.theme.audio.play(): OperationsTools.theme.audio.pause();
             DragEvent.mouseDwnAudio = false;
           }
@@ -69,7 +70,7 @@ export class DragEvent{
     }
 
     static VolBar = {
-        volumeBarDrag(event:MouseEvent | TouchEvent, instance: AudioBarComponent){
+        volumeBarDrag(event:MouseEvent | TouchEvent){
             const volBarPosition = MiscToolsProgress.getElementById(Elements_Id.vol_bar_small);
             const clientX = (event instanceof MouseEvent) ? event.clientX : event.changedTouches[0].clientX;
             const position = BarUtils.positionInBar(clientX, volBarPosition);
@@ -78,20 +79,20 @@ export class DragEvent{
             if(position >= -1 && position <= ViewTools.progressBars.volume.size + 1){
               ViewTools.progressBars.volume.progress = position;
             }
-            DragEvent.VolBar.calculateVolumePosition(instance, ViewTools.progressBars.volume.progress);
+            DragEvent.VolBar.calculateVolumePosition(ViewTools.progressBars.volume.progress);
           },
         
-          mouseUpVolume(instance: AudioBarComponent){
+          mouseUpVolume(){
             if(DragEvent.mouseDwnVolume == true){
-              DragEvent.VolBar.calculateVolumePosition(instance, ViewTools.progressBars.volume.progress)
+              DragEvent.VolBar.calculateVolumePosition(ViewTools.progressBars.volume.progress)
                 DragEvent.mouseDwnVolume = false;
             }
           },
         
-          mouseDownVolume(instance: AudioBarComponent){
+          mouseDownVolume(){
             DragEvent.mouseDwnVolume = true;
           },
-          calculateVolumePosition(instance: AudioBarComponent, coorY:number){
+          calculateVolumePosition(coorY:number){
             if(OperationsTools.theme.audio){
               let vol = 
               (coorY / ViewTools.progressBars.volume.size > 1) 

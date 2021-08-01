@@ -1,0 +1,11 @@
+{
+    "root":"private_assets",
+    "tmp": ".tmp",
+    "collections":{
+        "path":{
+            "audio": "media\\audio",
+            "image": "media\\image",
+            "video": "media\\video"
+        }
+    }
+}

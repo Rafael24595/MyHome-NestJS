@@ -30,6 +30,7 @@ export class AudioBarComponent implements OnInit {
 
   ViewResources = ViewTools.viewStatus;
   ProgressBars = ViewTools.progressBars;
+  ButtonsColor = ViewTools.buttonsColor;
 
   Operations = OperationsTools;
   Reproduction = ReproductionTools;
@@ -52,41 +53,26 @@ export class AudioBarComponent implements OnInit {
     OperationsTools.destroyComponent(this);
   }
   
-  /*////////////
-  | COLOR VARS |
-  ////////////*/
-
-  loadGif = Color_Vars.load_gif_status.hidden;
-  barColor = Color_Vars.bar_progress_color.pause;
-  barVolColorBack = Color_Vars.bar_volume_color.background.unmuted;
-  barVolColor = Color_Vars.bar_volume_color.front.unmuted;
-  babyMeatballColor = Color_Vars.meatball_color.baby.unmuted;
-  muteColor = Color_Vars.button_mute_color.unmuted;
-  loopColor = Color_Vars.button_loop_color.normal;
-  randomColor = Color_Vars.button_random_color.normal;
-  loopListColor = Color_Vars.button_loop_list_color.normal;
-  reverseColor = Color_Vars.button_reverse_color.normal;
-
+  
   /////////////////////
   // BETA FUNCTIONS //
   ////////////////////
 
   reverseSrc = '';
-  isReverse = false;
 
   revertAudioImplement(){
     if(OperationsTools.theme.audio){
-      this.loadGif = Color_Vars.load_gif_status.visible;
+      ViewTools.buttonsColor.loadGif = Color_Vars.load_gif_status.visible;
       OperationsTools.audioPlaying = (OperationsTools.theme.audio.paused) ? false : true;
 
       if(OperationsTools.theme.audio.src != this.reverseSrc){
         OperationsTools.theme.audio.pause();
         (this.reverseSrc == '')
-          ? this.revertAudio(OperationsTools.theme.audio.src).then(()=>{this.isReverse = true; this.switchSRC()})
-          : (this.isReverse = true, this.switchSRC()) ;  
+          ? this.revertAudio(OperationsTools.theme.audio.src).then(()=>{OperationsTools.isReverse = true; this.switchSRC()})
+          : (OperationsTools.isReverse = true, this.switchSRC()) ;  
       }
       else{
-        this.isReverse = false;
+        OperationsTools.isReverse = false;
         this.switchSRC();
       }
     }
@@ -95,17 +81,15 @@ export class AudioBarComponent implements OnInit {
   switchSRC(){
 
     if(OperationsTools.theme.audio){
-      if(this.isReverse){
-
-        this.loadGif = Color_Vars.load_gif_status.hidden;
+      if(OperationsTools.isReverse){
+        ViewTools.buttonsColor.loadGif = Color_Vars.load_gif_status.hidden;
         let time = OperationsTools.theme.audio.duration - OperationsTools.theme.audio.currentTime;
         OperationsTools.prepareTheme(this);
         OperationsTools.theme.audio.currentTime = time;
         OperationsTools.theme.audio.play();
   
       }else{
-  
-        this.loadGif = Color_Vars.load_gif_status.hidden;
+        ViewTools.buttonsColor.loadGif = Color_Vars.load_gif_status.hidden;
         let time = OperationsTools.theme.audio.duration - OperationsTools.theme.audio.currentTime;
         OperationsTools.prepareTheme(this);
         OperationsTools.theme.audio.currentTime = time;

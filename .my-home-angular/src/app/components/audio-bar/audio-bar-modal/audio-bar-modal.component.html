@@ -2,26 +2,26 @@
     <div class="display-inline">
         <div class="modal-element">
             <p>Aleatorio:</p>
-            <button (click)='Reproduction.randomReproduction(AudioBarInstance)' style="color: {{AudioBarInstance.randomColor}};" class="my-home-icons-font cursor-pointer button-clear">&</button>
+            <button (click)='Reproduction.randomReproduction()' style="color: {{ButtonsColor.randomColor}};" class="my-home-icons-font cursor-pointer button-clear">&</button>
         </div>
         <div class="modal-element">
             <p>Loop lista:</p>
-            <button (click)='Reproduction.loopListReproduction(AudioBarInstance)' style="color: {{AudioBarInstance.loopListColor}};" class="my-home-icons-font cursor-pointer button-clear">'</button>
+            <button (click)='Reproduction.loopListReproduction()' style="color: {{ButtonsColor.loopListColor}};" class="my-home-icons-font cursor-pointer button-clear">'</button>
         </div>
         <div class="modal-element">
             <p>Loop tema:</p>
-            <button (click)='Reproduction.loopAudio(AudioBarInstance)' style="color: {{AudioBarInstance.loopColor}};" class="my-home-icons-font cursor-pointer button-clear">(</button>
+            <button (click)='Reproduction.loopAudio()' style="color: {{ButtonsColor.loopColor}};" class="my-home-icons-font cursor-pointer button-clear">(</button>
         </div>
         <div class="modal-element">
             <p>Inverso: </p>
-            <button (click)='AudioBarInstance.revertAudioImplement()' style="color: {{AudioBarInstance.reverseColor}};" class="my-home-icons-font cursor-pointer button-clear">F</button>
+            <button (click)='AudioBarInstance.revertAudioImplement()' style="color: {{ButtonsColor.reverseColor}};" class="my-home-icons-font cursor-pointer button-clear">F</button>
         </div>
     </div>
     <div class="underline-box"></div>
     <div class="modal-element">
         <p style="margin-top: 5px; margin-bottom: 5px;">Velocidad:</p>
         <div class="display-inline" style="margin-left: 5px; margin-right: 5px;">
-            <select [(ngModel)]="Operations.speed" (change)='Operations.updateSpeed(AudioBarInstance)' class="right-button cursor-pointer" style="margin-bottom: 5px;">
+            <select [(ngModel)]="Operations.speed" (change)='Operations.updateSpeed()' class="right-button cursor-pointer" style="margin-bottom: 5px;">
                 <option value="0.25">x0.25</option>
                 <option value="0.5">x0.5</option>
                 <option value="0.75">x0.75</option>

@@ -2,6 +2,7 @@ import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Shedule } from './utils/shedule.job';
+import { ConfigTools } from './utils/config.tools';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   await app.listen(3000);
 
+  ConfigTools.OnInit();
   Shedule.thumbnailControl();
 
 }

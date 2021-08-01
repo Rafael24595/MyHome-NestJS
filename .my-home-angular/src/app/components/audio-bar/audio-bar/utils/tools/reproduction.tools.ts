@@ -10,21 +10,21 @@ export class ReproductionTools{
     public static randomList = false;
     public static loopList = false;
 
-    public static loopListReproduction(instance: AudioBarComponent){
+    public static loopListReproduction(){
         ReproductionTools.loopList = !ReproductionTools.loopList;
-        ViewTools.setLoopList(instance);
+        ViewTools.setLoopList();
         MiscToolsProgress.setLocalStorage(LocalStorage.loop_list_status, ReproductionTools.loopList);
       }
     
-      public static loopAudio(instance: AudioBarComponent){
+      public static loopAudio(){
         if(OperationsTools.theme.audio){
             OperationsTools.theme.audio.loop = !OperationsTools.theme.audio.loop;
-            ViewTools.setLoopAudio(instance);
+            ViewTools.setLoopAudio();
             MiscToolsProgress.setLocalStorage(LocalStorage.loop_status, OperationsTools.theme.audio.loop);
         }
       }
 
-    public static randomReproduction(instance: AudioBarComponent){
+    public static randomReproduction(){
         ReproductionTools.randomList = !ReproductionTools.randomList;
         if(ReproductionTools.randomList){
             OperationsTools.themesLists.random = BarUtils.randomizeList(OperationsTools.themesLists.normal, OperationsTools.themesLists.position);
@@ -35,7 +35,7 @@ export class ReproductionTools{
             OperationsTools.themesLists.position = BarUtils.findThemePositionInListById(OperationsTools.themesLists.active, OperationsTools.themesLists.position, OperationsTools.themesLists.normal);
             OperationsTools.themesLists.active = OperationsTools.themesLists.normal;
         }
-        ViewTools.setRandomList(instance);
+        ViewTools.setRandomList();
         MiscToolsProgress.setLocalStorage(LocalStorage.random_list_status, ReproductionTools.randomList);
       }
 

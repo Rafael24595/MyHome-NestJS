@@ -1,7 +1,10 @@
-<div id="button-container" class="{{AudioBarModal.modalState}}">
-    <app-audio-bar-modal [AudioBarInstance]="this"></app-audio-bar-modal>
-</div>
-<div class="smathphone-display" style="height: -webkit-fill-available; padding: 15px; background-color: black;" (mousemove)='DragEvent($event, this)' (touchmove)='DragEvent($event, this)' (mouseleave)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this);DragEvent($event, this)' (mouseup)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this)' (touchend)='DragProgress.mouseUpAudio(this);DragVolume.mouseUpVolume(this);DragEvent($event, this)'>
+<div class="smathphone-display" style="height: -webkit-fill-available; padding: 15px; background-color: black;"
+    (mousemove)='DragEvent($event, this)'
+    (touchmove)='DragEvent($event, this)'
+    (mouseleave)='DragProgress.mouseUpAudio();DragVolume.mouseUpVolume();DragEvent($event, this)'
+    (mouseup)='DragProgress.mouseUpAudio();DragVolume.mouseUpVolume()'
+    (touchend)='DragProgress.mouseUpAudio();DragVolume.mouseUpVolume();DragEvent($event, this)'
+>
     <div style="width: 100%; text-align: center;">
         <div style="display: flex; justify-content: space-between;">
             <span class="reproductor-icon" [routerLink]='["/Manage" + Operations.theme.data.directory]'>Z</span>
@@ -10,13 +13,13 @@
         </div>
         <div class="display-inline" style="display: flex; align-items: center; width: 100%;">
             <div>
-                <button tooltip="Volumen" placement="bottom" (click)='Operations.muteVol(this)' class="my-home-icons-font cursor-pointer button-style button-clear">{{ViewResources.volLogo}}</button>
+                <button tooltip="Volumen" placement="bottom" (click)='Operations.muteVol()' class="my-home-icons-font cursor-pointer button-style button-clear">{{ViewResources.volLogo}}</button>
             </div>
             <div id="bar-ajustable-vol-width" style="position: relative; overflow: hidden; display: inline-block; padding-left: 25px; padding-right: 25px; vertical-align: bottom; width: -webkit-fill-available;">
                 <div style="width: {{ProgressBars.volume.size}}px;" id='vol-bar-padding' (mousedown)='ToClick($event, this)' (touchstart)='ToClick($event, this)'></div>
-                <div style="width: {{ProgressBars.volume.progress}}px; background-color: {{barVolColor}};" id='vol-bar-progress'></div>
-                <div style="width: {{ProgressBars.volume.size}}px; background-color: {{barVolColorBack}};" id='vol-bar'>
-                    <div style="margin-left: {{ProgressBars.volume.progress}}px; background-color: {{babyMeatballColor}};" id='Baby-Meatball' (mousedown)='DragVolume.mouseDownVolume(this)' (touchstart)='DragVolume.mouseDownVolume(this)'></div>
+                <div style="width: {{ProgressBars.volume.progress}}px; background-color: {{ButtonsColor.barVolColor}};" id='vol-bar-progress'></div>
+                <div style="width: {{ProgressBars.volume.size}}px; background-color: {{ButtonsColor.barVolColorBack}};" id='vol-bar'>
+                    <div style="margin-left: {{ProgressBars.volume.progress}}px; background-color: {{ButtonsColor.babyMeatballColor}};" id='Baby-Meatball' (mousedown)='DragVolume.mouseDownVolume()' (touchstart)='DragVolume.mouseDownVolume()'></div>
                 </div>
             </div>
         </div>
@@ -27,8 +30,13 @@
         </div>
     </div>
     <div style="width: 100%;">
-        <div id="button-gear-container" class="display-inline" style="position: relative;">
-            <button id="button-gear" tooltip="Desplegar opciones" placement="bottom" (click)='AudioBarModal.showModal()' class="my-home-icons-font button-style button-clear cursor-pointer {{AudioBarModal.modalState}}" style="margin-left: 5px; margin-right: 5px;">J</button>
+        <div style="position: relative;">
+            <div id="button-container" class="{{AudioBarModal.modalState}}">
+                <app-audio-bar-modal [AudioBarInstance]="this"></app-audio-bar-modal>
+            </div>
+            <div id="button-gear-container" class="display-inline" style="position: relative;">
+                <button id="button-gear" tooltip="Desplegar opciones" placement="bottom" (click)='AudioBarModal.showModal()' class="my-home-icons-font button-style button-clear cursor-pointer {{AudioBarModal.modalState}}" style="margin-left: 5px; margin-right: 5px;">J</button>
+            </div>
         </div>
         <div style="display: flex; width: 100%; align-items: center;">
             <div style="display: inline-block; margin-left: 5px; margin-right: 5px;">
@@ -38,7 +46,7 @@
                 <p class="timeTag" style="margin-left: {{ViewResources.timeToolTip.position}}px; display:{{ViewResources.timeToolTip.display}}; ">{{ViewResources.timeToolTip.value}}</p>
                 <div id="bar-ajustable-width" style="position: relative; display: inline-block; width: -webkit-fill-available; overflow: hidden; padding-left: 15px; padding-right: 15px;">
                     <div style="width: {{ProgressBars.media.size}}px;" id='audio-bar-padding' (mousedown)='ToClick($event, this)' (touchstart)='ToClick($event, this)'></div>
-                    <div style="width: {{ProgressBars.media.progress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>
+                    <div style="width: {{ProgressBars.media.progress}}px; background-color: {{ButtonsColor.barColor}};" id='audio-bar-progress'></div>
                     <div style="width: {{ProgressBars.media.size}}px;" id='audio-bar'>
                         <div style="margin-left: {{ProgressBars.media.progress}}px;" id='Meatball' (mousedown)='DragProgress.mouseDownAudio()' (touchstart)='DragProgress.mouseDownAudio()'></div>
                     </div>

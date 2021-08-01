@@ -1,6 +1,8 @@
+import { ActivatedRoute } from "@angular/router";
 import { Theme } from "src/classes/File/Theme";
 import { MiscTools } from "src/utils/tools/misc.tools";
 import { AudioBarComponent } from "../../audio-bar.component";
+import { ProgressBarListener } from "../services/listener.service";
 import { Media } from "../variables/Bar-Variables";
 import { LocalStorage } from "../variables/storage.const";
 import { BarUtils } from "./audio-bar.tools";
@@ -13,6 +15,7 @@ export class OperationsTools{
   public static speed = 1; 
   public static playOnInit = true;
   public static audioPlaying = false;
+  public static isReverse = false;
 
   public static theme: {audio: HTMLAudioElement | undefined, data: Theme} = {
     audio: new Audio(),
@@ -25,6 +28,10 @@ export class OperationsTools{
     position: 0
   }
 
+  constructor(progressBarListener: ProgressBarListener, route: ActivatedRoute) {
+    console.log(route);
+  }
+
   public static setInitialValues(instance: AudioBarComponent){
       OperationsTools.setTheme(instance);
       OperationsTools.setThemeListListener(instance);
@@ -32,6 +39,7 @@ export class OperationsTools{
 
   public static destroyComponent(instance: AudioBarComponent){
       if(OperationsTools.theme.audio) OperationsTools.theme.audio.pause();
+      OperationsTools.themesLists = {normal: [],random: [],active: [],position: 0};
       instance.progressBarListener.unsubscribe();
   }
 
@@ -40,13 +48,13 @@ export class OperationsTools{
       let src = ''; 
   
       if(theme){
-          instance.isReverse =  false;
-          instance.reverseSrc = '';
-          src = `${Media.path}/${theme.path}`;
-          OperationsTools.theme.data = theme;
+        OperationsTools.isReverse =  false;
+        instance.reverseSrc = '';
+        src = `${Media.path}/${theme.path}`;
+        OperationsTools.theme.data = theme;
       }
       else{
-        src = (instance.isReverse) ? instance.reverseSrc : `${Media.path}/${OperationsTools.theme.data.path}`;
+        src = (OperationsTools.isReverse) ? instance.reverseSrc : `${Media.path}/${OperationsTools.theme.data.path}`;
       }
       
       if(OperationsTools.theme.audio) {OperationsTools.theme.audio.pause();}
@@ -60,11 +68,11 @@ export class OperationsTools{
             if(OperationsTools.theme.audio){
               OperationsTools.theme.audio.onpause = ()=>{ViewTools.setPlay(instance)}
               OperationsTools.theme.audio.onplay = ()=>{ViewTools.setPlay(instance)}
-              OperationsTools.theme.audio.onvolumechange = ()=>{ViewTools.progressBarVolume(instance)};
+              OperationsTools.theme.audio.onvolumechange = ()=>{ViewTools.progressBarVolume()};
               OperationsTools.theme.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio(instance)}
               OperationsTools.theme.audio.onended = ()=>{ReproductionTools.nextTheme(instance, 1)}
       
-              OperationsTools.setDefaultThemeValues(instance);
+              OperationsTools.setDefaultThemeValues();
               ViewTools.setDefaultInterfaceValues(instance);
             }
           }
@@ -85,12 +93,12 @@ export class OperationsTools{
             OperationsTools.themesLists.normal = themeList;
             OperationsTools.themesLists.active = OperationsTools.themesLists.normal;
             OperationsTools.themesLists.position = BarUtils.findThemePositionInListByPath(OperationsTools.theme.data, OperationsTools.themesLists.active);
-              if(MiscToolsProgress.getLocalStorage(LocalStorage.random_list_status)) ReproductionTools.randomReproduction(instance);
+              if(MiscToolsProgress.getLocalStorage(LocalStorage.random_list_status)) ReproductionTools.randomReproduction();
           }
       });
   }
 
-  private static setDefaultThemeValues(instance: AudioBarComponent){
+  private static setDefaultThemeValues(){
 
       let muted = MiscToolsProgress.getLocalStorage(LocalStorage.mute_status);
       let loop = MiscToolsProgress.getLocalStorage(LocalStorage.loop_status);
@@ -127,14 +135,14 @@ export class OperationsTools{
       }
     }
 
-    public static muteVol(instance: AudioBarComponent){
+    public static muteVol(){
       if(OperationsTools.theme.audio){
         OperationsTools.theme.audio.muted = !OperationsTools.theme.audio.muted;
           MiscToolsProgress.setLocalStorage(LocalStorage.mute_status, OperationsTools.theme.audio.muted);
       }
     }
   
-    public static updateSpeed(instance: AudioBarComponent){
+    public static updateSpeed(){
       if(OperationsTools.theme.audio){
         OperationsTools.theme.audio.playbackRate = OperationsTools.speed;
           MiscToolsProgress.setLocalStorage(LocalStorage.velocity_status, OperationsTools.theme.audio.playbackRate);

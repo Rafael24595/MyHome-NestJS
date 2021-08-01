@@ -4,6 +4,7 @@ import { AudioBarComponent } from '../audio-bar/audio-bar.component';
 import { ProgressBarListener } from '../audio-bar/utils/services/listener.service';
 import { OperationsTools } from '../audio-bar/utils/tools/operations.tools';
 import { ReproductionTools } from '../audio-bar/utils/tools/reproduction.tools';
+import { ViewTools } from '../audio-bar/utils/tools/view.tools';
 
 @Component({
   selector: 'app-audio-bar-modal',
@@ -16,6 +17,7 @@ export class AudioBarModalComponent implements OnInit {
 
   static modalState = '';
   
+  ButtonsColor = ViewTools.buttonsColor;
   Operations = OperationsTools;
   Reproduction = ReproductionTools;
 

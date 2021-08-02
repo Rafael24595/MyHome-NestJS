@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 import { ConfigFile } from "./interfaces/config.interface";
-import { PathVariables } from "./Variables";
+import { PathVariables } from "./variables/Variables";
 
 export class ConfigTools{
 

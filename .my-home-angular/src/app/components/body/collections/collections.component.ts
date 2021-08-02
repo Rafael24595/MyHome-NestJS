@@ -1,8 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { CollectionsService } from 'src/app/services/collections/collections.service';
+import { FileCollectionAbstract } from 'src/classes/Collections/FileColectionAbstract';
+import { Gallery } from 'src/classes/Collections/Gallery';
+import { PlayListMusic } from 'src/classes/Collections/PlayListMusic';
+import { PlayListVideo } from 'src/classes/Collections/PlayListVideo';
+import { Picture } from 'src/classes/File/Picture';
 import { Theme } from 'src/classes/File/Theme';
 import { AuthTools } from 'src/utils/tools/auth.tools';
+import { CollectionTools } from 'src/utils/tools/collections.tools';
+import { MiscTools } from 'src/utils/tools/misc.tools';
+import { collection_owners, system_collections_group } from 'src/utils/variables/collection.constants';
 import { ProgressBarListener } from '../../audio-bar/audio-bar/utils/services/listener.service';
+import { logos_name } from 'src/utils/variables/Globals';
 
 @Component({
   selector: 'app-collections',
@@ -11,26 +22,112 @@ import { ProgressBarListener } from '../../audio-bar/audio-bar/utils/services/li
 })
 export class CollectionsComponent implements OnInit {
 
-  constructor(private authTools:AuthTools, private router: Router, private progressBarListener: ProgressBarListener) { }
+  routerEvent: Subscription | undefined;
+  collections: Gallery[] | PlayListMusic[] | PlayListVideo[] | FileCollectionAbstract[] = [];
+  mediaPath = '../../../../assets/media/';
+  backButton = {
+    show: false,
+    text: 'volver',
+    path: ''
+  }
+
+  constructor(private authTools: AuthTools, private router: Router, private progressBarListener: ProgressBarListener, private route: ActivatedRoute, private collectionsService: CollectionsService) { }
 
   ngOnInit(): void {
     this.authTools.checkSession();
+    this.routerEvent = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.getCollections();
+      }
+      if (event instanceof NavigationError) {
+        console.error(event.error);
+      }
+    });
+    this.getCollections();
   }
 
-  ToCollection(){
+  ngOnDestroy() {
+    this.routerEvent?.unsubscribe();
+  }
 
-    let themeList = [
-      new Theme('1', '/media/video/Anything goes by cole porter.mp3', '', {id: '', name: ''}, 0, 0, []),
-      new Theme('2', '/media/video/Buona Sera (1998 Digital Remaster.mp3', '', {id: '', name: ''}, 0, 0, []),
-      new Theme('3', '/media/video/movies/Albinoni.mp3', '', {id: '', name: ''}, 0, 0, [])
-    ]
+  async getCollections():Promise<void> {
+    const pathData = CollectionTools.getCollectionPathData(this.route);
+    this.backButton.show = (pathData.path) ? true : false;
+    this.backButton.path = `/Collection/${MiscTools.pathParent(pathData.path ,1)}`;
+    if (!pathData.owner) {
+      this.collections = collection_owners;
+    }
+    else {
+      switch (pathData.owner) {
+        case 'system':
+          if (!pathData.name) {
+            this.collections = system_collections_group;
+          }
+          else {
+            if(!pathData.list){
+              this.getCollection(pathData.name, pathData.path);
+            }
+            else{
+              if(this.collections.length < 1) await this.getCollection(pathData.name, pathData.path);
+              const collection = CollectionTools.getCollectionByName(this.collections, pathData.list);
+              if(collection) this.ToCollection(collection.list);
+            }
+          }
+          break;
+        case 'user': break;
+      }
+    }
+  }
 
-    this.router.navigate([`/Media${themeList[0].path}`]);
-
-    setTimeout(() => {
-      this.progressBarListener.sendThemeList(themeList);
-    }, 1);
+  async getCollection(name: string, path: string): Promise<boolean>{
+    return new Promise((resolve)=>{
+      this.collectionsService.getSystemCollection(name).subscribe(
+        sucess => {console.log(sucess)
+          const type = sucess.type;
+          const object = sucess.message;
   
+          switch (type){
+  
+            case 'audio':
+              this.collections = PlayListMusic.interfaceToPlayListMusicArray(object, path);
+            break;
+            case 'image':
+            
+            break;
+            case 'video':
+            
+            break;
+            case undefined:
+            
+            break;
+  
+          }
+          resolve(true);
+        },
+        err => {
+          console.error(err);
+          resolve(false);
+        }
+      );
+      return false;
+    });
+  }
+
+  ToCollection(collection: Theme[] |Picture[]) {
+
+    if(collection[0] instanceof Theme){
+      this.toMusicCollection(collection as Theme[]);
+    };
+
+  }
+
+  toMusicCollection(themeList: Theme[]){
+    if (themeList.length > 0) {
+      this.router.navigate([`/Media${themeList[0].path}`]);
+      setTimeout(() => {
+        if (themeList) this.progressBarListener.sendThemeList(themeList);
+      }, 1);
+    }
   }
 
 }

@@ -29,6 +29,7 @@ export const order_types = {
 }
 
 export const logos_name = {
+    computer: 'images/icons/computer.png',
     directory:{
         folder:'images/icons/folder.png',
         back:'images/icons/folder-back.png',

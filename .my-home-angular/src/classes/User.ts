@@ -40,19 +40,19 @@ export class User{
 
         if(playListMusic){
             playListMusic.forEach(theme=>{
-            this.playListMusic.push(new PlayListMusic(theme.name,theme.userView,theme.userManage,theme.privateState,theme.list,theme.hotList));
+            this.playListMusic.push(new PlayListMusic(theme.name,theme.owner,theme.userView,theme.userManage,theme.privateState,theme.list,theme.systemList, theme.path));
             });
         }
 
         if(playListVideo){
             playListVideo.forEach(video=>{
-            this.playListVideo.push(new PlayListVideo(video.name,video.userView,video.userManage,video.privateState,video.list,video.hotList));
+            this.playListVideo.push(new PlayListVideo(video.name,video.owner,video.userView,video.userManage,video.privateState,video.list,video.systemList));
             });
         }
 
         if(gallery){
             gallery.forEach(image=>{
-            this.gallery.push(new Gallery(image.name,image.userView,image.userManage,image.privateState,image.list,image.hotList));
+            this.gallery.push(new Gallery(image.name,image.owner,image.userView,image.userManage,image.privateState,image.list,image.systemList));
             });
         }
 

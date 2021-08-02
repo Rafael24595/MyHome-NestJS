@@ -1,4 +1,4 @@
-import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException, HttpStatus } from '@nestjs/common';
+import { Controller, Request, Res, Get, UseGuards, HttpStatus } from '@nestjs/common';
 import { AppUtils } from 'src/utils/app.utils';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { DirectoryService } from './directory.service';

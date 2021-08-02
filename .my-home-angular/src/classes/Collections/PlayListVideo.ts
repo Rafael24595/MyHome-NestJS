@@ -5,8 +5,8 @@ export class PlayListVideo extends FileCollectionAbstract{
     
     list:Theme[];
 
-    constructor(name:string, userView:boolean, userManage:boolean, privateState:boolean, list:Theme[], hotList: boolean){
-        super(name, userView, userManage, privateState, hotList);
+    constructor(name:string, owner: string, userView:boolean, userManage:boolean, privateState:boolean, list:Theme[], systemList: boolean){
+        super(name, owner, userView, userManage, privateState, systemList, '');
         this.list = list;
     }
 

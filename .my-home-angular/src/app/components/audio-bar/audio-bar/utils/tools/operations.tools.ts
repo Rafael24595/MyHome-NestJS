@@ -89,7 +89,7 @@ export class OperationsTools{
   
   private static setThemeListListener(instance: AudioBarComponent){
       instance.progressBarListener.themeListObservable.subscribe((themeList: Theme[])=>{
-          if(themeList){
+          if(themeList){console.log(themeList)
             OperationsTools.themesLists.normal = themeList;
             OperationsTools.themesLists.active = OperationsTools.themesLists.normal;
             OperationsTools.themesLists.position = BarUtils.findThemePositionInListByPath(OperationsTools.theme.data, OperationsTools.themesLists.active);

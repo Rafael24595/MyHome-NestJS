@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { statSync, unlink, unlinkSync } from "fs";
 import { scheduleJob } from "node-schedule";
 import { DirectoryUtils } from "src/modules/directory/utils/directory.utils";
-import { LifeTime, PathVariables } from "./Variables";
+import { LifeTime, PathVariables } from "./variables/Variables";
 
 @Injectable()
 export class Shedule{

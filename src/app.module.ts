@@ -13,6 +13,9 @@ import { AppUtils } from './utils/app.utils';
 import { DirectoryModule } from './modules/directory/directory.module';
 import { FileUtils } from './modules/file/utils/file.utils';
 import { Shedule } from './utils/shedule.job';
+import { CollectionController } from './modules/collection/collection.controller';
+import { CollectionService } from './modules/collection/collection.service';
+import { CollectionUtils } from './modules/collection/utils/collection.utils';
 
 const mongoUri = "mongodb://localhost:27017/myhome";
 
@@ -26,13 +29,16 @@ const mongoUri = "mongodb://localhost:27017/myhome";
   ],
   controllers: [
     AppController,
-    FileController
+    FileController,
+    CollectionController
   ],
   providers: [
     AppService,
     FileService,
+    CollectionService,
     AppUtils,
     FileUtils,
+    CollectionUtils,
     Shedule
   ],
   exports:[

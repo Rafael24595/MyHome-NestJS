@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { readdirSync, statSync } from "fs";
-import { join, normalize, posix, resolve } from "path";
+import { join } from "path";
 import { FileUtils } from "src/modules/file/utils/file.utils";
 import { AppUtils } from "src/utils/app.utils";
 import { DirectoryContent } from "../interfaces/directory.interface";

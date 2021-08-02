@@ -6,7 +6,7 @@ import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
 import { FileService } from './file.service';
 import { FileUtils } from './utils/file.utils';
 import { join } from 'path';
-import { PathVariables } from 'src/utils/Variables';
+import { PathVariables } from 'src/utils/variables/Variables';
 
 const root = 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp';
 const controller = 'file';

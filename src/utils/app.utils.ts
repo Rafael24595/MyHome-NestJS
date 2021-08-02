@@ -1,6 +1,6 @@
 import { statSync } from "fs";
 import { basename, extname, join } from "path";
-import { PathVariables } from "./Variables";
+import { PathVariables } from "./variables/Variables";
 import * as CryptoJS from 'crypto-js';
 
 export class AppUtils{

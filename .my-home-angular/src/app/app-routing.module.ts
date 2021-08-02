@@ -16,7 +16,12 @@ const routes: Routes = [
         component: MediaViewComponent
       }]
   },
-  { path: 'Collection', component: CollectionsComponent},
+  { path: 'Collection', component: CollectionsComponent,
+    children: [{
+      path: '**',
+      component: CollectionsComponent
+    }]
+  },
   { path: 'Media', component: MediaViewComponent, 
       children: [{
         path: '**',

@@ -5,8 +5,8 @@ export class Gallery extends FileCollectionAbstract{
 
     list:Picture[];
 
-    constructor(name:string, userView:boolean, userManage:boolean, privateState:boolean, list:Picture[], hotList: boolean){
-        super(name, userView, userManage, privateState, hotList);
+    constructor(name:string, owner: string, userView:boolean, userManage:boolean, privateState:boolean, list:Picture[], systemList: boolean){
+        super(name, owner, userView, userManage, privateState, systemList, '');
         this.list = list;
     }
 

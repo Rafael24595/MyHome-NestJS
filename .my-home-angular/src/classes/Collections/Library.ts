@@ -5,8 +5,8 @@ export class Library extends FileCollectionAbstract{
     
     list:Text[];
 
-    constructor(name:string, userView:boolean, userManage:boolean, privateState:boolean, list:Text[], hotList: boolean){
-        super(name, userView, userManage, privateState, hotList);
+    constructor(name:string, owner: string, userView:boolean, userManage:boolean, privateState:boolean, list:Text[], systemList: boolean){
+        super(name, owner, userView, userManage, privateState, systemList, '');
         this.list = list;
     }
 

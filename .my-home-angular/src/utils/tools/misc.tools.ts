@@ -50,12 +50,26 @@ export class MiscTools{
         return '';
     }
 
+    static getParentPath(route: ActivatedRoute): string{
+        const path = route.snapshot.routeConfig?.path;
+        return (path) ? path : '';
+    }
+
     static getChildPath(route: ActivatedRoute): string{
         const path = MiscTools.decodeURIComponentFull(location.pathname.toString());
         const parentPath = route.snapshot.routeConfig?.path;
         const regexPattern = `.*${parentPath}`;
         var regex = new RegExp(regexPattern);
         return path.replace(regex, '');
+    }
+
+    static pathParent(path: string, levels?: number): string{
+        let pathArray = path.split('/');
+        levels = (levels) ? levels : 1;
+        for (let index = 0; index < levels; index++) {
+            pathArray.pop();
+        }
+        return pathArray.join('/');
     }
 
     static formatBytes(bytes: number, decimals = 2): string {

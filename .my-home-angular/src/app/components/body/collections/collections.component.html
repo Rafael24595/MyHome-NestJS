@@ -1,1 +1,19 @@
-<p (click)='ToCollection()'>collections works! Try Me!</p>
+<h1 style="text-align: center;">Colecciones</h1>
+<div class="underline-box"></div>
+<ng-container *ngIf='backButton.show; else backElse'>
+    <div [routerLink]='backButton.path' class="">
+        <p style="text-align: center; font-weight: bold;">volver</p>
+    </div>
+</ng-container>
+<ng-template #backElse>
+    <br>
+</ng-template>
+<div class='collection-thumbnail'>
+    <div *ngFor='let collection of collections' [routerLink]='[collection.path]' style="padding:7px;">
+        <div>
+            <img src="{{mediaPath}}{{collection.image}}">
+        </div>
+        <p>{{collection.name}}</p>
+        <p *ngIf='collection.owner != ""' class="owner-title">{{collection.owner}}</p>
+    </div>
+</div>

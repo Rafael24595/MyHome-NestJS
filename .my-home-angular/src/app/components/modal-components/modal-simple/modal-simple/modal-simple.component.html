@@ -1,0 +1,26 @@
+<div id="modal-screen" class="simple-modal-size" style="min-width: {{(modal.modalDataSimple.actions) ? '60' : 75}}%;">
+    <div style="white-space: nowrap; text-align: center;">
+        <div class="title-box"></div>
+        <h2 style="display: inline-block;">{{modal.modalDataSimple.title}}</h2>
+        <div class="title-box" style="float: right;"><a href="javascript:void(0);" (click)='closeModal()'>X</a></div>
+    </div>
+    <div class="underline-box"></div>
+    <br>
+    <div style="padding-left: 15px;padding-right: 15px;">
+        <div *ngFor='let element of modal.modalDataSimple.elements'>
+            <ng-container *ngIf='element.message.title == "" && element.message.body == "" && ! element.funct; else elseContent'>
+                <br>
+            </ng-container>
+            <ng-template #elseContent>
+                <ng-container *ngIf='element.funct; else elseFunct'>
+                    <p class="option-element" (click)='selectOption(element)' style="cursor: pointer;"><span><b>{{element.message.title}}</b></span><span *ngIf='element.message.title != "" && element.message.body != ""'><b>: </b></span><span>{{element.message.body}}</span></p>
+                </ng-container>
+                <ng-template #elseFunct>
+                    <p class="option-element"><span><b>{{element.message.title}}</b></span><span *ngIf='element.message.title != "" && element.message.body != ""'><b>: </b><br>&nbsp;&nbsp;</span><span>{{element.message.body}}</span></p>
+                </ng-template>
+            </ng-template>
+            <div></div>
+        </div>
+    </div>
+    <br>
+</div>

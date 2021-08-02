@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FileManagerService } from 'src/app/services/file-manager/file-manager.service';
 import { Path } from 'src/classes/Path';
-import { AuthTools } from 'src/utils/variables/tools/auth.tools';
-import { MiscTools } from 'src/utils/variables/tools/misc.tools';
+import { group_types, logos_name, media_types, order_types, service_config, user_config } from 'src/utils/variables/Globals';
+import { AuthTools } from 'src/utils/tools/auth.tools';
+import { MiscTools } from 'src/utils/tools/misc.tools';
+import { ModalTools } from 'src/utils/tools/modal.tools';
+import { SortTools } from 'src/utils/tools/sort.tools';
 
 @Component({
   selector: 'app-file-manager',
@@ -16,8 +19,16 @@ export class FileManagerComponent implements OnInit {
   routerEvent: Subscription | undefined;
   path: string = '';
   directoryContent:Path[] = [];
+  mediaPath = '../../../../assets/media/';
+  groupByState = group_types.directories;
+  orderByState = order_types.name;
+  orderDirectionState = true;
+  dirLoading = false;
+  connection = service_config.connection; 
+  media_types = media_types;
+  logos_name = logos_name;
 
-  constructor(private authTools:AuthTools, private miscTools: MiscTools, private router: Router, private route: ActivatedRoute, private fileManagerService: FileManagerService) { }
+  constructor(private authTools:AuthTools, private router: Router, private route: ActivatedRoute, private fileManagerService: FileManagerService) { }
 
   ngOnInit(): void {
     this.authTools.checkSession();
@@ -26,7 +37,7 @@ export class FileManagerComponent implements OnInit {
         this.getDirectory();
       }
       if (event instanceof NavigationError) {
-          console.log(event.error);
+          console.error(event.error);
       }
     });
     this.getDirectory();
@@ -37,21 +48,106 @@ export class FileManagerComponent implements OnInit {
   }
 
   getDirectory(){
-    this.path = this.miscTools.getChildPath(this.route);
-    if(this.miscTools.isFile(this.path)){
+    this.path = MiscTools.getChildPath(this.route);
+    if(MiscTools.isFile(this.path)){
       this.router.navigate([`/Media${this.path}`]);
     }
     else{
-      this.fileManagerService.getDirectory(this.path).subscribe(
-        sucess=>{console.log(sucess)
-          this.directoryContent = sucess.message;
-          console.log(this.directoryContent)
-        },
-        err=>{
-          console.error(err);
-        }
-      );
+        this.showLoadMessage();
+        this.fileManagerService.getDirectory(this.path).subscribe(
+          sucess=>{
+            this.directoryContent = sucess.message;
+            this.orderBy(this.orderByState);
+            MiscTools.resetLastElement(this.path);
+          },
+          err=>{
+            console.error(err);
+          }
+        );
     }
   }
 
+  groupBy(mode: string){
+    switch (mode){
+
+      case group_types.directories:
+        this.directoryContent = SortTools.Path.groupByDirectory(this.directoryContent, true);
+      break;
+
+      case group_types.files:
+        this.directoryContent = SortTools.Path.groupByDirectory(this.directoryContent, false);
+      break;
+
+      case group_types.extension:
+        this.directoryContent = SortTools.Path.groupByExtension(this.directoryContent);
+      break;
+
+      case group_types.type:
+        this.directoryContent = SortTools.Path.groupByType(this.directoryContent);
+      break;
+
+    }
+
+    this.groupByState = mode;
+
+  }
+
+  orderBy(mode: string, direction?: boolean){
+
+    direction = (direction != undefined) ? direction : this.orderDirectionState;
+
+    switch (mode){
+
+      case order_types.name:
+        this.directoryContent = SortTools.Path.orderByName(this.directoryContent, direction);
+      break;
+
+      case order_types.size:
+        this.directoryContent = SortTools.Path.orderBySize(this.directoryContent, direction);
+      break;
+
+      case order_types.birth:
+        this.directoryContent = SortTools.Path.orderByBirth(this.directoryContent, direction);
+      break;
+
+    }
+
+    this.orderByState = mode;
+    this.groupBy(this.groupByState);
+
+  }
+
+  orderDirection(mode: boolean){
+    this.orderBy(this.orderByState, mode);
+    this.orderDirectionState = mode;
+  }
+
+  showElementOptions(element: Path){
+    ModalTools.generateActions(this, element);
+  }
+
+  showProperties(path: Path): void{
+    ModalTools.generateDescription(path);
+  }
+
+  showLoadMessage(){
+    this.directoryContent = [];
+    this.dirLoading = true;
+  }
+
+  hideLoadMessage(){
+    this.dirLoading = false;
+    this.scrollToLastElement();
+  }
+
+  scrollToLastElement(){
+    const element = document.getElementById('element-' + user_config.lastElementId.path);
+    const body = document.getElementById('body');
+    if(body && element){
+      const elementTop = element.getBoundingClientRect().top;
+      const elementHeight = element.getBoundingClientRect().height;
+      const scrollValue = elementTop - elementHeight;
+      body.scrollTo(0, scrollValue);
+    }
+  }
 }

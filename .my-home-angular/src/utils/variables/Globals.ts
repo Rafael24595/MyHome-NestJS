@@ -8,6 +8,41 @@ export const service_config = {
     }
 }
 
-export let user_config: {user: User | undefined} = {
-    user: undefined
+export const media_types = {
+    audio: 'audio',
+    video: 'video',
+    image: 'image',
+    other: 'other'
+}
+
+export const group_types = {
+    directories: 'directories',
+    extension: 'extension',
+    files: 'files',
+    type: 'type'
+}
+
+export const order_types = {
+    name: 'name',
+    size: 'size',
+    birth: 'birth'
+}
+
+export const logos_name = {
+    directory:{
+        folder:'images/icons/folder.png',
+        back:'images/icons/folder-back.png',
+    },
+    files:{
+        audio: 'images/icons/audio-file.png',
+        other: 'images/icons/unknown-file.png'
+    }
+}
+
+export let user_config: {user: User | undefined, lastElementId: {path: string, pathParent: string}} = {
+    user: undefined,
+    lastElementId: {
+        path: '',
+        pathParent: ''
+    }
 };

@@ -1,5 +1,50 @@
-<div>
-    <div *ngFor='let content of directoryContent' [routerLink]='["/Manage" + content.abpath]' >
-        <p>{{content.name}} <span *ngIf='content.extension != ""'>.{{content.extension}}</span></p>
+<div style="padding: 10px; position: relative;">
+    <div *ngIf='dirLoading' class="loading-dir">
+        <img src="../../../../assets/media/images/gifs/load.gif">
+        <p>Cargando...</p>
     </div>
+    <div *ngFor='let content of directoryContent; index as i' class="directory-element-horizontal" id="element-{{content.abpath}}">
+        <span *ngIf='i == directoryContent.length - 1'>{{hideLoadMessage()}}</span>
+        <ng-container *ngIf='content.back; else backElse'>
+            <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
+                <img src="{{mediaPath}}{{logos_name.directory.back}}">
+            </div>
+        </ng-container>
+        <ng-template #backElse>
+            <ng-container *ngIf='content.directory; else fileElse'>
+                <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
+                    <img src="{{mediaPath}}{{logos_name.directory.folder}}">
+                </div>
+            </ng-container>
+            <ng-template #fileElse>
+                <ng-container *ngIf='content.type == media_types.audio'>
+                    <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
+                        <img src="{{mediaPath}}{{logos_name.files.audio}}">
+                    </div>
+                </ng-container>
+                <ng-container *ngIf='content.type == media_types.video'>
+                    <div class="video-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
+                        <div></div>
+                        <div class="video-thumnail-area">
+                            <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/thumbnail/{{content.abpath}}">
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf='content.type == media_types.image'>
+                    <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
+                        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/thumbnail/{{content.abpath}}">
+                    </div>
+                </ng-container>
+                <ng-container *ngIf='content.type == media_types.other'>
+                    <div class="img-thumnail" [routerLink]='["/Manage" + content.abpath]' style="display: inline-block;">
+                        <img src="{{mediaPath}}{{logos_name.files.other}}">
+                    </div>
+                </ng-container>
+            </ng-template>
+        </ng-template>
+        <p class="directory-element-title" [routerLink]='["/Manage" + content.abpath]'>{{content.name}}<span *ngIf='content.extension != ""'>.{{content.extension}}</span></p>
+        <div *ngIf='content.metadata' class="directory-element-menu" (click)='showElementOptions(content)'><div></div><div></div><div></div></div>
+    </div>
+    <br><br><br><br>
+    <app-bottom-aux-menu></app-bottom-aux-menu>
 </div>

@@ -1,14 +1,17 @@
 import { Controller, Request, Res, Get, UseGuards, Post, Delete, BadRequestException } from '@nestjs/common';
-import { readFileSync, statSync } from 'fs';
-import path, { join } from 'path';
+import { existsSync, readFileSync, statSync } from 'fs';
 import { AppUtils } from 'src/utils/app.utils';
-import { PathVariables } from 'src/utils/Variables';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtCookieAuthGuard } from '../auth/guards/jwt-cookie-auth.guard';
 import { FileService } from './file.service';
 import { FileUtils } from './utils/file.utils';
+import { join } from 'path';
+import { PathVariables } from 'src/utils/Variables';
 
+const root = 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp';
 const controller = 'file';
+const get_file_Controller = 'data';
+const get_thumbnail_Controller = 'thumbnail';
 
 @Controller(controller)
 export class FileController {
@@ -16,11 +19,11 @@ export class FileController {
     constructor(private fileService:FileService, private fileUtils:FileUtils, private appUtils:AppUtils){}
 
     @UseGuards(JwtCookieAuthGuard)
-    @Get('*')
+    @Get(`${get_file_Controller}/*`)
     async getFile(@Request() req, @Res() res){
 
-        const filePath = this.appUtils.getCleanRelativePath(controller, req.url);
-        const isImage = this.fileUtils.typeFile(filePath);
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_file_Controller}`, req.url);
+        const isImage = this.fileUtils.isImage(filePath);
 
         if(isImage){
             const data = readFileSync(filePath);
@@ -47,6 +50,24 @@ export class FileController {
 
     }
 
+    @Get(`${get_thumbnail_Controller}/*`)
+    async getVideoThumbnail(@Request() req, @Res() res){
+ 
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_thumbnail_Controller}`, req.url);
+        const fileHash = this.appUtils.getFileHash(filePath);
+        const thumbnailPath = join(PathVariables.tmp_thumbnails, `${fileHash}.png`);
+
+        if(!existsSync(thumbnailPath)){
+            await this.fileUtils.generateThumbnail(filePath, thumbnailPath);
+        }
+
+        const data = readFileSync(thumbnailPath);
+
+        res.writeHead(200, {'Content-Type': 'image/jpg'});
+        res.end(data);
+
+    }
+
     @UseGuards(JwtAuthGuard)
     @Post()
     async setFile(){
@@ -58,6 +79,5 @@ export class FileController {
     async deleteFile(){
         //TODO Añadir toda la lógica
     }
-
 
 }

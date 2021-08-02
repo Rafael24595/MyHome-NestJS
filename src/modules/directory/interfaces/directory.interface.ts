@@ -3,6 +3,7 @@ export interface DirectoryContent{
     directory: boolean;
     name: string;
     extension: string;
+    type: string;
     size: number;
     content: {directory: number, file: number}
     birthtime: number;

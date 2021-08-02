@@ -46,13 +46,13 @@ export class User{
 
         if(playListVideo){
             playListVideo.forEach(video=>{
-            this.playListMusic.push(new PlayListVideo(video.name,video.userView,video.userManage,video.privateState,video.list,video.hotList));
+            this.playListVideo.push(new PlayListVideo(video.name,video.userView,video.userManage,video.privateState,video.list,video.hotList));
             });
         }
 
         if(gallery){
             gallery.forEach(image=>{
-            this.playListMusic.push(new Gallery(image.name,image.userView,image.userManage,image.privateState,image.list,image.hotList));
+            this.gallery.push(new Gallery(image.name,image.userView,image.userManage,image.privateState,image.list,image.hotList));
             });
         }
 

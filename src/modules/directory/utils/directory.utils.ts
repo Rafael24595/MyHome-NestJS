@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { readdirSync, statSync } from "fs";
 import { join, normalize, posix, resolve } from "path";
+import { FileUtils } from "src/modules/file/utils/file.utils";
 import { AppUtils } from "src/utils/app.utils";
 import { DirectoryContent } from "../interfaces/directory.interface";
 
 @Injectable()
 export class DirectoryUtils{
 
-  constructor(private appUtils: AppUtils){}
+  constructor(private appUtils: AppUtils, private fileUtils:FileUtils){}
 
     rootDirectory = 'private_assets';
 
@@ -86,13 +87,14 @@ export class DirectoryUtils{
 
       async getDirectory(absolutePath: string){
 
-        const fileStat = statSync(absolutePath);console.log("thx:" + normalize(this.simplifyPath(absolutePath)))
+        const fileStat = statSync(absolutePath);
 
         const item: DirectoryContent = {
           abpath: this.simplifyPath(absolutePath),
           directory: fileStat.isDirectory(),
           name: this.appUtils.basename(absolutePath),
           extension: this.appUtils.extname(absolutePath),
+          type: this.fileUtils.typeFile(absolutePath),
           size: await this.getTotalContentSize(absolutePath),
           content: await this.getFilesType(absolutePath),
           birthtime: fileStat.birthtimeMs,
@@ -114,6 +116,7 @@ export class DirectoryUtils{
             directory: true,
             name: name,
             extension: '',
+            type:'',
             size: 0,
             content: {directory:0, file:0},
             birthtime:0,

@@ -1,5 +1,7 @@
+import { statSync } from "fs";
 import { basename, extname, join } from "path";
 import { PathVariables } from "./Variables";
+import * as CryptoJS from 'crypto-js';
 
 export class AppUtils{
 
@@ -28,7 +30,16 @@ export class AppUtils{
 
     getCleanRelativePath(controller: string, url: string): string {
         const filePath = this.cleanUrl(controller, url);
-        const relativePath = decodeURIComponent(join(__dirname, PathVariables.private_assets_root , filePath));
+        const relativePath = decodeURIComponent(join(PathVariables.private_assets_root , filePath));
         return relativePath;
+    }
+
+    getFileHash(path: string): string{
+        const metadata = statSync(path);
+        const size = metadata.size;
+        const date = metadata.birthtimeMs;
+        const fileHash = CryptoJS.MD5(`${path}-${size}-${date}`).toString();
+        
+        return fileHash;
     }
 }

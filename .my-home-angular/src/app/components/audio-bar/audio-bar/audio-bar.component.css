@@ -1,0 +1,177 @@
+.button-responsive-I{
+    display: initial;
+}
+.button-responsive-II{
+    display: initial;
+}
+#button-gear-container{
+    display: block;
+    text-align: center;
+    margin: 10px;
+    transition: 0.25s;
+}
+#button-gear{
+    transition: 0.25s;
+}
+#button-gear.show{
+    transform: rotate(70deg);
+    transition: 0.25s;
+}
+.drag-mode{
+    position: absolute;
+}
+.timeTag{
+    position: absolute; 
+    transform: translate(-25%,-175%); 
+    font-weight:bold; 
+    background-color:rgba(255,255,255, 0.8);
+    padding:5px;
+}
+#audio-bar-padding{
+    z-index: 2;
+    position: absolute; 
+    margin-top: 10px; margin-bottom: 10px; 
+    height: 10px; 
+    padding-top: 5px; padding-bottom: 5px;
+    cursor: pointer;
+}
+#audio-bar{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 8px; 
+    background-color: #808080
+}
+#audio-bar-progress{
+    position: absolute;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 8px; 
+    /*transform: translateY(-100%);*/
+}
+#audio-bar-background{
+    position: absolute;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 8px; 
+    transform: translateY(-100%);
+}
+#Meatball{
+    position: relative; 
+    top: 50%; 
+    transform: translate(-50%,-50%);  
+    width: 20px; height: 20px; 
+    background-color: #0d0d0d; 
+    border-radius: 50%;
+    cursor: pointer;
+}
+#vol-bar{
+    vertical-align: bottom; 
+    display: inline-block; 
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+    height: 5px; 
+    background-color: #bfbfbf;
+    cursor: pointer;
+}
+#vol-bar-progress{
+    position: absolute;
+    vertical-align: bottom; 
+    display: inline-block; 
+    margin-top: 10px; 
+    margin-bottom: 10px;  
+    height: 5px; 
+    cursor: pointer;
+}
+#vol-bar-padding{
+    position: absolute;
+    vertical-align: bottom; 
+    display: inline-block; 
+    margin-top: 10px; 
+    margin-bottom: 10px;   
+    height: 5px; 
+    cursor: pointer;
+    z-index: 2;
+}
+#Baby-Meatball{
+    position: relative; 
+    top: 50%; 
+    transform: translate(-50%,-50%); 
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.buttonsDisplay{
+    text-align: center;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.button{
+    font-family: my-home-icons !important;
+    cursor: pointer;
+}
+.play-button{
+    font-size: 3em;
+}
+.next-button{
+    font-size: 2em;
+}
+.left-button{
+    margin-right: 2.5px;
+}
+.right-button{
+    margin-left: 2.5px;
+}
+.left-button-button{
+    margin-left: 10px; 
+    margin-right: 2.5px;
+}
+.rigth-button-button{
+    margin-left: 2.5px; 
+    margin-right: 10px;
+}
+.centre-button{
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+#button-container{
+    display: none;
+}
+#button-container.show{
+    display: initial;
+}
+.button-style{
+    background-color: transparent;
+    color: rgba(145, 145, 145, 1);
+}
+.button-clear{
+    background: none;
+    border: none;
+}
+
+.smathphone-display{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reproductor-icon{
+    font-family: my-home-icons;
+    color: white;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.reproductor-icon.empty{
+    opacity: 0;
+}
+
+.song-cover{
+    height: 200px;
+    width: 200px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: gray;
+}

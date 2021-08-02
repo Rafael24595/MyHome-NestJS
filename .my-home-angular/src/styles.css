@@ -1,3 +1,12 @@
+@font-face {
+	font-family: my-home-icons;
+	src: url(./assets/fonts/my-home-icons.ttf);
+}
+
+*{
+	font-family: sans-serif;
+}
+
 html, body{
     height: 100%;
     width: 100%;
@@ -6,8 +15,21 @@ html, body{
     background-color: rgb(245, 245, 245);
 }
 
+.my-home-icons-font{
+    font-family: my-home-icons;
+    font-size: 1.5em;
+}
+
+.menu-icon{
+    font-family: my-home-icons;
+}
+
 .principal-module{
     overflow: hidden;
+}
+
+.principal-module-scroll{
+    overflow-y: auto;
 }
 
 #header, #footer{
@@ -23,4 +45,112 @@ html, body{
 }
 
 #footer{
+}
+
+.img-thumnail{
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+}
+
+.img-thumnail img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-thumnail{
+    position: relative;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.video-thumnail-area{
+    width: 68% !important;
+    background-image: none !important;
+    background-color: black;
+    overflow: hidden;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.video-thumnail-area img{
+    position: relative;
+    height: 100%;
+    object-fit: contain;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.video-thumnail div{
+    height: 100%;
+    width: 100%;
+    background-image: url(./assets/media/images/icons/movie-roll.png);
+    background-size: contain;
+    position: absolute;
+}
+
+.directory-element-horizontal{
+    padding: 10px;
+    white-space: nowrap;
+    border-bottom: 1px solid gray;
+}
+
+.no-border{
+    border: none;
+}
+
+.directory-element-title{
+    display: inline-block;
+    width: 70%;
+    margin-left: 10px;
+    vertical-align: baseline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.directory-element-menu{
+    display: inline-block;
+    margin-left: 15px;
+    transform: translateY(-50%);
+}
+
+.directory-element-menu div{
+    display: block;
+    width: 4px;
+    height: 4px;
+    margin: 3px;
+    border-radius: 50%;
+    background-color: rgb(65, 65, 65);
+}
+
+#modal-screen{
+    position: absolute;
+    max-width: 80%;
+    background-color: white;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1%;
+    z-index: 6;
+}
+
+.underline-box{
+    border-bottom: 2px solid gray;
+}
+
+.simple-modal-size{
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.option-element{
+    border-bottom: 0.5px solid gray;
+}
+
+.option-element p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    word-break: break-all;
 }

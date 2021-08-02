@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { User } from "src/classes/User";
-import { user_config } from "../Globals";
+import { user_config } from "../variables/Globals";
 
 @Injectable()
 export class AuthTools{
@@ -20,12 +20,12 @@ export class AuthTools{
         localStorage.setItem(this.ItemName, token);
     }
 
-    public setUser(user: User):void{
+    public setUser(user: User | undefined):void{
         user_config.user = user;
     }
 
     public setCookie(token: string):void{
-        document.cookie = `token=${token}`;
+        document.cookie = `token=${token};path=/`;
         this.authService.setCookies().subscribe(
             sucess=>{
                 console.log(sucess.message);
@@ -54,13 +54,18 @@ export class AuthTools{
     }
 
     setLastURI(){
-        const href = this.router.url;
+        const href = decodeURIComponent(this.router.url);
         localStorage.setItem(this.URIName, href);
     }
 
     goLastURI(){
         const uri = this.getLastURI();
         this.router.navigate([uri]);
+    }
+
+    destroySession(){
+        this.setToken('');
+        this.setUser(undefined);
     }
 
     checkSession(){

@@ -1,0 +1,9 @@
+.candy-row{
+    display: flex;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.candy-row div{
+    margin-right: 5px;
+}

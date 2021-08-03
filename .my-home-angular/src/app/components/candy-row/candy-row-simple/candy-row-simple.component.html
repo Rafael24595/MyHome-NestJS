@@ -1,0 +1,10 @@
+<div class="candy-row">
+    <div *ngFor='let candy of candyRow.candies'>
+        <ng-container *ngIf='candy.href; else elseHref'>
+            <p [routerLink]='candy.href'>{{candy.name}}</p>
+        </ng-container>
+        <ng-template #elseHref>
+            <p>{{candy.name}}</p>
+        </ng-template>
+    </div>
+</div>

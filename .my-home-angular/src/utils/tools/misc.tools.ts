@@ -50,6 +50,10 @@ export class MiscTools{
         return '';
     }
 
+    static getPath(route: ActivatedRoute){
+        return `/${this.getParentPath(route)}${this.getChildPath(route)}`;
+    }
+
     static getParentPath(route: ActivatedRoute): string{
         const path = route.snapshot.routeConfig?.path;
         return (path) ? path : '';

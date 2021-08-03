@@ -13,7 +13,7 @@ import { CollectionTools } from 'src/utils/tools/collections.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
 import { collection_owners, system_collections_group } from 'src/utils/variables/collection.constants';
 import { ProgressBarListener } from '../../audio-bar/audio-bar/utils/services/listener.service';
-import { logos_name } from 'src/utils/variables/Globals';
+import { CandyRowSimpleComponent } from '../../candy-row/candy-row-simple/candy-row-simple.component';
 
 @Component({
   selector: 'app-collections',
@@ -25,11 +25,6 @@ export class CollectionsComponent implements OnInit {
   routerEvent: Subscription | undefined;
   collections: Gallery[] | PlayListMusic[] | PlayListVideo[] | FileCollectionAbstract[] = [];
   mediaPath = '../../../../assets/media/';
-  backButton = {
-    show: false,
-    text: 'volver',
-    path: ''
-  }
 
   constructor(private authTools: AuthTools, private router: Router, private progressBarListener: ProgressBarListener, private route: ActivatedRoute, private collectionsService: CollectionsService) { }
 
@@ -51,9 +46,8 @@ export class CollectionsComponent implements OnInit {
   }
 
   async getCollections():Promise<void> {
+    CandyRowSimpleComponent.setCandyRowByUri(this.route);
     const pathData = CollectionTools.getCollectionPathData(this.route);
-    this.backButton.show = (pathData.path) ? true : false;
-    this.backButton.path = `/Collection/${MiscTools.pathParent(pathData.path ,1)}`;
     if (!pathData.owner) {
       this.collections = collection_owners;
     }

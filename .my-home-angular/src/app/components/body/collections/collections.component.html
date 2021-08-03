@@ -1,13 +1,6 @@
 <h1 style="text-align: center;">Colecciones</h1>
 <div class="underline-box"></div>
-<ng-container *ngIf='backButton.show; else backElse'>
-    <div [routerLink]='backButton.path' class="">
-        <p style="text-align: center; font-weight: bold;">volver</p>
-    </div>
-</ng-container>
-<ng-template #backElse>
-    <br>
-</ng-template>
+<app-candy-row-simple></app-candy-row-simple>
 <div class='collection-thumbnail'>
     <div *ngFor='let collection of collections' [routerLink]='[collection.path]' style="padding:7px;">
         <div>

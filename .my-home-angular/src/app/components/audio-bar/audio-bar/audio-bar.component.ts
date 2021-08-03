@@ -1,12 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AudiobufferToWav } from './utils/tools/AudionufferToWav';
-import { BarUtils } from './utils/tools/audio-bar.tools';
 import { Color_Vars } from './utils/variables/Bar-Variables';
 import { ResizeTools } from './utils/tools/resize.tools';
 import { ViewTools } from './utils/tools/view.tools';
 import { DragEvent } from './utils/tools/drag.event.tool';
 import { AudioBarModalComponent } from '../audio-bar-modal/audio-bar-modal.component';
-import { Theme } from 'src/classes/File/Theme';
 import { ProgressBarListener } from './utils/services/listener.service';
 import { ActivatedRoute } from '@angular/router';
 import { OperationsTools } from './utils/tools/operations.tools';

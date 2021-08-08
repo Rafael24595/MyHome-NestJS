@@ -50,6 +50,12 @@ export class MiscTools{
         return '';
     }
 
+    static cleanUrl(path: string): string{
+        path = path.replace(/\?.*/g, '');
+        path = path.replace(/#.*/g, '');
+        return path;
+    }
+
     static getPath(route: ActivatedRoute){
         return `/${this.getParentPath(route)}${this.getChildPath(route)}`;
     }

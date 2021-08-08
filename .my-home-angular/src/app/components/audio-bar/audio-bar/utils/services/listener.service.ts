@@ -8,19 +8,29 @@ import { Theme } from "src/classes/File/Theme";
 
 export class ProgressBarListener{
 
-    themeList: Theme[] | undefined;
-    private sendThemeListSubject = new Subject<Theme[]>();
+    themeList: ProgressBarData | undefined;
+    private sendThemeListSubject = new Subject<ProgressBarData>();
     themeListObservable = this.sendThemeListSubject.asObservable();
 
     unsubscribe(){
         this.sendThemeListSubject.next();
-        this.sendThemeListSubject = new Subject<Theme[]>();
+        this.sendThemeListSubject = new Subject<ProgressBarData>();
         this.themeListObservable = this.sendThemeListSubject.asObservable();
     }
 
-    sendThemeList(themeList:Theme[]){
+    sendThemeList(themeList:ProgressBarData){
         this.themeList = themeList;
         this.sendThemeListSubject.next(themeList);
     }
 
+}
+
+export interface ProgressBarData{
+    list:Theme[],
+    collection?: string | undefined,
+    settings?: ProgressBarRepSettings
+}
+
+export interface ProgressBarRepSettings{
+    random: boolean
 }

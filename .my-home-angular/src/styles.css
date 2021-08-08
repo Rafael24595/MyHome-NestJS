@@ -116,7 +116,12 @@ html, body{
     transform: translateY(-50%);
 }
 
-.directory-element-menu div{
+.directory-element-menu-flex{
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.directory-element-menu div, .directory-element-menu-flex div{
     display: block;
     width: 4px;
     height: 4px;

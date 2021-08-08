@@ -1,12 +1,19 @@
 <h1 style="text-align: center;">Colecciones</h1>
 <div class="underline-box"></div>
 <app-candy-row-simple></app-candy-row-simple>
-<div class='collection-thumbnail'>
-    <div *ngFor='let collection of collections' [routerLink]='[collection.path]' style="padding:7px;">
-        <div>
-            <img src="{{mediaPath}}{{collection.image}}">
+<ng-container *ngIf='!collectionList.showList; else ElseShowList'>
+    <div class='collection-thumbnail'>
+        <div *ngFor='let collection of collections' style="padding:7px;" [routerLink]='[collection.path]'>
+            <div (click)='collectionList.fastAccess = true'>
+                <img src="{{mediaPath}}{{collection.image}}">
+            </div>
+            <div (click)='collectionList.fastAccess = false'>
+                <p>{{collection.name}}</p>
+                <p *ngIf='collection.owner != ""' class="owner-title">{{collection.owner}}</p>
+            </div>
         </div>
-        <p>{{collection.name}}</p>
-        <p *ngIf='collection.owner != ""' class="owner-title">{{collection.owner}}</p>
     </div>
-</div>
+</ng-container>
+<ng-template #ElseShowList>
+    <app-collection-list (ToCollection)="ToCollection($event)" [collection]='collectionList.collection'></app-collection-list>
+</ng-template>

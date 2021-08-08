@@ -4,6 +4,7 @@ import { BarUtils } from "./audio-bar.tools";
 import { MiscToolsProgress } from "./misc.tools";
 import { OperationsTools } from "./operations.tools";
 import { ViewTools } from "./view.tools";
+import { Theme } from "src/classes/File/Theme";
 
 export class ReproductionTools{
 
@@ -65,7 +66,13 @@ export class ReproductionTools{
           action = event as number;
         }
         OperationsTools.themesLists.position = action;
-        OperationsTools.prepareTheme(instance, OperationsTools.themesLists.active[OperationsTools.themesLists.position]);
+        const theme = OperationsTools.themesLists.active[OperationsTools.themesLists.position];
+        OperationsTools.prepareTheme(instance, theme);
+        ReproductionTools.updateURI(theme);
+    }
+
+    public static updateURI(theme: Theme): void{
+      history.replaceState({page:1},'',`/Media${theme.path}`);
     }
 
 }

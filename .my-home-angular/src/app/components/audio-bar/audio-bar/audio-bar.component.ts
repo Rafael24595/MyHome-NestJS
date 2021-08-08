@@ -9,6 +9,7 @@ import { ProgressBarListener } from './utils/services/listener.service';
 import { ActivatedRoute } from '@angular/router';
 import { OperationsTools } from './utils/tools/operations.tools';
 import { ReproductionTools } from './utils/tools/reproduction.tools';
+import { InterfaceTools } from './utils/tools/interface.tools';
 
 @Component({
   selector: 'app-audio-bar',
@@ -29,6 +30,8 @@ export class AudioBarComponent implements OnInit {
   ViewResources = ViewTools.viewStatus;
   ProgressBars = ViewTools.progressBars;
   ButtonsColor = ViewTools.buttonsColor;
+
+  Interface = InterfaceTools;
 
   Operations = OperationsTools;
   Reproduction = ReproductionTools;
@@ -94,7 +97,7 @@ export class AudioBarComponent implements OnInit {
   
       }
   
-      ViewTools.setReverse(this);
+      ViewTools.setReverse();
       (OperationsTools.audioPlaying) ? OperationsTools.theme.audio.play() : OperationsTools.theme.audio.pause();
       OperationsTools.audioPlaying = (OperationsTools.theme.audio.paused) ? false : true; 
     }

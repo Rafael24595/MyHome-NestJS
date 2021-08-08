@@ -12,7 +12,7 @@ import { AuthTools } from 'src/utils/tools/auth.tools';
 import { CollectionTools } from 'src/utils/tools/collections.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
 import { collection_owners, system_collections_group } from 'src/utils/variables/collection.constants';
-import { ProgressBarListener } from '../../audio-bar/audio-bar/utils/services/listener.service';
+import { ProgressBarListener, ProgressBarRepSettings } from '../../audio-bar/audio-bar/utils/services/listener.service';
 import { CandyRowSimpleComponent } from '../../candy-row/candy-row-simple/candy-row-simple.component';
 
 @Component({
@@ -25,6 +25,12 @@ export class CollectionsComponent implements OnInit {
   routerEvent: Subscription | undefined;
   collections: Gallery[] | PlayListMusic[] | PlayListVideo[] | FileCollectionAbstract[] = [];
   mediaPath = '../../../../assets/media/';
+  collectionList: {fastAccess:boolean,showList:boolean,collection:Gallery | PlayListMusic | PlayListVideo | undefined | undefined} = {
+    fastAccess: false,
+    showList: false,
+    collection: undefined
+  }
+  
 
   constructor(private authTools: AuthTools, private router: Router, private progressBarListener: ProgressBarListener, private route: ActivatedRoute, private collectionsService: CollectionsService) { }
 
@@ -48,6 +54,7 @@ export class CollectionsComponent implements OnInit {
   async getCollections():Promise<void> {
     CandyRowSimpleComponent.setCandyRowByUri(this.route);
     const pathData = CollectionTools.getCollectionPathData(this.route);
+    this.collectionList.showList = false;
     if (!pathData.owner) {
       this.collections = collection_owners;
     }
@@ -64,19 +71,25 @@ export class CollectionsComponent implements OnInit {
             else{
               if(this.collections.length < 1) await this.getCollection(pathData.name, pathData.path);
               const collection = CollectionTools.getCollectionByName(this.collections, pathData.list);
-              if(collection) this.ToCollection(collection.list);
+              if(!this.collectionList.fastAccess) {
+                this.collectionList.showList = true;
+                this.collectionList.collection = collection;
+              }
+              else if(collection){
+                this.ToCollection({list:collection.list})
+              }
             }
           }
           break;
         case 'user': break;
       }
-    }
+    }console.log(this.collectionList.fastAccess)
   }
 
   async getCollection(name: string, path: string): Promise<boolean>{
     return new Promise((resolve)=>{
       this.collectionsService.getSystemCollection(name).subscribe(
-        sucess => {console.log(sucess)
+        sucess => {
           const type = sucess.type;
           const object = sucess.message;
   
@@ -107,19 +120,26 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
-  ToCollection(collection: Theme[] |Picture[]) {
+  ToCollection(collection:{list: Theme[] |Picture[], path?: string, settings?:ProgressBarRepSettings}) {
 
-    if(collection[0] instanceof Theme){
-      this.toMusicCollection(collection as Theme[]);
+    collection.path = (collection.path) ? collection.path : collection.list[0].path;
+
+    if(collection.list[0] instanceof Theme){
+      this.toMusicCollection(collection.list as Theme[], collection.path, collection.settings);
     };
 
   }
 
-  toMusicCollection(themeList: Theme[]){
+  toMusicCollection(themeList: Theme[], path: string, settings?:ProgressBarRepSettings){
     if (themeList.length > 0) {
-      this.router.navigate([`/Media${themeList[0].path}`]);
+      this.router.navigate([`/Media${path}`]);
+      const data = {
+        list: themeList,
+        collection: MiscTools.getPath(this.route),
+        settings: settings
+      }
       setTimeout(() => {
-        if (themeList) this.progressBarListener.sendThemeList(themeList);
+        if (themeList) this.progressBarListener.sendThemeList(data);
       }, 1);
     }
   }

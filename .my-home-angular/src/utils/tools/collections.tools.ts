@@ -9,7 +9,7 @@ import { MiscTools } from "./misc.tools";
 export class CollectionTools{
 
     public static getCollectionPathData(route: ActivatedRoute): {path: string, owner: string | undefined, name: string | undefined, list: string | undefined}{
-        const path = MiscTools.getChildPath(route).replace(/\//, '');
+        const path =  MiscTools.cleanUrl(MiscTools.getChildPath(route).replace(/\//, ''));
         const pathData = path.split('/');
         const owner = (pathData[0]) ? pathData[0] : undefined;
         const name = (pathData[1]) ? pathData[1] : undefined;

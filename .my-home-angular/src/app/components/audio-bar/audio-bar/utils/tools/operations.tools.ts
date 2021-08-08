@@ -2,10 +2,11 @@ import { ActivatedRoute } from "@angular/router";
 import { Theme } from "src/classes/File/Theme";
 import { MiscTools } from "src/utils/tools/misc.tools";
 import { AudioBarComponent } from "../../audio-bar.component";
-import { ProgressBarListener } from "../services/listener.service";
+import { ProgressBarData, ProgressBarListener } from "../services/listener.service";
 import { Media } from "../variables/Bar-Variables";
 import { LocalStorage } from "../variables/storage.const";
 import { BarUtils } from "./audio-bar.tools";
+import { InterfaceTools } from "./interface.tools";
 import { MiscToolsProgress } from "./misc.tools";
 import { ReproductionTools } from "./reproduction.tools";
 import { ViewTools } from "./view.tools";
@@ -13,7 +14,7 @@ import { ViewTools } from "./view.tools";
 export class OperationsTools{
 
   public static speed = 1; 
-  public static playOnInit = true;
+  public static playOnInit = false;
   public static audioPlaying = false;
   public static isReverse = false;
 
@@ -28,10 +29,6 @@ export class OperationsTools{
     position: 0
   }
 
-  constructor(progressBarListener: ProgressBarListener, route: ActivatedRoute) {
-    console.log(route);
-  }
-
   public static setInitialValues(instance: AudioBarComponent){
       OperationsTools.setTheme(instance);
       OperationsTools.setThemeListListener(instance);
@@ -40,6 +37,7 @@ export class OperationsTools{
   public static destroyComponent(instance: AudioBarComponent){
       if(OperationsTools.theme.audio) OperationsTools.theme.audio.pause();
       OperationsTools.themesLists = {normal: [],random: [],active: [],position: 0};
+      InterfaceTools.collectionPath = undefined;
       instance.progressBarListener.unsubscribe();
   }
 
@@ -66,14 +64,14 @@ export class OperationsTools{
         if(OperationsTools.theme.audio){
           OperationsTools.theme.audio.onloadeddata = ()=>{
             if(OperationsTools.theme.audio){
-              OperationsTools.theme.audio.onpause = ()=>{ViewTools.setPlay(instance)}
-              OperationsTools.theme.audio.onplay = ()=>{ViewTools.setPlay(instance)}
+              OperationsTools.theme.audio.onpause = ()=>{ViewTools.setPlay()}
+              OperationsTools.theme.audio.onplay = ()=>{ViewTools.setPlay()}
               OperationsTools.theme.audio.onvolumechange = ()=>{ViewTools.progressBarVolume()};
-              OperationsTools.theme.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio(instance)}
+              OperationsTools.theme.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio()}
               OperationsTools.theme.audio.onended = ()=>{ReproductionTools.nextTheme(instance, 1)}
       
               OperationsTools.setDefaultThemeValues();
-              ViewTools.setDefaultInterfaceValues(instance);
+              ViewTools.setDefaultInterfaceValues();
             }
           }
         }
@@ -88,12 +86,13 @@ export class OperationsTools{
     }
   
   private static setThemeListListener(instance: AudioBarComponent){
-      instance.progressBarListener.themeListObservable.subscribe((themeList: Theme[])=>{
+      instance.progressBarListener.themeListObservable.subscribe((themeList: ProgressBarData)=>{
           if(themeList){console.log(themeList)
-            OperationsTools.themesLists.normal = themeList;
+            OperationsTools.themesLists.normal = themeList.list;
             OperationsTools.themesLists.active = OperationsTools.themesLists.normal;
             OperationsTools.themesLists.position = BarUtils.findThemePositionInListByPath(OperationsTools.theme.data, OperationsTools.themesLists.active);
-              if(MiscToolsProgress.getLocalStorage(LocalStorage.random_list_status)) ReproductionTools.randomReproduction();
+            InterfaceTools.collectionPath = themeList.collection;
+            if(MiscToolsProgress.getLocalStorage(LocalStorage.random_list_status)) ReproductionTools.randomReproduction();
           }
       });
   }

@@ -20,11 +20,11 @@ export class CandyRowSimpleComponent implements OnInit {
   }
 
   static setCandyRow(candies: Candy[], separator?:string):void{
-    candyRow.setNewCandyRow(candies, separator);console.log(candyRow)
+    candyRow.setNewCandyRow(candies, separator);
   }
 
   static setCandyRowByUri(route: ActivatedRoute): void{
-    const candiesArray = MiscTools.getPath(route).split('/');
+    const candiesArray = MiscTools.cleanUrl(MiscTools.getPath(route)).split('/');
     let candies: Candy[] = [];
     let uri = '';
     candiesArray.forEach(candy=>{

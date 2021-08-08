@@ -1,4 +1,3 @@
-import { AudioBarComponent } from "src/app/components/audio-bar/audio-bar/audio-bar.component";
 import { BarUtils } from "./audio-bar.tools";
 import { MiscToolsProgress } from "./misc.tools";
 import { Color_Vars, Elements_Id, Icons } from "../variables/Bar-Variables";
@@ -45,14 +44,14 @@ export class ViewTools{
       reverseColor: Color_Vars.button_reverse_color.normal
     }
 
-    public static setDefaultInterfaceValues(instance: AudioBarComponent){
-        ViewTools.progressBarAudio(instance);
+    public static setDefaultInterfaceValues(){
+        ViewTools.progressBarAudio();
         ViewTools.setLoopAudio();
         ViewTools.setTime();
         ViewTools.setLoopList();
         ViewTools.setRandomList();
-        ViewTools.setReverse(instance);
-        ViewTools.setPlay(instance); 
+        ViewTools.setReverse();
+        ViewTools.setPlay(); 
     }
 
     public static showTimePointer(event:MouseEvent | TouchEvent): void{
@@ -75,7 +74,7 @@ export class ViewTools{
         }
       }
 
-    public static progressBarAudio(instance: AudioBarComponent): void{
+    public static progressBarAudio(): void{
         if(OperationsTools.theme.audio){
           const currentTimeReverse = OperationsTools.theme.audio.duration - OperationsTools.theme.audio.currentTime;
           const movement = (!OperationsTools.isReverse) ? BarUtils.calculeTimeBySeconds(OperationsTools.theme.audio, ViewTools.progressBars.media.size) : BarUtils.calculeTimeBySeconds(OperationsTools.theme.audio, ViewTools.progressBars.media.size, currentTimeReverse);
@@ -132,7 +131,7 @@ export class ViewTools{
         }
     }
 
-    public static setReverse(instance: AudioBarComponent): void{
+    public static setReverse(): void{
         if(OperationsTools.theme.audio){
           if(OperationsTools.isReverse){
             ViewTools.buttonsColor.reverseColor = Color_Vars.button_reverse_color.reverse;
@@ -145,7 +144,7 @@ export class ViewTools{
         }
     }
 
-    public static setPlay(instance: AudioBarComponent): void{
+    public static setPlay(): void{
         if(OperationsTools.theme.audio){
           if(OperationsTools.theme.audio.paused){
             ViewTools.buttonsColor.barColor = (OperationsTools.isReverse) ? Color_Vars.bar_progress_color.reverse_rause : Color_Vars.bar_progress_color.pause; 

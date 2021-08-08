@@ -22,6 +22,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AudioBarComponent } from './components/audio-bar/audio-bar/audio-bar.component';
 import { AudioBarModalComponent } from './components/audio-bar/audio-bar-modal/audio-bar-modal.component';
 import { CandyRowSimpleComponent } from './components/candy-row/candy-row-simple/candy-row-simple.component';
+import { CollectionListComponent } from './components/body/collections/collection-list/collection-list/collection-list.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { CandyRowSimpleComponent } from './components/candy-row/candy-row-simple
     BottomAuxMenuComponent,
     AudioBarComponent,
     AudioBarModalComponent,
-    CandyRowSimpleComponent
+    CandyRowSimpleComponent,
+    CollectionListComponent
   ],
   imports: [
     BrowserModule,

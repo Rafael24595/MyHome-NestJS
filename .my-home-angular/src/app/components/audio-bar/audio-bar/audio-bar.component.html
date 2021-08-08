@@ -8,8 +8,13 @@
     <div style="width: 100%; text-align: center;">
         <div style="display: flex; justify-content: space-between;">
             <span class="reproductor-icon" [routerLink]='["/Manage" + Operations.theme.data.directory]'>Z</span>
-            <p style="color: white;">{{Operations.theme.data.name}}</p>
-            <span class="reproductor-icon empty">Z</span>
+            <p style="color: white; padding-left: 5px; padding-right: 5px;">{{Operations.theme.data.name}}</p>
+            <ng-container *ngIf='Interface.collectionPath; else ElseCollection'>
+                <span class="reproductor-icon" [routerLink]='[Interface.collectionPath + "?theme=" + Operations.theme.data.name]'>=</span>
+            </ng-container>
+            <ng-template #ElseCollection>
+                <span class="reproductor-icon empty">Z</span>
+            </ng-template>
         </div>
         <div class="display-inline" style="display: flex; align-items: center; width: 100%;">
             <div>

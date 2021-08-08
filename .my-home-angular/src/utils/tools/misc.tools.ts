@@ -108,10 +108,37 @@ export class MiscTools{
         
     }
 
-    static resetLastElement(path: string){
-        if(path != user_config.lastElementId.pathParent){
-          user_config.lastElementId.path = '';
-          user_config.lastElementId.pathParent = '';
+    static resetLastElementMedia(path: string): void{
+        if(path != user_config.lastElementIdMedia.pathParent){
+          user_config.lastElementIdMedia.path = '';
+          user_config.lastElementIdMedia.pathParent = '';
         }
     }
+
+    static resetLastElementCollection(): void{
+        user_config.lastElementIdCollection.path = '';
+        user_config.lastElementIdCollection.pathParent = '';
+    }
+
+    static resetScroll(element: string): void{
+        const elementHTML = document.getElementById(element);
+        if(elementHTML){
+            elementHTML.scrollTo(0, 0);
+        }
+    }
+
+    static scrollToLastElement(parent: string, child: string){
+        const parentElement = document.getElementById(parent);
+        const childElement = document.getElementById(child);console.log(parentElement, childElement);
+        if(parentElement && childElement){console.log(childElement.getBoundingClientRect());
+          const elementTop = childElement.getBoundingClientRect().top;
+          const elementHeight = childElement.getBoundingClientRect().height;
+          const scrollValue = elementTop - elementHeight;console.log(elementTop,elementHeight,scrollValue);
+          if(scrollValue > 1)
+            parentElement.scrollTo(0, scrollValue);
+        }
+        else{
+            console.error('Not elements found');
+        }
+      }
 }

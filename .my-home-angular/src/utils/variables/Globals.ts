@@ -40,9 +40,13 @@ export const logos_name = {
     }
 }
 
-export let user_config: {user: User | undefined, lastElementId: {path: string, pathParent: string}} = {
+export let user_config: {user: User | undefined, lastElementIdMedia: {path: string, pathParent: string},lastElementIdCollection: {path: string, pathParent: string}} = {
     user: undefined,
-    lastElementId: {
+    lastElementIdMedia: {
+        path: '',
+        pathParent: ''
+    },
+    lastElementIdCollection: {
         path: '',
         pathParent: ''
     }

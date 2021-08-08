@@ -83,6 +83,7 @@ export class OperationsTools{
       const path = MiscTools.getChildPath(instance.route);
       OperationsTools.themesLists.normal = [new Theme('', path, '', {id: '', name: ''}, 0, 0, [])];
       OperationsTools.prepareTheme(instance, OperationsTools.themesLists.normal[0]);
+      ReproductionTools.setLastElementId(OperationsTools.themesLists.normal[0]);
     }
   
   private static setThemeListListener(instance: AudioBarComponent){

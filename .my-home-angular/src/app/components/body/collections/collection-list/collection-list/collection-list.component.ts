@@ -4,6 +4,8 @@ import { PlayListMusic } from 'src/classes/Collections/PlayListMusic';
 import { PlayListVideo } from 'src/classes/Collections/PlayListVideo';
 import { Picture } from 'src/classes/File/Picture';
 import { Theme } from 'src/classes/File/Theme';
+import { MiscTools } from 'src/utils/tools/misc.tools';
+import { user_config } from 'src/utils/variables/Globals';
 
 @Component({
   selector: 'app-collection-list',
@@ -18,7 +20,18 @@ export class CollectionListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.collection)
+    window.setTimeout(()=>{
+      this.ngForEnd();
+    }, 10)
+  }
+
+  ngOnDestroy(): void{
+    MiscTools.resetLastElementCollection();
+  }
+
+  ngForEnd(): void{
+    MiscTools.resetScroll(`body`);
+    MiscTools.scrollToLastElement(`body`, `element-${user_config.lastElementIdCollection.path}`);
   }
 
   toCollection(element: Theme[] |Picture[],path:string):void{

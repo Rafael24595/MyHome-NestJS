@@ -5,6 +5,7 @@ import { MiscToolsProgress } from "./misc.tools";
 import { OperationsTools } from "./operations.tools";
 import { ViewTools } from "./view.tools";
 import { Theme } from "src/classes/File/Theme";
+import { user_config } from "src/utils/variables/Globals";
 
 export class ReproductionTools{
 
@@ -73,6 +74,14 @@ export class ReproductionTools{
 
     public static updateURI(theme: Theme): void{
       history.replaceState({page:1},'',`/Media${theme.path}`);
+      ReproductionTools.setLastElementId(theme);
+    }
+
+    public static setLastElementId(theme: Theme):void{
+      user_config.lastElementIdCollection = {
+        path: theme.path,
+        pathParent: ''
+      }
     }
 
 }

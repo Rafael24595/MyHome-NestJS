@@ -32,7 +32,7 @@ export class MediaViewComponent implements OnInit {
     let parentPath = this.path.split('/');
     parentPath.pop();
     
-    user_config.lastElementId = {
+    user_config.lastElementIdMedia = {
       path: this.path,
       pathParent: parentPath.join('/')
     }

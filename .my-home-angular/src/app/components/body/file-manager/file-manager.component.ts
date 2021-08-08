@@ -58,7 +58,7 @@ export class FileManagerComponent implements OnInit {
           sucess=>{
             this.directoryContent = sucess.message;
             this.orderBy(this.orderByState);
-            MiscTools.resetLastElement(this.path);
+            MiscTools.resetLastElementMedia(this.path);
           },
           err=>{
             console.error(err);
@@ -137,17 +137,7 @@ export class FileManagerComponent implements OnInit {
 
   hideLoadMessage(){
     this.dirLoading = false;
-    this.scrollToLastElement();
+    MiscTools.scrollToLastElement(`body`, `element-${user_config.lastElementIdMedia.path}`);
   }
 
-  scrollToLastElement(){
-    const element = document.getElementById('element-' + user_config.lastElementId.path);
-    const body = document.getElementById('body');
-    if(body && element){
-      const elementTop = element.getBoundingClientRect().top;
-      const elementHeight = element.getBoundingClientRect().height;
-      const scrollValue = elementTop - elementHeight;
-      body.scrollTo(0, scrollValue);
-    }
-  }
 }

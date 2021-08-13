@@ -3,6 +3,7 @@ import { FileCollectionAbstract } from "src/classes/Collections/FileColectionAbs
 import { Gallery } from "src/classes/Collections/Gallery";
 import { PlayListMusic } from "src/classes/Collections/PlayListMusic";
 import { PlayListVideo } from "src/classes/Collections/PlayListVideo";
+import { Picture } from "src/classes/File/Picture";
 import { Theme } from "src/classes/File/Theme";
 import { MiscTools } from "./misc.tools";
 
@@ -30,6 +31,7 @@ export class CollectionTools{
 
         if(collectionList[0] instanceof Gallery){
             collection = collectionList[position] as Gallery;
+            collection.list = Picture.interfaceToPicture(collection.list);
         }
         if(collectionList[0] instanceof PlayListMusic){
             collection = collectionList[position] as PlayListMusic;

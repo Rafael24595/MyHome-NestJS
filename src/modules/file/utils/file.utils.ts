@@ -49,7 +49,7 @@ export class FileUtils {
 
     async generateThumbnail(filePath: string, thumbnailPath:string): Promise<void>{
         try {
-            await genThumbnail(join(filePath), thumbnailPath, '250x?')
+            await genThumbnail(join(filePath), thumbnailPath, '150x?')
         } catch (err) {
             console.error(err)
         }

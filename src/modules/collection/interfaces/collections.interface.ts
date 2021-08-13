@@ -6,4 +6,6 @@ export interface Collection{
     privateState:boolean;
     systemList: boolean;
     list: object[];
+    total?: number;
+    position?: number;
 }

@@ -10,7 +10,7 @@ export class CookieStrategy extends PassportStrategy(Strategy, 'jwt_cookie'){
     constructor(private authUtils: AuthUtils){
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([(request: Request)=>{
-                const token = authUtils.clearToken(request?.cookies["token"]);
+                const token = authUtils.clearToken(request?.cookies["token"]);console.log(token)
                 if(!token){
                     return null;
                 }

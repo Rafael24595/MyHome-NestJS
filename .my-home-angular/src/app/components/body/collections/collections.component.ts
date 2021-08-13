@@ -25,10 +25,11 @@ export class CollectionsComponent implements OnInit {
   routerEvent: Subscription | undefined;
   collections: Gallery[] | PlayListMusic[] | PlayListVideo[] | FileCollectionAbstract[] = [];
   mediaPath = '../../../../assets/media/';
-  collectionList: {fastAccess:boolean,showList:boolean,collection:Gallery | PlayListMusic | PlayListVideo | undefined | undefined} = {
+  collectionList: {fastAccess:boolean,showList:boolean,collection:Gallery | PlayListMusic | PlayListVideo | undefined | undefined, type: string} = {
     fastAccess: false,
     showList: false,
-    collection: undefined
+    collection: undefined,
+    type: ''
   }
   
 
@@ -66,40 +67,55 @@ export class CollectionsComponent implements OnInit {
           }
           else {
             if(!pathData.list){
-              this.getCollection(pathData.name, pathData.path);
+              this.getCollection(pathData.name, pathData.path);console.log(this.collections)
             }
             else{
               if(this.collections.length < 1) await this.getCollection(pathData.name, pathData.path);
               const collection = CollectionTools.getCollectionByName(this.collections, pathData.list);
-              if(!this.collectionList.fastAccess) {
-                this.collectionList.showList = true;
-                this.collectionList.collection = collection;
-              }
-              else if(collection){
-                this.ToCollection({list:collection.list})
-              }
+              this.listCollection(collection);
             }
           }
           break;
         case 'user': break;
       }
-    }console.log(this.collectionList.fastAccess)
+    }
+  }
+
+  listCollection(collection: Gallery | PlayListMusic | PlayListVideo | undefined): void{
+    switch(this.collectionList.type){
+      case 'audio':
+        if(!this.collectionList.fastAccess) {
+          this.collectionList.showList = true;
+          this.collectionList.collection = collection;
+        }
+        else if(collection){
+          this.ToCollection({list:collection.list})
+        }
+      break;
+      case 'video':
+      case 'image':
+        this.collectionList.showList = true;
+        this.collectionList.collection = collection;
+      break;
+    }
   }
 
   async getCollection(name: string, path: string): Promise<boolean>{
     return new Promise((resolve)=>{
       this.collectionsService.getSystemCollection(name).subscribe(
-        sucess => {
+        sucess => {console.log(sucess)
           const type = sucess.type;
           const object = sucess.message;
+          this.collectionList.type = sucess.type;
   
           switch (type){
   
             case 'audio':
-              this.collections = PlayListMusic.interfaceToPlayListMusicArray(object, path);
+              this.collections = PlayListMusic.interfaceToPlayListMusicArray(object as PlayListMusic[], path);
+              console.log(this.collections)
             break;
             case 'image':
-            
+              this.collections = Gallery.interfaceToGalleryArray(object as Gallery[], path);
             break;
             case 'video':
             

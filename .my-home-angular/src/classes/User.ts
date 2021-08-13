@@ -52,7 +52,7 @@ export class User{
 
         if(gallery){
             gallery.forEach(image=>{
-            this.gallery.push(new Gallery(image.name,image.owner,image.userView,image.userManage,image.privateState,image.list,image.systemList));
+            this.gallery.push(new Gallery(image.name,image.owner,image.userView,image.userManage,image.privateState,image.list,image.systemList, image.path, image.totalElements, image.imageElements));
             });
         }
 

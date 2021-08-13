@@ -1,10 +1,10 @@
 #footer-options{
     position: relative;
     text-align: center;
+    align-items: center;
     display: flex;
     justify-content: space-evenly;
-    top: 50%;
-    transform: translateY(-50%);
+    height: 100%;
 }
 
 #footer-options div{

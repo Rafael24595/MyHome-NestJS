@@ -4,6 +4,7 @@ import { join } from "path";
 import { FileUtils } from "src/modules/file/utils/file.utils";
 import { AppUtils } from "src/utils/app.utils";
 import { DirectoryContent } from "../interfaces/directory.interface";
+import { execSync } from "child_process";
 
 @Injectable()
 export class DirectoryUtils{
@@ -12,7 +13,7 @@ export class DirectoryUtils{
 
     rootDirectory = 'private_assets';
 
-    async getTotalContentSize(contentPath: string): Promise<number> {
+      async getTotalContentSize(contentPath: string): Promise<number> {
 
         let arrayOfFiles = [];
         let totalSize = 0
@@ -27,6 +28,28 @@ export class DirectoryUtils{
         arrayOfFiles.forEach( (filePath: string) => {
           totalSize += statSync(filePath).size;
         });
+      
+        return totalSize;
+      }
+
+      async getTotalContentSizeV2(contentPath: string): Promise<number> {
+  
+        let totalSize = 0;
+
+        if(!this.isFile(contentPath)){
+
+          const stdout = execSync(`dir /a/s "${contentPath}"`).toString();
+            
+          if(stdout){
+            let dataSplit: string | string[] = stdout.split(`archivos`);
+            dataSplit = dataSplit[dataSplit.length - 1];
+          
+            totalSize = parseInt(dataSplit.split(`bytes`)[0].replace(/\.*/g, ''));
+          }
+         
+        }else{
+          totalSize = statSync(contentPath).size;
+        }
       
         return totalSize;
       }
@@ -85,6 +108,10 @@ export class DirectoryUtils{
         return absolutePath.replace(regex, '').replace(/\\/g, '/');
       }
 
+      isFile(path: string | undefined): boolean{
+        return (path && path.split('.').length > 1) ? true : false;
+      }
+
       async getDirectory(absolutePath: string){
 
         const fileStat = statSync(absolutePath);
@@ -95,14 +122,15 @@ export class DirectoryUtils{
           name: this.appUtils.basename(absolutePath),
           extension: this.appUtils.extname(absolutePath),
           type: this.fileUtils.typeFile(absolutePath),
-          size: await this.getTotalContentSize(absolutePath),
+          size: await this.getTotalContentSizeV2(absolutePath),
           content: await this.getFilesType(absolutePath),
           birthtime: fileStat.birthtimeMs,
           modtime: fileStat.mtimeMs,
           metadata: true,
           back: false
         }
-
+        
+        console.log(item.size)
         return item;
       }
 

@@ -5,4 +5,6 @@ export interface CollectionElement{
     dateCreated: number;
     dateModify: number;
     tags: string[];
+    total?: number,
+    position?: number
 }

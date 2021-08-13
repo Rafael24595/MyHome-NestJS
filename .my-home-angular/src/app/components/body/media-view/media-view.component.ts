@@ -17,6 +17,7 @@ export class MediaViewComponent implements OnInit {
   fileType: string = '';
   mediaPath = '../../../../assets/media/';
   connection = service_config.connection;
+  apiConnection = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}`;
   logos_name = logos_name;
 
   constructor(private authTools:AuthTools, private miscTools:MiscTools, private route: ActivatedRoute) { }

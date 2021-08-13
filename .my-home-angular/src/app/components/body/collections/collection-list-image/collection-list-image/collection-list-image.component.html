@@ -1,0 +1,11 @@
+<p>collection-list-image works!</p>
+<ng-container *ngIf='collection'>
+    <div style="position: relative; padding-left: 15px; padding-right: 15px;" class="list-element">
+         <div *ngFor='let element of collection.list; let last = last' [routerLink]='[collection.path]' id="element-{{element.path}}">
+             <!--<span *ngIf='last'>{{last ? ngForEnd() : ''}}</span>-->
+             <div class="img-thumnail" [routerLink]='["/Manage" + element.path]' style="display: inline-block;">
+                <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/thumbnail/{{element.path}}" (error)="ErrorTools.reloadBrokenImage($event)">
+            </div>
+         </div>
+    </div>
+</ng-container>

@@ -34,6 +34,19 @@ export class AppUtils{
         return relativePath;
     }
 
+    getCleanSystemMediaPath(controller: string, url: string, type: string){
+        const collectionPath = this.cleanUrl(controller, url);
+        let mediaPath = '';
+        switch (type){
+            case 'audio': mediaPath = PathVariables.collections_audio; break;
+            case 'image': mediaPath = PathVariables.collections_image; break;
+            case 'video': mediaPath = PathVariables.collections_video; break;
+            default: break;
+        }
+
+        return decodeURIComponent(join(mediaPath, collectionPath));
+    }
+
     getFileHash(path: string): string{
         const metadata = statSync(path);
         const size = metadata.size;

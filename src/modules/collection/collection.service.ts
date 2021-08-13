@@ -23,4 +23,9 @@ export class CollectionService {
         return dirContent;
     }
 
+    async getSystemCollectionsPage(path: string, type: string, position: number): Promise<CreateCollectionDTO>{
+        let collection:CreateCollectionDTO = await this.collectionUtils.getSystemCollectionPage(path, type, position);
+        return collection;
+    }
+
 }

@@ -16,8 +16,12 @@ export class CollectionsService {
     return this.http.get<{status: boolean, type:string, message: PlayListMusic[]}>(`${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/collection/system/${type}`);
   }
 
-  getSystemCollectionPage(type:string, position: number, path: string): Observable<{status: boolean, type:string, message: PlayListMusic[] | Gallery[]}>{
-    return this.http.get<{status: boolean, type:string, message: PlayListMusic[]}>(`${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/collection/path/system/${type}/${position}/${path}`);
+  getSystemCollectionAll(type:string, path: string): Observable<{status: boolean, type:string, message: PlayListMusic | Gallery}>{
+    return this.http.get<{status: boolean, type:string, message: PlayListMusic}>(`${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/collection/path/all/system/${type}/${path}`);
+  }
+
+  getSystemCollectionPage(type:string, position: number, path: string): Observable<{status: boolean, type:string, message: PlayListMusic | Gallery}>{
+    return this.http.get<{status: boolean, type:string, message: PlayListMusic}>(`${service_config.connection.protocol}://${service_config.connection.host}:${service_config.connection.port}/api/collection/path/page/system/${type}/${position}/${path}`);
   }
 
 }

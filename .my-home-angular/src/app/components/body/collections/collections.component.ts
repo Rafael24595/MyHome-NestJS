@@ -67,11 +67,12 @@ export class CollectionsComponent implements OnInit {
           }
           else {
             if(!pathData.list){
-              this.getCollection(pathData.name, pathData.path);console.log(this.collections)
+              this.getAllCollections(pathData.name, pathData.path);console.log(this.collections)
             }
             else{
-              if(this.collections.length < 1) await this.getCollection(pathData.name, pathData.path);
-              const collection = CollectionTools.getCollectionByName(this.collections, pathData.list);
+              if(this.collections.length < 1) await this.getAllCollections(pathData.name, pathData.path);
+              const collection = await this.getSingleCollection(pathData.name, pathData.path);
+              //const collection = CollectionTools.getCollectionByName(this.collections, pathData.list);
               this.listCollection(collection);
             }
           }
@@ -80,6 +81,8 @@ export class CollectionsComponent implements OnInit {
       }
     }
   }
+
+
 
   listCollection(collection: Gallery | PlayListMusic | PlayListVideo | undefined): void{
     switch(this.collectionList.type){
@@ -100,7 +103,59 @@ export class CollectionsComponent implements OnInit {
     }
   }
 
-  async getCollection(name: string, path: string): Promise<boolean>{
+  async getSingleCollection(type: string, path: string): Promise<Gallery | PlayListMusic | undefined>{
+    return new Promise((resolve)=>{
+      switch (type){
+        case 'audio':
+          this.collectionsService.getSystemCollectionAll(type, path).subscribe(
+            sucess => {console.log(sucess)
+              resolve(this.resolveGetCollection(sucess,path));
+            },
+            err => {console.error(err); resolve(undefined);}
+          );
+        break;
+        case 'image':
+          this.collectionsService.getSystemCollectionPage(type, 0, path).subscribe(
+            sucess => {console.log(sucess)
+              resolve(this.resolveGetCollection(sucess,path));
+            },
+            err => {console.error(err);resolve(undefined);}
+          );
+        break;
+      }
+      
+      return false;
+    });
+  }
+
+  resolveGetCollection(sucess:{status: boolean,type: string,message: Gallery | PlayListMusic}, path: string): Gallery | PlayListMusic | undefined{
+    const type = sucess.type;
+    const object = sucess.message;
+    let collection;
+
+    switch (type){
+
+      case 'audio':
+        collection = PlayListMusic.interfaceToPlayList(object as PlayListMusic, path);
+        console.log(this.collections)
+      break;
+      case 'image':
+        collection = Gallery.interfaceToGallery(object as Gallery, path);
+      break;
+      case 'video':
+      
+      break;
+      case undefined:
+      
+      break;
+
+    }
+
+    return collection;
+
+  }
+
+  async getAllCollections(name: string, path: string): Promise<boolean>{
     return new Promise((resolve)=>{
       this.collectionsService.getSystemCollection(name).subscribe(
         sucess => {console.log(sucess)

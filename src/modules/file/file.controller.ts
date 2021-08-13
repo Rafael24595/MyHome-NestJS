@@ -8,7 +8,6 @@ import { FileUtils } from './utils/file.utils';
 import { join } from 'path';
 import { PathVariables } from 'src/utils/variables/Variables';
 
-const root = 'C:\\Users\\Rafael Ruiz\\Desktop\\MyHome\\my-home-reset\\.tmp';
 const controller = 'file';
 const get_file_Controller = 'data';
 const get_thumbnail_Controller = 'thumbnail';

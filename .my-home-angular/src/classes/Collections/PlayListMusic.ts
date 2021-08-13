@@ -10,6 +10,10 @@ export class PlayListMusic extends FileCollectionAbstract{
         this.list = list;
     }
 
+    static interfaceToPlayList(playList: PlayListMusic, path:string):PlayListMusic{
+        return new PlayListMusic(playList.name,playList.owner,playList.userView,playList.userManage,playList.privateState,playList.list,playList.systemList,`${path}/${playList.name}`);
+    }
+
     static interfaceToPlayListMusicArray(list: PlayListMusic[], path: string): PlayListMusic[]{
         let listArray = [];
         for (let index = 0; index < list.length; index++) {

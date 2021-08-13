@@ -12,7 +12,7 @@ export class CollectionUtils{
 
     constructor(private appUtils: AppUtils, private directoryUtils: DirectoryUtils, private fileUtils: FileUtils){}
 
-    async getSystemCollection(path:string, type: string, collectionList?:CreateCollectionDTO[]): Promise<CreateCollectionDTO[]>{
+    async getSystemCollections(path:string, type: string, collectionList?:CreateCollectionDTO[]): Promise<CreateCollectionDTO[]>{
 
         try {
             const files = readdirSync(path);
@@ -25,7 +25,7 @@ export class CollectionUtils{
             files.forEach(async file=>{
                 const elementPath = `${path}/${file}`;
                 if (statSync(elementPath).isDirectory()) {
-                    collectionList = await this.getSystemCollection(elementPath, type, collectionList);
+                    collectionList = await this.getSystemCollections(elementPath, type, collectionList);
                 } else {
                     const filePath = this.directoryUtils.simplifyPath(elementPath);
                     const collectionElement = this.createCollectionElement(`${name}-${cont}`, filePath, {id: 'system-001', name: 'system'}, 0, 0, []);
@@ -43,6 +43,30 @@ export class CollectionUtils{
             console.error(error);
             return [];
         }
+
+    }
+
+    async getSystemCollectionAll(path:string, type: string): Promise<CreateCollectionDTO>{
+
+        const files = readdirSync(path);
+        const name = this.appUtils.basename(path);
+        let collection = this.createEmptyCollection(name, 'system', true, false, false, true, files.length, files.length);
+
+        try {
+            for (let index = 0; index < files.length; index++) {
+                const elementPath = `${path}/${files[index]}`;
+                const filePath = this.directoryUtils.simplifyPath(elementPath);
+                const collectionElement = this.createCollectionElement(`${name}-${index}`, filePath, {id: 'system-001', name: 'system'}, 0, 0, []);
+                if(this.fileUtils.typeFile(elementPath) == type){
+                    collection.list.push(collectionElement);
+                }
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+
+        return collection;
 
     }
 
@@ -71,7 +95,7 @@ export class CollectionUtils{
                 cont = cont + 1;
             }
 
-            position = cont;
+            collection.position = cont;
 
         } catch (error) {
             console.error(error);
@@ -81,12 +105,12 @@ export class CollectionUtils{
 
     }
 
-    creatCollection(name,owner,userView,userManage,privateState,systemList, list): Collection{
+    createCollection(name:string,owner:string,userView:boolean,userManage:boolean,privateState:boolean,systemList:boolean,list:object[]): Collection{
         return {name, owner,userView,userManage,privateState,systemList,list};
     }
 
-    createEmptyCollection(name,owner,userView,userManage,privateState,systemList,  total?: number, position?: number): Collection{
-        return {name, owner,userView,userManage,privateState,systemList,list: [], total, position};
+    createEmptyCollection(name:string,owner:string,userView:boolean,userManage:boolean,privateState:boolean,systemList:boolean,total?:number,position?:number): Collection{
+        return {name,owner,userView,userManage,privateState,systemList,list:[], total, position};
     }
 
     createCollectionElement(id:string,path:string,autor:{id:string, name:string},dateCreated:number,dateModify:number,tags: string[]):CollectionElement{

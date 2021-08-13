@@ -14,6 +14,9 @@ export class Gallery extends FileCollectionAbstract{
         this.imageElements = imageElements;
     }
 
+    static interfaceToGallery(gallery: Gallery, path: string): Gallery{
+        return new Gallery(gallery.name, gallery.owner, gallery.userView,gallery.userManage,gallery.privateState,gallery.list,gallery.systemList,`${path}/${gallery.name}`, gallery.totalElements, gallery.imageElements);
+    }
     static interfaceToGalleryArray(list: Gallery[], path: string): Gallery[]{
         let listArray = [];
         for (let index = 0; index < list.length; index++) {

@@ -18,12 +18,17 @@ export class CollectionService {
             default: break;
         }
 
-        let dirContent:CreateCollectionDTO[] = await this.collectionUtils.getSystemCollection(path, type);
+        let dirContent:CreateCollectionDTO[] = await this.collectionUtils.getSystemCollections(path, type);
 
         return dirContent;
     }
 
-    async getSystemCollectionsPage(path: string, type: string, position: number): Promise<CreateCollectionDTO>{
+    async getSystemCollectionAll(path: string, type: string): Promise<CreateCollectionDTO>{
+        let collection:CreateCollectionDTO = await this.collectionUtils.getSystemCollectionAll(path, type);
+        return collection;
+    }
+
+    async getSystemCollectionPage(path: string, type: string, position: number): Promise<CreateCollectionDTO>{
         let collection:CreateCollectionDTO = await this.collectionUtils.getSystemCollectionPage(path, type, position);
         return collection;
     }

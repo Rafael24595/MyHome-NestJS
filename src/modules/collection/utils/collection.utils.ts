@@ -18,10 +18,23 @@ export class CollectionUtils{
             const files = readdirSync(path);
             const name = this.appUtils.basename(path);
             let collection = this.createEmptyCollection(name, 'system', true, false, false, true);
-            let cont = 1;
+            let isEmpty = true;
+            let cont = 0;
 
             collectionList = collectionList || [];
 
+            while(cont < files.length){
+                const file = files[cont];
+                const elementPath = `${path}/${file}`;
+                if (statSync(elementPath).isDirectory()) {
+                    collectionList = await this.getSystemCollections(elementPath, type, collectionList);
+                } else {
+                    isEmpty = (this.fileUtils.typeFile(elementPath) == type) ? false : true;
+                }
+                cont = cont + 1;
+            }
+
+            /*let cont = 1;
             files.forEach(async file=>{
                 const elementPath = `${path}/${file}`;
                 if (statSync(elementPath).isDirectory()) {
@@ -34,9 +47,9 @@ export class CollectionUtils{
                         cont = cont + 1;
                     }
                 }
-            });
+            });*/
 
-            if(collection.list.length > 0) collectionList.push(collection);
+            if(!isEmpty) collectionList.push(collection);
 
             return collectionList;
         } catch (error) {

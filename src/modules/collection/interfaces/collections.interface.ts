@@ -1,4 +1,5 @@
 export interface Collection{
+    location: string;
     name:string;
     owner: string;
     userView:boolean;

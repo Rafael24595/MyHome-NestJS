@@ -3,7 +3,7 @@ import { User } from "src/classes/User";
 export const service_config = {
     connection: {
         protocol: 'http',
-        host: '213.37.76.173',
+        host: 'localhost',
         port: '3000'
     }
 }
@@ -30,6 +30,12 @@ export const order_types = {
 
 export const logos_name = {
     computer: 'images/icons/computer.png',
+    smartphone: 'images/icons/smartphone.png',
+    audio_collection: 'images/icons/audio-collection.png',
+    video_collection: 'images/icons/video-collection.png',
+    image_collection: 'images/icons/image-collection.png',
+    user_fedora: 'images/icons/user-fedora.png',
+    heart: 'images/icons/heart.png',
     directory:{
         folder:'images/icons/folder.png',
         back:'images/icons/folder-back.png',

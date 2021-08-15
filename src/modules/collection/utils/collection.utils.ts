@@ -17,8 +17,9 @@ export class CollectionUtils{
         try {
             const files = readdirSync(path);
             const name = this.appUtils.basename(path);
-            let collection = this.createEmptyCollection(name, 'system', true, false, false, true);
-            let isEmpty = true;
+            const simplifyPath = this.directoryUtils.simplifyPath(path);
+            let collection = this.createEmptyCollection(simplifyPath, name, 'system', true, false, false, true);
+            let validFiles = 0;
             let cont = 0;
 
             collectionList = collectionList || [];
@@ -29,7 +30,7 @@ export class CollectionUtils{
                 if (statSync(elementPath).isDirectory()) {
                     collectionList = await this.getSystemCollections(elementPath, type, collectionList);
                 } else {
-                    isEmpty = (this.fileUtils.typeFile(elementPath) == type) ? false : true;
+                    validFiles = (this.fileUtils.typeFile(elementPath) == type) ? validFiles + 1 : validFiles;
                 }
                 cont = cont + 1;
             }
@@ -48,8 +49,8 @@ export class CollectionUtils{
                     }
                 }
             });*/
-
-            if(!isEmpty) collectionList.push(collection);
+            
+            if(validFiles > 0) collectionList.push(collection);
 
             return collectionList;
         } catch (error) {
@@ -63,7 +64,7 @@ export class CollectionUtils{
 
         const files = readdirSync(path);
         const name = this.appUtils.basename(path);
-        let collection = this.createEmptyCollection(name, 'system', true, false, false, true, files.length, files.length);
+        let collection = this.createEmptyCollection(path, name, 'system', true, false, false, true, files.length, files.length);
 
         try {
             for (let index = 0; index < files.length; index++) {
@@ -87,7 +88,7 @@ export class CollectionUtils{
 
         const files = readdirSync(path);
         const name = this.appUtils.basename(path);
-        let collection = this.createEmptyCollection(name, 'system', true, false, false, true, files.length, position);
+        let collection = this.createEmptyCollection(this.directoryUtils.simplifyPath(path), name, 'system', true, false, false, true, files.length, position);
 
         try {
             
@@ -96,7 +97,7 @@ export class CollectionUtils{
 
             while(numId < position + 30 && cont < files.length){
                 const elementPath = `${path}/${files[cont]}`;
-                const filePath = this.directoryUtils.simplifyPath(elementPath);console.log(filePath, cont)
+                const filePath = this.directoryUtils.simplifyPath(elementPath);
                 const collectionElement = this.createCollectionElement(`${name}-${numId}`, filePath, {id: 'system-001', name: 'system'}, 0, 0, []);
                 if(this.fileUtils.typeFile(elementPath) == type){
                     collection.list.push(collectionElement);
@@ -118,12 +119,12 @@ export class CollectionUtils{
 
     }
 
-    createCollection(name:string,owner:string,userView:boolean,userManage:boolean,privateState:boolean,systemList:boolean,list:object[]): Collection{
-        return {name, owner,userView,userManage,privateState,systemList,list};
+    createCollection(location: string, name:string,owner:string,userView:boolean,userManage:boolean,privateState:boolean,systemList:boolean,list:object[]): Collection{
+        return {location,name,owner,userView,userManage,privateState,systemList,list};
     }
 
-    createEmptyCollection(name:string,owner:string,userView:boolean,userManage:boolean,privateState:boolean,systemList:boolean,total?:number,position?:number): Collection{
-        return {name,owner,userView,userManage,privateState,systemList,list:[], total, position};
+    createEmptyCollection(location: string,name:string,owner:string,userView:boolean,userManage:boolean,privateState:boolean,systemList:boolean,total?:number,position?:number): Collection{
+        return {location,name,owner,userView,userManage,privateState,systemList,list:[], total, position};
     }
 
     createCollectionElement(id:string,path:string,autor:{id:string, name:string},dateCreated:number,dateModify:number,tags: string[]):CollectionElement{

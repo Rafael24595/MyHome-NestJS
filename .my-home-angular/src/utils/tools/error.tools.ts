@@ -2,7 +2,7 @@ export class ErrorTools{
 
     static reloadBrokenImage(event: Event):void{
         const img = event.currentTarget as HTMLImageElement;
-        const count = (img.getAttribute('reload') != null) ? parseInt(img.getAttribute('reload') as string) + 1 : 1;console.log(count)
+        const count = (img.getAttribute('reload') != null) ? parseInt(img.getAttribute('reload') as string) + 1 : 1;
         if(count < 5){
             setTimeout(() => {
                 img.setAttribute('reload', JSON.stringify(count));

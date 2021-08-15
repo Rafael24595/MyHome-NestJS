@@ -22,7 +22,7 @@ export class CollectionController {
     @Get(`${get_system_controller}/:type`)
     async getSystemCollections(@Param() param, @Res() res){
         const type = param.type;
-        const content = await this.collectionService.getSystemCollectionsByType(type);console.log(content)
+        const content = await this.collectionService.getSystemCollectionsByType(type);
 
         res.status(HttpStatus.OK).json({
             status: true,
@@ -50,7 +50,7 @@ export class CollectionController {
 
         const type = param.type;
         const position = parseInt(param.position);
-        const collectionPath = this.appUtils.getCleanSystemMediaPath(`${controller}/${get_systemPageByPath}/${type}/${position}`, req.url, type);console.log(type, position, collectionPath)
+        const collectionPath = this.appUtils.getCleanRelativePath(`${controller}/${get_systemPageByPath}/${type}/${position}`, req.url);
         const content = await this.collectionService.getSystemCollectionPage(collectionPath, type, position);
 
         res.status(HttpStatus.OK).json({
@@ -64,7 +64,7 @@ export class CollectionController {
     async getAllSystemCollectionByPath(@Param() param, @Request() req, @Res() res){
 
         const type = param.type;
-        const collectionPath = this.appUtils.getCleanSystemMediaPath(`${controller}/${get_systemAllByPath}/${type}}`, req.url, type);console.log(type, collectionPath)
+        const collectionPath = this.appUtils.getCleanRelativePath(`${controller}/${get_systemAllByPath}/${type}`, req.url);
         const content = await this.collectionService.getSystemCollectionAll(collectionPath, type);
 
         res.status(HttpStatus.OK).json({

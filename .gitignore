@@ -4,6 +4,7 @@
 
 # compiled output
 /dist
+/client
 /node_modules
 /private_assets
 

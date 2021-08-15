@@ -25,11 +25,12 @@ export class CollectionsComponent implements OnInit {
   routerEvent: Subscription | undefined;
   collections: Gallery[] | PlayListMusic[] | PlayListVideo[] | FileCollectionAbstract[] = [];
   mediaPath = '../../../../assets/media/';
-  collectionList: {fastAccess:boolean,showList:boolean,collection:Gallery | PlayListMusic | PlayListVideo | undefined | undefined, type: string} = {
+  collectionList: {fastAccess:boolean,showList:boolean,collection:Gallery | PlayListMusic | PlayListVideo | undefined | undefined, type: string, isBuilding: boolean} = {
     fastAccess: false,
     showList: false,
     collection: undefined,
-    type: ''
+    type: '',
+    isBuilding: false
   }
   
 
@@ -67,13 +68,15 @@ export class CollectionsComponent implements OnInit {
           }
           else {
             if(!pathData.list){
-              this.getAllCollections(pathData.name, pathData.path);console.log(this.collections)
+              this.getAllCollections(pathData.name, pathData.path);
             }
             else{
               if(this.collections.length < 1) await this.getAllCollections(pathData.name, pathData.path);
-              const collection = await this.getSingleCollection(pathData.name, pathData.path);
-              //const collection = CollectionTools.getCollectionByName(this.collections, pathData.list);
-              this.listCollection(collection);
+              const collectionData = CollectionTools.getCollectionByName(this.collections, pathData.list);
+              if(collectionData && collectionData.location){
+                const collection = await this.getSingleCollection(pathData.name, collectionData.location);
+                this.listCollection(collection);
+              }
             }
           }
           break;
@@ -103,21 +106,21 @@ export class CollectionsComponent implements OnInit {
     }
   }
 
-  async getSingleCollection(type: string, path: string): Promise<Gallery | PlayListMusic | undefined>{
+  async getSingleCollection(type: string, path: string, position?: number): Promise<Gallery | PlayListMusic | undefined>{
     return new Promise((resolve)=>{
       switch (type){
         case 'audio':
           this.collectionsService.getSystemCollectionAll(type, path).subscribe(
-            sucess => {console.log(sucess)
-              resolve(this.resolveGetCollection(sucess,path));
+            sucess => {
+              resolve(this.resolveGetCollection(sucess,path,type));
             },
             err => {console.error(err); resolve(undefined);}
           );
         break;
         case 'image':
-          this.collectionsService.getSystemCollectionPage(type, 0, path).subscribe(
-            sucess => {console.log(sucess)
-              resolve(this.resolveGetCollection(sucess,path));
+          this.collectionsService.getSystemCollectionPage(type, position ? position : 0, path).subscribe(
+            sucess => {
+              resolve(this.resolveGetCollection(sucess,path,type));
             },
             err => {console.error(err);resolve(undefined);}
           );
@@ -128,37 +131,16 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
-  resolveGetCollection(sucess:{status: boolean,type: string,message: Gallery | PlayListMusic}, path: string): Gallery | PlayListMusic | undefined{
-    const type = sucess.type;
+  resolveGetCollection(sucess:{status: boolean, message: Gallery | PlayListMusic}, path: string, type: string): Gallery | PlayListMusic | undefined{
     const object = sucess.message;
-    let collection;
-
-    switch (type){
-
-      case 'audio':
-        collection = PlayListMusic.interfaceToPlayList(object as PlayListMusic, path);
-        console.log(this.collections)
-      break;
-      case 'image':
-        collection = Gallery.interfaceToGallery(object as Gallery, path);
-      break;
-      case 'video':
-      
-      break;
-      case undefined:
-      
-      break;
-
-    }
-
-    return collection;
+    return CollectionTools.collectionListInterfaceToList(object, path, type, this.loadNextCollectionPage.bind(this));
 
   }
 
   async getAllCollections(name: string, path: string): Promise<boolean>{
     return new Promise((resolve)=>{
       this.collectionsService.getSystemCollection(name).subscribe(
-        sucess => {console.log(sucess)
+        sucess => {
           const type = sucess.type;
           const object = sucess.message;
           this.collectionList.type = sucess.type;
@@ -167,7 +149,6 @@ export class CollectionsComponent implements OnInit {
   
             case 'audio':
               this.collections = PlayListMusic.interfaceToPlayListMusicArray(object as PlayListMusic[], path);
-              console.log(this.collections)
             break;
             case 'image':
               this.collections = Gallery.interfaceToGalleryArray(object as Gallery[], path);
@@ -212,6 +193,33 @@ export class CollectionsComponent implements OnInit {
       setTimeout(() => {
         if (themeList) this.progressBarListener.sendThemeList(data);
       }, 1);
+    }
+  }
+
+  async loadNextCollectionPage():Promise<void>{
+    let panel = document.getElementById('body');
+
+    if(panel){
+      const scrollHeight = panel.scrollTop;
+      const scrollMaxHeight = panel.scrollHeight - panel.clientHeight;
+      const collection =  this.collectionList.collection;
+
+      if(scrollHeight >= scrollMaxHeight * 0.8 && collection && collection.location){
+          const position = collection.position;
+
+          if(collection.total && position && position < collection.total && this.collectionList.isBuilding == false){
+            this.collectionList.isBuilding = true
+            const type = CollectionTools.getType(collection);
+            const path = collection.location;
+            const newItems = await this.getSingleCollection(type, path, position);
+            
+            if(newItems){
+              const list = CollectionTools.collectionListInterfaceToList(newItems, path, type).list;
+              this.collectionList.collection = CollectionTools.updateCollectionPage(collection, list, newItems.position);
+              this.collectionList.isBuilding = false
+            } 
+          }
+      }
     }
   }
 

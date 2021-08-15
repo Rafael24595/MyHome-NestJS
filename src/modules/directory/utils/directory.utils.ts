@@ -129,8 +129,7 @@ export class DirectoryUtils{
           metadata: true,
           back: false
         }
-        
-        console.log(item.size)
+
         return item;
       }
 

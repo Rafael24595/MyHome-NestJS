@@ -41,7 +41,7 @@ export class CollectionListComponent implements OnInit {
   toRandomCollection(): void{
     if(this.collection){
       const list = this.collection.list;
-      const position = Math.floor(Math.random() * list?.length);console.log(position)
+      const position = Math.floor(Math.random() * list?.length);
       const path = list[position].path;
       
       this.ToCollection.next({list, path});

@@ -18,7 +18,7 @@ export class ConfigTools{
             }
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
             ConfigTools.setDefaultConfig();
         }
     }

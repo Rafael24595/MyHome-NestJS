@@ -27,20 +27,64 @@ export class CollectionTools{
         const position = CollectionTools.findCollectionPosition(collectionList, name);
         let collection;
 
-        console.log(collectionList[0] instanceof PlayListMusic)
-
         if(collectionList[0] instanceof Gallery){
             collection = collectionList[position] as Gallery;
-            collection.list = Picture.interfaceToPicture(collection.list);
         }
         if(collectionList[0] instanceof PlayListMusic){
             collection = collectionList[position] as PlayListMusic;
-            collection.list = Theme.interfaceToTheme(collection.list);
         }
         if(collectionList[0] instanceof PlayListVideo){
             collection = collectionList[position] as PlayListVideo;
         }
 
+        return collection;
+    }
+
+    public static collectionListInterfaceToList(collection: Gallery | PlayListMusic | PlayListVideo, path: string, type: string, scrollFunct?: Function): Gallery | PlayListMusic | PlayListVideo{
+
+        let panel = document.getElementById('body');
+
+        /*if(panel){
+            panel.onscroll = null;
+        }*/
+
+        switch (type){
+
+            case 'image':
+                collection = Gallery.interfaceToGallery(collection as Gallery, path);
+                collection.list = Picture.interfaceToPicture(collection.list);
+                if(scrollFunct && panel){
+                    panel.onscroll = ()=>{
+                        scrollFunct();
+                    };
+                }
+            break;
+
+            case 'audio':
+                collection = PlayListMusic.interfaceToPlayList(collection as PlayListMusic, path);
+                collection.list = Theme.interfaceToTheme(collection.list);
+            break;
+
+            case 'video':
+                collection = collection as PlayListVideo;
+            break;
+
+        }
+
+       return collection;
+   }
+
+   static getType(collection: Gallery | PlayListMusic | PlayListVideo): string{
+        if(collection instanceof Gallery) return 'image';
+        if(collection instanceof PlayListMusic) return 'audio';
+        if(collection instanceof PlayListVideo) return 'video';
+        return '';
+    }
+
+    public static updateCollectionPage(collection: Gallery | PlayListMusic | PlayListVideo, list: Theme[] | Picture[], position: number | undefined): Gallery | PlayListMusic | PlayListVideo{
+        list = collection.list.concat(list as any);
+        collection.list = list;
+        collection.position = position;
         return collection;
     }
 

@@ -129,11 +129,11 @@ export class MiscTools{
 
     static scrollToLastElement(parent: string, child: string){
         const parentElement = document.getElementById(parent);
-        const childElement = document.getElementById(child);console.log(parentElement, childElement);
-        if(parentElement && childElement){console.log(childElement.getBoundingClientRect());
+        const childElement = document.getElementById(child);
+        if(parentElement && childElement){
           const elementTop = childElement.getBoundingClientRect().top;
           const elementHeight = childElement.getBoundingClientRect().height;
-          const scrollValue = elementTop - elementHeight;console.log(elementTop,elementHeight,scrollValue);
+          const scrollValue = elementTop - elementHeight;
           if(scrollValue > 1)
             parentElement.scrollTo(0, scrollValue);
         }

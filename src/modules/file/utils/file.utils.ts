@@ -8,7 +8,7 @@ export class FileUtils {
     
     videoFormats = ['mp4', 'avi'];
     audioFormats = ['mp3', 'wav'];
-    imageFormats = ['png', 'jpg'];
+    imageFormats = ['png', 'jpg', 'gif'];
 
     constructor(private appUtils: AppUtils){}
     

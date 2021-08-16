@@ -38,7 +38,7 @@ export class CollectionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.authTools.checkSession();
-    this.routerEvent = this.router.events.subscribe((event) => {
+    this.routerEvent = this.router.events.subscribe((event) => {console.log(event)
       if (event instanceof NavigationEnd) {
         this.getCollections();
       }
@@ -84,8 +84,6 @@ export class CollectionsComponent implements OnInit {
       }
     }
   }
-
-
 
   listCollection(collection: Gallery | PlayListMusic | PlayListVideo | undefined): void{
     switch(this.collectionList.type){

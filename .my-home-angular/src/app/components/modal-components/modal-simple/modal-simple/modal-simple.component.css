@@ -7,3 +7,7 @@
     text-align: right;
     box-sizing: border-box;
 }
+
+.title-box a{
+    text-decoration: none;
+}

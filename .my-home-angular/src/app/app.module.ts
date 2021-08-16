@@ -24,6 +24,7 @@ import { AudioBarModalComponent } from './components/audio-bar/audio-bar-modal/a
 import { CandyRowSimpleComponent } from './components/candy-row/candy-row-simple/candy-row-simple.component';
 import { CollectionListComponent } from './components/body/collections/collection-list/collection-list/collection-list.component';
 import { CollectionListImageComponent } from './components/body/collections/collection-list-image/collection-list-image/collection-list-image.component';
+import { ImageViewComponent } from './components/image-view/image-view/image-view.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { CollectionListImageComponent } from './components/body/collections/coll
     AudioBarModalComponent,
     CandyRowSimpleComponent,
     CollectionListComponent,
-    CollectionListImageComponent
+    CollectionListImageComponent,
+    ImageViewComponent
   ],
   imports: [
     BrowserModule,

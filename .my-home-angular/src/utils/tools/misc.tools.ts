@@ -7,7 +7,7 @@ export class MiscTools{
 
     videoFormats = ['mp4', 'avi'];
     audioFormats = ['mp3', 'wav'];
-    imageFormats = ['png', 'jpg'];
+    imageFormats = ['png', 'jpg', 'gif'];
 
     static decodeURIComponentFull(path:string): string{
         return decodeURIComponent(decodeURIComponent(path));
@@ -127,9 +127,14 @@ export class MiscTools{
         }
     }
 
-    static scrollToLastElement(parent: string, child: string){
+    static setLastElementCollection(path: string, pathParent?: string): void{
+        user_config.lastElementIdCollection.path = `element-${path}`;
+        user_config.lastElementIdCollection.pathParent = (pathParent) ? pathParent : '';
+    }
+
+    static scrollToLastElement(parent: string, child: string){console.log(parent, child)
         const parentElement = document.getElementById(parent);
-        const childElement = document.getElementById(child);
+        const childElement = document.getElementById(child);console.log(parentElement, childElement)
         if(parentElement && childElement){
           const elementTop = childElement.getBoundingClientRect().top;
           const elementHeight = childElement.getBoundingClientRect().height;

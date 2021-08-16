@@ -20,6 +20,19 @@ html, body{
     font-size: 1.5em;
 }
 
+.my-home-icons-font-125-white{
+    font-family: my-home-icons;
+    color: white;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.my-home-icons-font-125-black{
+    font-family: my-home-icons;
+    color: black;
+    font-size: 1.25em;
+}
+
 .menu-icon{
     font-family: my-home-icons;
 }
@@ -30,6 +43,7 @@ html, body{
 
 .principal-module-scroll{
     overflow-y: auto;
+    position: relative;
 }
 
 #header, #footer{

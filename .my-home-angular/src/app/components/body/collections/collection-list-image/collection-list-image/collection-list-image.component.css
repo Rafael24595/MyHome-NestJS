@@ -10,3 +10,11 @@
     height: 75px;
     width: 75px;
 }
+.image-panel{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: black;
+}

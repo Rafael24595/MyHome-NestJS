@@ -16,9 +16,9 @@
 </ng-container>
 <ng-template #ElseShowList>
     <ng-container *ngIf='collectionList.type == "audio"'>
-        <app-collection-list (ToCollection)="ToCollection($event)" [collection]='collectionList.collection'></app-collection-list>
+        <app-collection-list (ToCollection)="toCollection($event)" [collection]='collectionList.collection'></app-collection-list>
     </ng-container>
     <ng-container *ngIf='collectionList.type == "image"'>
-        <app-collection-list-image (ToCollection)="ToCollection($event)" [collection]='collectionList.collection'></app-collection-list-image>
+        <app-collection-list-image (LoadNextCollectionPage)="loadNextCollectionPage()" [collection]='collectionList.collection'></app-collection-list-image>
     </ng-container>
 </ng-template>

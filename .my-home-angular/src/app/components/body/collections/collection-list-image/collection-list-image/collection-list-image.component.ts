@@ -19,7 +19,7 @@ import { MiscTools } from 'src/utils/tools/misc.tools';
 export class CollectionListImageComponent implements OnInit {
 
   @Input() collection: Gallery | PlayListMusic | PlayListVideo | undefined;
-  @Output() ToCollection = new EventEmitter<{list: Theme[] | Picture[], path: string}>();
+  @Output() LoadNextCollectionPage = new EventEmitter<{}>();
 
   connection = service_config.connection; 
   ErrorTools = ErrorTools;
@@ -39,8 +39,8 @@ export class CollectionListImageComponent implements OnInit {
     MiscTools.resetLastElementCollection();
   }
 
-  toCollection(element: Theme[] |Picture[],path:string):void{
-    this.ToCollection.next({list:element, path:path});
+  loadNextCollectionPage():void{
+    this.LoadNextCollectionPage.next();
   }
 
   showImage(position: number): void{

@@ -1,9 +1,24 @@
 <ng-container *ngIf='collection'>
     <div class="superior-tools">
-        <p [routerLink]='["/Manage" + collection.location]' class="my-home-icons-font-125-white">Z</p>
+        <p [routerLink]='["/Manage" + collection.location]' class="my-home-icons-font-125-white" style="font-weight: bold;">Z</p>
         <p (click)='hideImage()' class="my-home-icons-font-125-white">3</p>
     </div>
-    <div class="img-view">
-        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/data/{{collection.list[image.position].path}}" (error)="ErrorTools.reloadBrokenImage($event)">
+    <div id="touch-panel" (touchstart)='dragImage($event)' (mousedown)='dragImage($event)'></div>
+    <div id="img-view">
+        <div class="panel">
+            <div class="cover">
+                <img id="img-01" src="">
+            </div>
+        </div>
+        <div class="panel">
+            <div class="cover">
+                <img id="img-02" src="">
+            </div>
+        </div>
+        <div class="panel">
+            <div class="cover">
+                <img id="img-03" src="">
+            </div>
+        </div>
     </div>
 </ng-container>

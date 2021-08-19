@@ -93,7 +93,7 @@ export class CollectionsComponent implements OnInit {
           this.collectionList.collection = collection;
         }
         else if(collection){
-          this.ToCollection({list:collection.list})
+          this.toCollection({list:collection.list})
         }
       break;
       case 'video':
@@ -170,7 +170,7 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
-  ToCollection(collection:{list: Theme[] |Picture[], path?: string, settings?:ProgressBarRepSettings}) {
+  toCollection(collection:{list: Theme[] |Picture[], path?: string, settings?:ProgressBarRepSettings}) {
 
     collection.path = (collection.path) ? collection.path : collection.list[0].path;
 

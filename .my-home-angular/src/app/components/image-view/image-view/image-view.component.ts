@@ -58,7 +58,7 @@ export class ImageViewComponent implements OnInit {
       let image02 = document.getElementById('img-02') as HTMLImageElement;
       let image03 = document.getElementById('img-03') as HTMLImageElement;
 
-      const apiUri = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/data/`;
+      const apiUri = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/preview/`;
 
       if(this.collection && image01 && image02 && image03){
 
@@ -73,6 +73,17 @@ export class ImageViewComponent implements OnInit {
         image03.setAttribute('can-switch', (image03Exists == '') ? 'false' : 'true');
       }
     }, 10);
+  }
+
+  checkImageSize(event: Event): void{
+    let element = event.target as HTMLImageElement;console.log(element)
+    if(element){
+      const height = element.getBoundingClientRect().height;console.log(height)
+      if(height <= 100){
+        const src = element.src.replace('/api/file/preview/', '/api/file/data/');
+        //element.src = src;
+      }
+    }
   }
 
 }

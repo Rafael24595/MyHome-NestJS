@@ -11,6 +11,7 @@ import { PathVariables } from 'src/utils/variables/Variables';
 const controller = 'file';
 const get_file_Controller = 'data';
 const get_thumbnail_Controller = 'thumbnail';
+const get_preview_Controller = 'preview';
 
 @Controller(controller)
 export class FileController {
@@ -58,6 +59,24 @@ export class FileController {
 
         if(!existsSync(thumbnailPath)){
             await this.fileUtils.generateThumbnail(filePath, thumbnailPath);
+        }
+
+        const data = readFileSync(thumbnailPath);
+
+        res.writeHead(200, {'Content-Type': 'image/jpg'});
+        res.end(data);
+
+    }
+
+    @Get(`${get_preview_Controller}/*`)
+    async getImagePreview(@Request() req, @Res() res){
+ 
+        const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_preview_Controller}`, req.url);
+        const fileHash = this.appUtils.getFileHash(filePath);
+        const thumbnailPath = join(PathVariables.tmp_thumbnails, `preview-${fileHash}.png`);
+
+        if(!existsSync(thumbnailPath)){
+            await this.fileUtils.generateThumbnail(filePath, thumbnailPath, 1080);
         }
 
         const data = readFileSync(thumbnailPath);

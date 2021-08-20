@@ -7,7 +7,7 @@ export class DragHorizontalPicture{
 
     connection = service_config.connection;
 
-    apiUri = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/data/`;
+    apiUri = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/preview/`;
 
     mouseUp:boolean = true;
     mouseDown:boolean = false;
@@ -81,7 +81,7 @@ export class DragHorizontalPicture{
         return itemId.getBoundingClientRect();
     }
 
-    setImageSrc(image: HTMLImageElement, src: string):void{console.log(src)
+    setImageSrc(image: HTMLImageElement, src: string):void{
         if(image){
             image.src = src;
         }

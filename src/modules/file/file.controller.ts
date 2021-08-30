@@ -74,12 +74,16 @@ export class FileController {
         const filePath = this.appUtils.getCleanRelativePath(`${controller}/${get_preview_Controller}`, req.url);
         const fileHash = this.appUtils.getFileHash(filePath);
         const thumbnailPath = join(PathVariables.tmp_thumbnails, `preview-${fileHash}.png`);
+        let finalPath = thumbnailPath;
 
-        if(!existsSync(thumbnailPath)){
+        if(this.appUtils.extname(filePath) == 'gif'){
+            finalPath = filePath;
+        }
+        else if(!existsSync(thumbnailPath)){
             await this.fileUtils.generateThumbnail(filePath, thumbnailPath, 1080);
         }
 
-        const data = readFileSync(thumbnailPath);
+        const data = readFileSync(finalPath);
 
         res.writeHead(200, {'Content-Type': 'image/jpg'});
         res.end(data);

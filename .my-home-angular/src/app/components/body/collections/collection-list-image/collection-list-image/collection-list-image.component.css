@@ -18,4 +18,5 @@
     left: 0px;
     background-color: black;
     overflow: hidden;
+    z-index: 3;
 }

@@ -171,7 +171,7 @@ export class DragHorizontalPicture{
             if(!this.mouseUp){
                 this.mouseDown = true;
             }
-        }, 500);
+        }, 250);
     }
 
     onDrag(event: MouseEvent | TouchEvent){
@@ -188,7 +188,7 @@ export class DragHorizontalPicture{
     moveImage(cursor: number, width: number): void{
         if(this.positionOrigin){
             const distance = this.positionOrigin - cursor;
-            this.velocity = Math.abs(this.lastDistance - distance);//console.log(cursor,distance, this.velocity)
+            this.velocity = Math.abs(this.lastDistance - distance);
 
             if(Math.abs(distance) >= width / 4){
                 this.switchImage.direction = (distance < 1) ? 1 : -1;
@@ -252,6 +252,9 @@ export class DragHorizontalPicture{
                 default: break;
             }
         }
+        image02.style.transform = `rotate(0deg)`; //TODO Refactorizar
+        image02.style.maxWidth = '100%';
+        image02.style.maxHeight = '100%';
         this.switchImage.canSwitch = true;
         this.checkCollectionLength();
         this.resetDistance();

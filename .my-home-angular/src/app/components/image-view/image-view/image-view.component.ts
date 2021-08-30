@@ -3,6 +3,7 @@ import { Gallery } from 'src/classes/Collections/Gallery';
 import { PlayListMusic } from 'src/classes/Collections/PlayListMusic';
 import { PlayListVideo } from 'src/classes/Collections/PlayListVideo';
 import { DragHorizontalPicture } from 'src/classes/DragHorizontalPicture';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 import { ErrorTools } from 'src/utils/tools/error.tools';
 import { service_config } from 'src/utils/variables/Globals';
 
@@ -26,9 +27,10 @@ export class ImageViewComponent implements OnInit {
   ErrorTools = ErrorTools;
   DragImageEvent = DragHorizontalPicture;
 
-  constructor() { }
+  constructor(private authTools: AuthTools) { }
 
   ngOnInit(): void {
+    this.authTools.checkSession();
     this.setInitialImageValues();
   }
 
@@ -76,14 +78,51 @@ export class ImageViewComponent implements OnInit {
   }
 
   checkImageSize(event: Event): void{
-    let element = event.target as HTMLImageElement;console.log(element)
+    let element = event.target as HTMLImageElement;
     if(element){
-      const height = element.getBoundingClientRect().height;console.log(height)
+      const height = element.getBoundingClientRect().height;
       if(height <= 100){
         const src = element.src.replace('/api/file/preview/', '/api/file/data/');
         //element.src = src;
       }
     }
+  }
+
+  rotateImage(mode: boolean): void{
+
+    let image = document.getElementById('img-02') as HTMLImageElement;
+    let container = document.getElementById('img-view') as HTMLImageElement;
+
+    if(container && image){
+
+      let maxHeight = '100%';
+      let maxWidth = '100%';
+      let rotateValue = parseInt(image.getAttribute('rotation') as string);
+
+      if(!rotateValue){
+        image.setAttribute('rotation', '0')
+        rotateValue = 0;
+      }
+
+      rotateValue = (mode) ? rotateValue + 90 : (rotateValue == 0) ? 360 - 90 : rotateValue - 90;
+
+      const orientation = Math.abs(((Math.round(rotateValue / 90) / 4) % 1));
+
+      let rotation = 360 * orientation;
+      
+      image.setAttribute('rotation', rotation.toString());
+      image.style.transform = `rotate(${rotation}deg)`;
+
+      if(rotation % 4){
+        maxWidth = `${container.getBoundingClientRect().height}px`;
+        maxHeight = `${container.getBoundingClientRect().width}px`;
+      }
+      
+      image.style.maxWidth = maxWidth;
+      image.style.maxHeight = maxHeight;
+
+    }
+
   }
 
 }

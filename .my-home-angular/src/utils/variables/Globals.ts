@@ -3,6 +3,7 @@ import { User } from "src/classes/User";
 export const service_config = {
     connection: {
         protocol: 'http',
+        //host: 'localhost',
         host: 'localhost',
         port: '3000'
     }

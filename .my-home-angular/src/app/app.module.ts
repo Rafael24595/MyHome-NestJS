@@ -25,6 +25,7 @@ import { CandyRowSimpleComponent } from './components/candy-row/candy-row-simple
 import { CollectionListComponent } from './components/body/collections/collection-list/collection-list/collection-list.component';
 import { CollectionListImageComponent } from './components/body/collections/collection-list-image/collection-list-image/collection-list-image.component';
 import { ImageViewComponent } from './components/image-view/image-view/image-view.component';
+import { ScrollTopButtonComponent } from './components/scroll-top-button/scroll-top-button/scroll-top-button.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ImageViewComponent } from './components/image-view/image-view/image-vie
     CandyRowSimpleComponent,
     CollectionListComponent,
     CollectionListImageComponent,
-    ImageViewComponent
+    ImageViewComponent,
+    ScrollTopButtonComponent
   ],
   imports: [
     BrowserModule,

@@ -2,14 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Gallery } from 'src/classes/Collections/Gallery';
 import { PlayListMusic } from 'src/classes/Collections/PlayListMusic';
 import { PlayListVideo } from 'src/classes/Collections/PlayListVideo';
-import { Picture } from 'src/classes/File/Picture';
-import { Theme } from 'src/classes/File/Theme';
 import { ErrorTools } from 'src/utils/tools/error.tools';
 import { service_config, user_config } from 'src/utils/variables/Globals';
 import { Location } from '@angular/common';
 import { CandyRowSimpleComponent } from 'src/app/components/candy-row/candy-row-simple/candy-row-simple.component';
 import { ActivatedRoute } from '@angular/router';
 import { MiscTools } from 'src/utils/tools/misc.tools';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 
 @Component({
   selector: 'app-collection-list-image',
@@ -29,9 +28,10 @@ export class CollectionListImageComponent implements OnInit {
     show: false
   }
 
-  constructor(private location: Location, private route: ActivatedRoute) { }
+  constructor(private location: Location, private route: ActivatedRoute, private authTools: AuthTools) { }
 
   ngOnInit(): void {
+    this.authTools.checkSession();
     this.hideImage();
   }
 

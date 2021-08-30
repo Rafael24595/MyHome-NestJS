@@ -31,6 +31,8 @@
     "cookie-parser": "^1.4.5",
     "crypto-js": "^4.0.0",
     "ffmpeg-static": "^4.4.0",
+    "imagemin": "^8.0.1",
+    "imagemin-pngquant": "^9.0.2",
     "mongoose": "^5.13.0",
     "node-cmd": "^5.0.0",
     "node-schedule": "^2.0.0",

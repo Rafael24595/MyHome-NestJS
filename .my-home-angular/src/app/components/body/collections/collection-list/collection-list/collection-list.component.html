@@ -1,16 +1,16 @@
-   <ng-container *ngIf='collection'>
-       <div style="position: relative; padding-left: 15px; padding-right: 15px;">
-            <div class="random-access">
-                <p (click)='toRandomCollection()'><span class="reproductor-icon">K</span> Reproducción aleatoria</p>
-                <p>Total: {{collection.list.length}}</p>
+<ng-container *ngIf='collection'>
+    <div style="position: relative; padding-left: 15px; padding-right: 15px;">
+        <div class="random-access">
+            <p (click)='toRandomCollection()'><span class="reproductor-icon">K</span> Reproducción aleatoria</p>
+            <p>Total: {{collection.list.length}}</p>
+        </div>
+        <div *ngFor='let element of collection.list; let last = last' [routerLink]='[collection.path]' id="element-{{element.path}}" class="list-element">
+            <!--<span *ngIf='last'>{{last ? ngForEnd() : ''}}</span>-->
+            <div (click)='toCollection(collection.list, element.path)' class="list-element-content">
+                <p>{{element.name}}</p>
+                <div class="directory-element-menu-flex"><div></div><div></div><div></div></div>
             </div>
-            <div *ngFor='let element of collection.list; let last = last' [routerLink]='[collection.path]' id="element-{{element.path}}" class="list-element">
-                <!--<span *ngIf='last'>{{last ? ngForEnd() : ''}}</span>-->
-                <div (click)='toCollection(collection.list, element.path)' class="list-element-content">
-                    <p>{{element.name}}</p>
-                    <div class="directory-element-menu-flex"><div></div><div></div><div></div></div>
-                </div>
-            </div>
-       </div>
+        </div>
+    </div>
 </ng-container>
 

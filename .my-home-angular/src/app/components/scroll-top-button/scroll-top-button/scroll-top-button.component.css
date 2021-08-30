@@ -1,0 +1,30 @@
+#scroll-up-button{
+    position: fixed;
+    right: 0%;
+    bottom: 10%;
+    padding: 15px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.3);
+    min-width: 25px;
+    min-height: 25px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    z-index: 2;
+}
+
+.hasAux{
+    margin-bottom: 75px !important;
+}
+
+#scroll-up-button p{
+    margin: 0px;
+}
+
+.visible{
+    display: initial;
+}
+
+.hidden{
+    display: none;
+}

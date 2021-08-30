@@ -33,12 +33,11 @@ export class CollectionsComponent implements OnInit {
     isBuilding: false
   }
   
-
   constructor(private authTools: AuthTools, private router: Router, private progressBarListener: ProgressBarListener, private route: ActivatedRoute, private collectionsService: CollectionsService) { }
 
   ngOnInit(): void {
     this.authTools.checkSession();
-    this.routerEvent = this.router.events.subscribe((event) => {console.log(event)
+    this.routerEvent = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.getCollections();
       }

@@ -132,9 +132,9 @@ export class MiscTools{
         user_config.lastElementIdCollection.pathParent = (pathParent) ? pathParent : '';
     }
 
-    static scrollToLastElement(parent: string, child: string){console.log(parent, child)
+    static scrollToLastElement(parent: string, child: string){
         const parentElement = document.getElementById(parent);
-        const childElement = document.getElementById(child);console.log(parentElement, childElement)
+        const childElement = document.getElementById(child);
         if(parentElement && childElement){
           const elementTop = childElement.getBoundingClientRect().top;
           const elementHeight = childElement.getBoundingClientRect().height;

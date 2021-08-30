@@ -4,6 +4,7 @@ import { PlayListMusic } from 'src/classes/Collections/PlayListMusic';
 import { PlayListVideo } from 'src/classes/Collections/PlayListVideo';
 import { Picture } from 'src/classes/File/Picture';
 import { Theme } from 'src/classes/File/Theme';
+import { AuthTools } from 'src/utils/tools/auth.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
 import { user_config } from 'src/utils/variables/Globals';
 
@@ -17,9 +18,10 @@ export class CollectionListComponent implements OnInit {
   @Input() collection: Gallery | PlayListMusic | PlayListVideo | undefined;
   @Output() ToCollection = new EventEmitter<{list: Theme[] | Picture[], path: string}>();
 
-  constructor() { }
+  constructor(private authTools: AuthTools) { }
 
   ngOnInit(): void {
+    this.authTools.checkSession();
     window.setTimeout(()=>{
       this.ngForEnd();
     }, 10)

@@ -22,6 +22,7 @@
     position: relative;
     max-width: 100%;
     max-height: 100%;
+    background-color: rgba(255, 255, 255, 0.25);
 }
 .superior-tools{
     display: flex;
@@ -39,10 +40,20 @@
     z-index: 2;
 }
 
-.superior-tools p{
+.superior-tools p, .inferior-tools p{
     margin: 0px;
     padding: 15px;
 }
 .soft-move{
     transition: 0.25s;
+}
+
+.inferior-tools{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    color: white;
+    z-index: 3;
 }

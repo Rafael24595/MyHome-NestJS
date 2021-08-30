@@ -14,6 +14,13 @@ export class BottomAuxMenuComponent implements OnInit {
   constructor(private fileManagerComponent: FileManagerComponent, private router: Router) { }
 
   ngOnInit(): void {
+    let body = document.getElementById('body');
+    body?.setAttribute('hasAux', 'true');
+  }
+
+  ngOnDestroy(): void{
+    let body = document.getElementById('body');
+    body?.removeAttribute('hasAux');
   }
 
   executeOption(mode: string){

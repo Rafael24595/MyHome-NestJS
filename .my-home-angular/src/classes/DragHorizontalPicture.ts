@@ -9,12 +9,15 @@ export class DragHorizontalPicture{
 
     apiUri = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/preview/`;
 
+    touches: number;
     mouseUp:boolean = true;
     mouseDown:boolean = false;
     mouseMoveEvent: boolean = false;
     elementToDrag: HTMLElement;
     parentElement:HTMLElement;
     loadNextPage: Function;
+    updateURI:Function;
+    updateElementRotation:Function;
     collection: Gallery;
     image: {position: number, show: boolean};
     positionOrigin: number | undefined;
@@ -28,23 +31,29 @@ export class DragHorizontalPicture{
     lastDistance: number = 0;
     velocity: number = 0;
 
-    private constructor(elementToDrag:HTMLElement, parentElement:HTMLElement, loadNextPage:Function, collection: Gallery, image: {position: number, show: boolean}){
+    private constructor(touches:number, elementToDrag:HTMLElement, parentElement:HTMLElement, loadNextPage:Function, updateURI:Function, updateElementRotation: Function, collection: Gallery, image: {position: number, show: boolean}){
+        this.touches = touches;
         this.elementToDrag = elementToDrag;
         this.parentElement = parentElement;
         this.loadNextPage = loadNextPage;
+        this.updateURI = updateURI;
+        this.updateElementRotation = updateElementRotation;
         this.collection = collection;
         this.image = image;
     }
 
-    static listener(collection: Gallery, image: {position: number, show: boolean}, elementToDrag?:HTMLElement, parentElement?:HTMLElement, loadNextPage?:Function): DragHorizontalPicture | undefined{
-        if(elementToDrag && loadNextPage && parentElement){
+    static listener(touches: number, collection: Gallery, image: {position: number, show: boolean}, elementToDrag?:HTMLElement, parentElement?:HTMLElement, loadNextPage?:Function, updateURI?:Function, updateElementRotation?: Function): DragHorizontalPicture | undefined{
+        if(elementToDrag && loadNextPage && updateURI && updateElementRotation && parentElement){
             if(!this.instance){
-                this.instance = new DragHorizontalPicture(elementToDrag, parentElement, loadNextPage, collection, image);
+                this.instance = new DragHorizontalPicture(touches, elementToDrag, parentElement, loadNextPage, updateURI, updateElementRotation, collection, image);
             }
             else{
+                this.instance.touches = touches;
                 this.instance.elementToDrag = elementToDrag;
                 this.instance.parentElement = parentElement;
                 this.instance.loadNextPage = loadNextPage;
+                this.instance.updateURI = updateURI;
+                this.instance.updateElementRotation = updateElementRotation;
             }
             this.instance.createMouseMoveEventListener();
         }
@@ -87,6 +96,28 @@ export class DragHorizontalPicture{
         }
     }
 
+    setImagesArraySrc(images: HTMLImageElement[], srcs: string[]):void{
+        if(images.length == srcs.length){
+            for (let index = 0; index < images.length; index++) {
+                this.setImageSrc(images[index], (srcs[index] != '') ? `${this.apiUri}${srcs[index]}` : '');
+            }
+        }
+        else{
+            console.error(`Invalid length: Images src array`)
+        }
+    }
+
+    updateElementsArrayRotation(images: HTMLImageElement[], srcs: string[]):void{
+        if(images.length == srcs.length){
+            for (let index = 0; index < images.length; index++) {
+                this.updateElementRotation((srcs[index] != '') ? srcs[index] : '', images[index]);
+            }
+        }
+        else{
+            console.error(`Invalid length: Images src array`)
+        }
+    }
+
     setCanSwitch(img: HTMLImageElement, mode: boolean): void{
         img.setAttribute('can-switch', `${mode}`);
     } 
@@ -104,6 +135,12 @@ export class DragHorizontalPicture{
         for (let index = 0; index < images.length; index++) {
             this.setImageSrc(images[index], '');
             this.setCanSwitch(images[index], true);
+        }
+    }
+
+    resetElementRotation(images: HTMLImageElement[]): void{
+        for (let index = 0; index < images.length; index++) {
+            this.updateElementRotation('', images[index]);
         }
     }
 
@@ -175,7 +212,7 @@ export class DragHorizontalPicture{
     }
 
     onDrag(event: MouseEvent | TouchEvent){
-        if(this.switchImage.canSwitch){
+        if(this.switchImage.canSwitch && this.touches < 2){
             const width = this.getElementBoundingClientRect(event).width;
             const cursor = this.getOffsetX(event);
             if(this.positionOrigin == undefined){
@@ -224,40 +261,49 @@ export class DragHorizontalPicture{
     }
  
     setNewImagesOrder(): void{
-
         let image01 = this.getImage01();
         let image02 = this.getImage02();
         let image03 = this.getImage03();
 
         if(image01 && image02 && image03){
-            this.resetImagesSrc([image01,image02,image03]); 
+            const imageArray = [image01,image02,image03];
+            let image01URI = '';
+            let image02URI = '';
+            let image03URI = '';
+            
+            this.resetImagesSrc(imageArray); 
+            this.resetElementRotation(imageArray);
+
             switch (this.switchImage.direction) {
                 case 1:
-                    const image01Exists = (this.collection.list[this.image.position - 2]) ? `${this.apiUri}${this.collection.list[this.image.position - 2].path}` : '';
-                    this.setImageSrc(image01, image01Exists);
-                    this.setImageSrc(image02, `${this.apiUri}${this.collection.list[this.image.position - 1].path}`);
-                    this.setImageSrc(image03, `${this.apiUri}${this.collection.list[this.image.position].path}`);
+                    image01URI = (this.collection.list[this.image.position - 2]) ? this.collection.list[this.image.position - 2].path : '';
+                    image02URI = this.collection.list[this.image.position - 1].path;
+                    image03URI = this.collection.list[this.image.position].path;
+
                     this.image.position = this.image.position - 1;
-                    this.setCanSwitch(image01, (image01Exists != ''));
+                    this.setCanSwitch(image01, (image01URI != ''));
                 break;
-                case -1:
-                    const image03Exists = (this.collection.list[this.image.position + 2] != undefined) ? `${this.apiUri}${this.collection.list[this.image.position + 2].path}` : '';
-                    this.setImageSrc(image01, `${this.apiUri}${this.collection.list[this.image.position].path}`);
-                    this.setImageSrc(image02, `${this.apiUri}${this.collection.list[this.image.position + 1].path}`);
-                    this.setImageSrc(image03, image03Exists);
+                case -1:                  
+                    image01URI = this.collection.list[this.image.position].path;
+                    image02URI = this.collection.list[this.image.position + 1].path;
+                    image03URI = (this.collection.list[this.image.position + 2]) ? this.collection.list[this.image.position + 2].path : '';
+
                     this.image.position = this.image.position + 1;
-                    this.setCanSwitch(image03, (image03Exists != ''));
+                    this.setCanSwitch(image03, (image03URI != ''));
                 break;
             
                 default: break;
             }
+
+            const uriArray = [image01URI, image02URI, image03URI];
+
+            this.setImagesArraySrc(imageArray, uriArray);
+            this.updateElementsArrayRotation(imageArray, uriArray);
         }
-        image02.style.transform = `rotate(0deg)`; //TODO Refactorizar
-        image02.style.maxWidth = '100%';
-        image02.style.maxHeight = '100%';
         this.switchImage.canSwitch = true;
         this.checkCollectionLength();
         this.resetDistance();
+        this.updateURI(true);
     }
 
     checkCollectionLength(): void{

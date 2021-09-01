@@ -21,8 +21,8 @@ export class ImageViewComponent implements OnInit {
   };
   @Output() HideImage = new EventEmitter<{}>();
   @Output() LoadNextCollectionPage = new EventEmitter<{}>();
+  @Output() UpdateURI = new EventEmitter<boolean>();
   
-
   connection = service_config.connection; 
   ErrorTools = ErrorTools;
   DragImageEvent = DragHorizontalPicture;
@@ -42,15 +42,30 @@ export class ImageViewComponent implements OnInit {
     this.HideImage.next({});
   }
 
+  updateURI(showMedia: boolean):void{
+    this.UpdateURI.emit(showMedia);
+  }
+
   dragImage(event: MouseEvent | TouchEvent):void{
-    const parentElement = document.getElementById('img-view');
-    const element =  document.getElementById('touch-panel');
-    event.preventDefault();
-    if(this.collection && this.collection instanceof Gallery && element && parentElement){
-      const instance = this.DragImageEvent.listener(this.collection, this.image, element, parentElement, this.loadNextCollectionPage.bind(this));
-      if(instance){
-        instance.onKeepMouseDown();
+    if(event instanceof TouchEvent){
+      const parentElement = document.getElementById('img-view');
+      const element =  document.getElementById('touch-panel');
+      const touches = event.touches.length;
+      
+      if(this.collection && this.collection instanceof Gallery && element && parentElement){
+        const instance = this.DragImageEvent.listener(touches, this.collection, this.image, element, parentElement, this.loadNextCollectionPage.bind(this), this.updateURI.bind(this), this.updateElementRotation.bind(this));
+        if(instance){
+          if(touches < 2){
+            //event.preventDefault();
+            instance.onKeepMouseDown();
+          }
+          else{
+            /*event.returnValue = true;
+            instance.onMouseUp();*/
+          }
+        }
       }
+      console.log(event.touches.length)
     }
   }
 
@@ -64,39 +79,30 @@ export class ImageViewComponent implements OnInit {
 
       if(this.collection && image01 && image02 && image03){
 
-        const image01Exists = (this.collection.list[this.image.position - 1]) ? `${apiUri}${this.collection.list[this.image.position - 1].path}` : '';
-        const image03Exists = (this.collection.list[this.image.position + 1]) ? `${apiUri}${this.collection.list[this.image.position + 1].path}` : '';
+        const image01URI = (this.collection.list[this.image.position - 1]) ? this.collection.list[this.image.position - 1].path : '';
+        const image02URI = (this.collection.list[this.image.position]) ? this.collection.list[this.image.position].path : '';
+        const image03URI = (this.collection.list[this.image.position + 1]) ? this.collection.list[this.image.position + 1].path : '';
 
-        image01.src = image01Exists;
-        image02.src = `${apiUri}${this.collection.list[this.image.position].path}`;
-        image03.src = image03Exists;
+        image01.src = (image01URI != '') ? `${apiUri}${image01URI}` : '';
+        image02.src = (image02URI != '') ? `${apiUri}${image02URI}` : '';
+        image03.src = (image03URI != '') ? `${apiUri}${image03URI}` : '';
 
-        image01.setAttribute('can-switch', (image01Exists == '') ? 'false' : 'true');
-        image03.setAttribute('can-switch', (image03Exists == '') ? 'false' : 'true');
+        image01.setAttribute('can-switch', (image01URI == '') ? 'false' : 'true');
+        image03.setAttribute('can-switch', (image03URI == '') ? 'false' : 'true');
+
+        this.updateElementRotation(image01URI, image01);
+        this.updateElementRotation(image02URI, image02);
+        this.updateElementRotation(image03URI, image03);
       }
     }, 10);
-  }
-
-  checkImageSize(event: Event): void{
-    let element = event.target as HTMLImageElement;
-    if(element){
-      const height = element.getBoundingClientRect().height;
-      if(height <= 100){
-        const src = element.src.replace('/api/file/preview/', '/api/file/data/');
-        //element.src = src;
-      }
-    }
   }
 
   rotateImage(mode: boolean): void{
 
     let image = document.getElementById('img-02') as HTMLImageElement;
-    let container = document.getElementById('img-view') as HTMLImageElement;
 
-    if(container && image){
+    if(image){
 
-      let maxHeight = '100%';
-      let maxWidth = '100%';
       let rotateValue = parseInt(image.getAttribute('rotation') as string);
 
       if(!rotateValue){
@@ -110,19 +116,47 @@ export class ImageViewComponent implements OnInit {
 
       let rotation = 360 * orientation;
       
-      image.setAttribute('rotation', rotation.toString());
-      image.style.transform = `rotate(${rotation}deg)`;
-
-      if(rotation % 4){
-        maxWidth = `${container.getBoundingClientRect().height}px`;
-        maxHeight = `${container.getBoundingClientRect().width}px`;
-      }
-      
-      image.style.maxWidth = maxWidth;
-      image.style.maxHeight = maxHeight;
-
+      this.setRotation(image, rotation);
+      this.updateRotationStorage(rotation);
     }
 
+  }
+
+  updateElementRotation(key: string, image: HTMLImageElement): void{
+    const list = localStorage.getItem('rotation-storage');
+    if(list){
+      const rotation = parseInt(JSON.parse(list)[key]);
+      this.setRotation(image, (rotation) ? rotation : 0);
+    }
+  }
+
+  setRotation(image: HTMLImageElement, rotation: number):void{
+
+    let container = document.getElementById('img-view') as HTMLImageElement;
+
+    let maxHeight = '100%';
+    let maxWidth = '100%';
+
+    image.setAttribute('rotation', rotation.toString());
+    image.style.transform = `rotate(${rotation}deg)`;
+
+    if(rotation % 4){
+      maxWidth = `${container.getBoundingClientRect().height}px`;
+      maxHeight = `${container.getBoundingClientRect().width}px`;
+    }
+    
+    image.style.maxWidth = maxWidth;
+    image.style.maxHeight = maxHeight;
+  }
+
+  updateRotationStorage(rotation: number):void{
+    let list = localStorage.getItem('rotation-storage');
+    let object = (list) ? JSON.parse(list) : {};
+    const key = this.collection?.list[this.image.position].path as string;
+    
+    object[key] = rotation;
+
+    localStorage.setItem('rotation-storage', JSON.stringify(object));
   }
 
 }

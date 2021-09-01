@@ -14,7 +14,7 @@
     </ng-container>
     <ng-template #ElseHide>
         <div class="image-panel">
-            <app-image-view (HideImage)="hideImage()" (LoadNextCollectionPage)="loadNextCollectionPage()" [collection]='collection' [image]='image'></app-image-view>
+            <app-image-view (HideImage)="hideImage()" (LoadNextCollectionPage)="loadNextCollectionPage()" (UpdateURI)="updateURI($event)" [collection]='collection' [image]='image'></app-image-view>
         </div>
     </ng-template>
 </ng-container>

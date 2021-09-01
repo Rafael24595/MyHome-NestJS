@@ -32,6 +32,12 @@ html, body{
     font-size: 1.25em;
 }
 
+.my-home-icons-font-150-white{
+    font-family: my-home-icons;
+    color: white;
+    font-size: 1.5em;
+}
+
 .my-home-icons-font-125-black{
     font-family: my-home-icons;
     color: black;

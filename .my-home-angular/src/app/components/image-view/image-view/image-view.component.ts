@@ -50,19 +50,11 @@ export class ImageViewComponent implements OnInit {
     if(event instanceof TouchEvent){
       const parentElement = document.getElementById('img-view');
       const element =  document.getElementById('touch-panel');
-      const touches = event.touches.length;
       
       if(this.collection && this.collection instanceof Gallery && element && parentElement){
-        const instance = this.DragImageEvent.listener(touches, this.collection, this.image, element, parentElement, this.loadNextCollectionPage.bind(this), this.updateURI.bind(this), this.updateElementRotation.bind(this));
+        const instance = this.DragImageEvent.listener(event, this.collection, this.image, element, parentElement, this.loadNextCollectionPage.bind(this), this.updateURI.bind(this), this.updateElementRotation.bind(this));
         if(instance){
-          if(touches < 2){
-            //event.preventDefault();
-            instance.onKeepMouseDown();
-          }
-          else{
-            /*event.returnValue = true;
-            instance.onMouseUp();*/
-          }
+          instance.onKeepMouseDown();
         }
       }
       console.log(event.touches.length)

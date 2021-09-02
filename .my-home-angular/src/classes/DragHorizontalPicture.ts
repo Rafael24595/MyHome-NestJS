@@ -9,7 +9,7 @@ export class DragHorizontalPicture{
 
     apiUri = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/preview/`;
 
-    touches: number;
+    event: TouchEvent;
     mouseUp:boolean = true;
     mouseDown:boolean = false;
     mouseMoveEvent: boolean = false;
@@ -31,8 +31,8 @@ export class DragHorizontalPicture{
     lastDistance: number = 0;
     velocity: number = 0;
 
-    private constructor(touches:number, elementToDrag:HTMLElement, parentElement:HTMLElement, loadNextPage:Function, updateURI:Function, updateElementRotation: Function, collection: Gallery, image: {position: number, show: boolean}){
-        this.touches = touches;
+    private constructor(event:TouchEvent, elementToDrag:HTMLElement, parentElement:HTMLElement, loadNextPage:Function, updateURI:Function, updateElementRotation: Function, collection: Gallery, image: {position: number, show: boolean}){
+        this.event = event;
         this.elementToDrag = elementToDrag;
         this.parentElement = parentElement;
         this.loadNextPage = loadNextPage;
@@ -42,13 +42,13 @@ export class DragHorizontalPicture{
         this.image = image;
     }
 
-    static listener(touches: number, collection: Gallery, image: {position: number, show: boolean}, elementToDrag?:HTMLElement, parentElement?:HTMLElement, loadNextPage?:Function, updateURI?:Function, updateElementRotation?: Function): DragHorizontalPicture | undefined{
+    static listener(event:TouchEvent, collection: Gallery, image: {position: number, show: boolean}, elementToDrag?:HTMLElement, parentElement?:HTMLElement, loadNextPage?:Function, updateURI?:Function, updateElementRotation?: Function): DragHorizontalPicture | undefined{
         if(elementToDrag && loadNextPage && updateURI && updateElementRotation && parentElement){
             if(!this.instance){
-                this.instance = new DragHorizontalPicture(touches, elementToDrag, parentElement, loadNextPage, updateURI, updateElementRotation, collection, image);
+                this.instance = new DragHorizontalPicture(event, elementToDrag, parentElement, loadNextPage, updateURI, updateElementRotation, collection, image);
             }
             else{
-                this.instance.touches = touches;
+                this.instance.event = event;
                 this.instance.elementToDrag = elementToDrag;
                 this.instance.parentElement = parentElement;
                 this.instance.loadNextPage = loadNextPage;
@@ -212,7 +212,9 @@ export class DragHorizontalPicture{
     }
 
     onDrag(event: MouseEvent | TouchEvent){
-        if(this.switchImage.canSwitch && this.touches < 2){
+        const touches = this.event.touches.length;
+        if(this.switchImage.canSwitch && touches < 2){
+            this.event.preventDefault();
             const width = this.getElementBoundingClientRect(event).width;
             const cursor = this.getOffsetX(event);
             if(this.positionOrigin == undefined){
@@ -227,7 +229,7 @@ export class DragHorizontalPicture{
             const distance = this.positionOrigin - cursor;
             this.velocity = Math.abs(this.lastDistance - distance);
 
-            if(Math.abs(distance) >= width / 4){
+            if(Math.abs(distance) >= width / 8){
                 this.switchImage.direction = (distance < 1) ? 1 : -1;
                 this.switchImage.isSwitch = true;
             }

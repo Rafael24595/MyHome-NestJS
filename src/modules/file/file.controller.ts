@@ -80,7 +80,7 @@ export class FileController {
             finalPath = filePath;
         }
         else if(!existsSync(thumbnailPath)){
-            await this.fileUtils.generateThumbnail(filePath, thumbnailPath, 1080);
+            await this.fileUtils.generateThumbnail(filePath, thumbnailPath, 540);
         }
 
         const data = readFileSync(finalPath);

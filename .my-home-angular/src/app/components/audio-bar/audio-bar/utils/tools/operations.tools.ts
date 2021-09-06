@@ -1,8 +1,8 @@
-import { ActivatedRoute } from "@angular/router";
 import { Theme } from "src/classes/File/Theme";
 import { MiscTools } from "src/utils/tools/misc.tools";
+import { AudioBarLiteComponent } from "../../../audio-bar-lite/audio-bar-lite/audio-bar-lite.component";
 import { AudioBarComponent } from "../../audio-bar.component";
-import { ProgressBarData, ProgressBarListener } from "../services/listener.service";
+import { ProgressBarData } from "../services/listener.service";
 import { Media } from "../variables/Bar-Variables";
 import { LocalStorage } from "../variables/storage.const";
 import { BarUtils } from "./audio-bar.tools";
@@ -17,6 +17,7 @@ export class OperationsTools{
   public static playOnInit = false;
   public static audioPlaying = false;
   public static isReverse = false;
+  public static safeTime = -1;
 
   public static theme: {audio: HTMLAudioElement | undefined, data: Theme} = {
     audio: new Audio(),
@@ -29,19 +30,42 @@ export class OperationsTools{
     position: 0
   }
 
+  public static setSafeTime():void{
+    if(OperationsTools.theme.audio){
+      OperationsTools.safeTime = OperationsTools.theme.audio?.currentTime;
+    }
+  }
+
   public static setInitialValues(instance: AudioBarComponent){
+      if(OperationsTools.safeTime == -1) this.resetList();
+      OperationsTools.playOnInit = false;
       OperationsTools.setTheme(instance);
       OperationsTools.setThemeListListener(instance);
   }
 
-  public static destroyComponent(instance: AudioBarComponent){
-      if(OperationsTools.theme.audio) OperationsTools.theme.audio.pause();
-      OperationsTools.themesLists = {normal: [],random: [],active: [],position: 0};
-      InterfaceTools.collectionPath = undefined;
-      instance.progressBarListener.unsubscribe();
+  public static destroyComponent(instance: AudioBarComponent | AudioBarLiteComponent){
+      if(OperationsTools.theme.audio){
+        OperationsTools.theme.audio.pause();
+        OperationsTools.theme.audio = new Audio();
+      }
+      if(instance instanceof AudioBarComponent){
+        OperationsTools.progressBarUnsubscribe(instance);
+      }
+      this.resetList();
+      OperationsTools.playOnInit = false;
+      ViewTools.showLite = 'hidden';
   }
 
-  public static prepareTheme(instance: AudioBarComponent, theme?:Theme){
+  public static resetList():void{
+    OperationsTools.themesLists = {normal: [],random: [],active: [],position: 0};
+    InterfaceTools.collectionPath = undefined;
+  }
+
+  public static progressBarUnsubscribe(instance: AudioBarComponent): void{
+    instance.progressBarListener.unsubscribe();
+  }
+
+  public static prepareTheme(instance: AudioBarComponent | AudioBarLiteComponent, theme?:Theme){
 
       let src = ''; 
   
@@ -55,28 +79,36 @@ export class OperationsTools{
         src = (OperationsTools.isReverse) ? instance.reverseSrc : `${Media.path}/${OperationsTools.theme.data.path}`;
       }
       
-      if(OperationsTools.theme.audio) {OperationsTools.theme.audio.pause();}
-      OperationsTools.theme.audio = new Audio();
-      OperationsTools.theme.audio.src = src;
-      OperationsTools.theme.audio.classList.add('reproductor-audio');
-      OperationsTools.theme.audio.load();
-      OperationsTools.theme.audio.onloadedmetadata = ()=>{
-        if(OperationsTools.theme.audio){
-          OperationsTools.theme.audio.onloadeddata = ()=>{
-            if(OperationsTools.theme.audio){
-              OperationsTools.theme.audio.onpause = ()=>{ViewTools.setPlay()}
-              OperationsTools.theme.audio.onplay = ()=>{ViewTools.setPlay()}
-              OperationsTools.theme.audio.onvolumechange = ()=>{ViewTools.progressBarVolume()};
-              OperationsTools.theme.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio()}
-              OperationsTools.theme.audio.onended = ()=>{ReproductionTools.nextTheme(instance, 1)}
       
-              OperationsTools.setDefaultThemeValues();
-              ViewTools.setDefaultInterfaceValues();
+      if(this.safeTime == -1){
+        if(OperationsTools.theme.audio) {OperationsTools.theme.audio.pause();}
+        OperationsTools.theme.audio = new Audio();
+        if(OperationsTools.theme.audio){
+          OperationsTools.theme.audio.src = src;
+          OperationsTools.theme.audio.classList.add('reproductor-audio');
+          OperationsTools.theme.audio.load();
+          OperationsTools.theme.audio.onloadedmetadata = ()=>{
+            if(OperationsTools.theme.audio){
+              OperationsTools.theme.audio.onloadeddata = ()=>{
+                if(OperationsTools.theme.audio){
+                  OperationsTools.theme.audio.onpause = ()=>{ViewTools.setPlay()}
+                  OperationsTools.theme.audio.onplay = ()=>{ViewTools.setPlay()}
+                  OperationsTools.theme.audio.onvolumechange = ()=>{ViewTools.progressBarVolume()};
+                  OperationsTools.theme.audio.ontimeupdate = ()=>{ViewTools.progressBarAudio()}
+                  OperationsTools.theme.audio.onended = ()=>{ReproductionTools.nextTheme(instance, 1)}
+          
+                  OperationsTools.setDefaultThemeValues();
+                  ViewTools.setDefaultInterfaceValues();
+                }
+              }
             }
           }
+          OperationsTools.theme.audio.onerror = (err)=>{OperationsTools.theme.audio = undefined; console.error(err)};
         }
       }
-      OperationsTools.theme.audio.onerror = (err)=>{OperationsTools.theme.audio = undefined; console.error(err)};
+      else{
+        this.safeTime = -1
+      } 
     }
 
   private static setTheme(instance: AudioBarComponent){
@@ -115,13 +147,13 @@ export class OperationsTools{
         ReproductionTools.loopList = (listLoop) ? listLoop : false;
         ReproductionTools.randomList = (listRandom) ? listRandom : false;
   
-          if (OperationsTools.theme.audio && !OperationsTools.playOnInit) OperationsTools.theme.audio.play();
+        if (OperationsTools.theme.audio && !OperationsTools.playOnInit) OperationsTools.theme.audio.play();
   
       }
   
     }
 
-  public static setPlayPause(instance: AudioBarComponent, mode?:string){
+  public static setPlayPause(instance: AudioBarComponent | AudioBarLiteComponent, mode?:string){
       if(OperationsTools.theme.audio){
         if(OperationsTools.theme.audio.paused || mode == 'play'){
           OperationsTools.theme.audio.play();

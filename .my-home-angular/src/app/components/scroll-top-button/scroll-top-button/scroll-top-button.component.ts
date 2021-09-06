@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { view_config } from 'src/utils/variables/Globals';
 
 @Component({
   selector: 'app-scroll-top-button',
@@ -7,33 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScrollTopButtonComponent implements OnInit {
 
-  visibility = 'hidden';
+  view = view_config;
 
   constructor() { }
 
   ngOnInit(): void {
-    let body = document.getElementById('body');
-    if(body){
-      setInterval(()=>{
-        if(body){
-          const scrollValue = body.scrollHeight;
-          const heightValue = body.getBoundingClientRect().height;
-          const scrollPosition = body.scrollTop;
-
-          if(scrollValue > heightValue && scrollPosition > heightValue / 2){
-            this.visibility = 'visible';
-          }
-          else{
-            this.visibility = 'hidden';
-          }
-
-          if(body.getAttribute('hasAux')){
-            this.visibility = `${this.visibility} hasAux`
-          }
-        }
-      },0);
-    }
-    
   }
 
   scrollTop(){
@@ -43,19 +22,23 @@ export class ScrollTopButtonComponent implements OnInit {
     }
   }
 
-  softScrollAnimation(element: HTMLElement, customSpeed?: number): void{
-    let speed = (customSpeed) ? customSpeed : 5;
+  softScrollAnimation(element: HTMLElement): void{
+    const loopSpeed = 50;
+    const maxTime = (element.scrollTop > 5000) ? 1500 : 250;
+    const initialValue = element.scrollTop/(maxTime/loopSpeed);
+    const increment = initialValue * 0.05;
+    let speed = initialValue;
     const scrollWidth = element.scrollWidth;
     const interval = setInterval(()=>{
       const scrollPosition = element.scrollTop;
       if(scrollPosition > 0){
         element.scrollTo(scrollWidth, scrollPosition - speed);
-        speed = speed + 5;
+        speed = speed + increment;
       }
       else{
         clearInterval(interval);
       }
-    },0);
+    },loopSpeed);
   }
 
 }

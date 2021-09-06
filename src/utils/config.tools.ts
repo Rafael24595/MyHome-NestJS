@@ -12,6 +12,7 @@ export class ConfigTools{
             if(file){
                 PathVariables.private_assets_root = join(__dirname, '..', '..', file.root);
                 PathVariables.tmp_thumbnails = join(__dirname, '..', '..', file.tmp);
+                PathVariables.media_sources = join(__dirname, '..', '..', file.media);
                 PathVariables.collections_audio = join(PathVariables.private_assets_root, file.collections.path.audio);
                 PathVariables.collections_image = join(PathVariables.private_assets_root, file.collections.path.image);
                 PathVariables.collections_video = join(PathVariables.private_assets_root, file.collections.path.video);

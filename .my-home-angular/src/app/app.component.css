@@ -1,0 +1,26 @@
+#first-aux-menu{
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    right: 0%;
+    bottom: 10%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+#first-aux-left{
+    pointer-events: visible;
+    width: 100%;
+}
+
+#first-aux-right{
+    pointer-events: visible;
+}
+
+.has-second-aux{
+    margin-bottom: 65px !important;
+}

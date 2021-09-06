@@ -10,7 +10,7 @@ export class DragEvent{
     protected static mouseDwnAudio = false;  
     protected static mouseDwnVolume = false;
 
-    static toClick(event:MouseEvent | TouchEvent, instance: AudioBarComponent){console.log(event.type)
+    static toClick(event:MouseEvent | TouchEvent, instance: AudioBarComponent){
         const itemId = event.target as HTMLElement ;
         const rect = itemId.getBoundingClientRect();
         const offsetX = (event instanceof MouseEvent) ? event.offsetX : event.changedTouches[0].clientX - rect.left;

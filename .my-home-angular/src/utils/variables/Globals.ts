@@ -3,7 +3,6 @@ import { User } from "src/classes/User";
 export const service_config = {
     connection: {
         protocol: 'http',
-        //host: 'localhost',
         host: 'localhost',
         port: '3000'
     }
@@ -46,6 +45,10 @@ export const logos_name = {
         other: 'images/icons/unknown-file.png'
     }
 }
+
+export let view_config: {scrollButtonVisivility: string} = {
+    scrollButtonVisivility: 'hidden'
+} 
 
 export let user_config: {user: User | undefined, lastElementIdMedia: {path: string, pathParent: string},lastElementIdCollection: {path: string, pathParent: string}} = {
     user: undefined,

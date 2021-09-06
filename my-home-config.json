@@ -1,6 +1,7 @@
 {
     "root":"private_assets",
     "tmp": ".tmp",
+    "media": "media_sources",
     "collections":{
         "path":{
             "audio": "media\\audio",

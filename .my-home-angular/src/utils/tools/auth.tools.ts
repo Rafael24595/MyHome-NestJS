@@ -31,7 +31,7 @@ export class AuthTools{
                 console.log(sucess.message);
             },
             err=>{
-                console.error(err);
+                console.error(`Cookie has send correctly:`, err);
             }
         );
     }

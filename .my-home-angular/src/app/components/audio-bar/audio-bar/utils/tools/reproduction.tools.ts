@@ -6,6 +6,7 @@ import { OperationsTools } from "./operations.tools";
 import { ViewTools } from "./view.tools";
 import { Theme } from "src/classes/File/Theme";
 import { user_config } from "src/utils/variables/Globals";
+import { AudioBarLiteComponent } from "../../../audio-bar-lite/audio-bar-lite/audio-bar-lite.component";
 
 export class ReproductionTools{
 
@@ -41,7 +42,7 @@ export class ReproductionTools{
         MiscToolsProgress.setLocalStorage(LocalStorage.random_list_status, ReproductionTools.randomList);
       }
 
-    public static nextTheme(instance: AudioBarComponent, event:Event | number, isCalculed?: boolean){
+    public static nextTheme(instance: AudioBarComponent | AudioBarLiteComponent, event:Event | number, isCalculed?: boolean){
         let action:HTMLInputElement | number = -1;
         if(event && !isCalculed){
           if(typeof event != 'number' && event.target){
@@ -69,7 +70,7 @@ export class ReproductionTools{
         OperationsTools.themesLists.position = action;
         const theme = OperationsTools.themesLists.active[OperationsTools.themesLists.position];
         OperationsTools.prepareTheme(instance, theme);
-        ReproductionTools.updateURI(theme);
+        if(ViewTools.showLite == 'hidden') ReproductionTools.updateURI(theme);
     }
 
     public static updateURI(theme: Theme): void{

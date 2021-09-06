@@ -7,10 +7,10 @@
 >
     <div style="width: 100%; text-align: center;">
         <div style="display: flex; justify-content: space-between;">
-            <span class="reproductor-icon" [routerLink]='["/Manage" + Operations.theme.data.directory]'>Z</span>
+            <span class="reproductor-icon" (click)='setDestroySession(false)' [routerLink]='["/Manage" + Operations.theme.data.directory]'>Z</span>
             <p style="color: white; padding-left: 5px; padding-right: 5px;">{{Operations.theme.data.name}}</p>
             <ng-container *ngIf='Interface.collectionPath; else ElseCollection'>
-                <span class="reproductor-icon" [routerLink]='[Interface.collectionPath + "?theme=" + Operations.theme.data.name]'>=</span>
+                <span class="reproductor-icon" (click)='setDestroySession(false)' [routerLink]='[Interface.collectionPath + "?theme=" + Operations.theme.data.name]'>=</span>
             </ng-container>
             <ng-template #ElseCollection>
                 <span class="reproductor-icon empty">Z</span>

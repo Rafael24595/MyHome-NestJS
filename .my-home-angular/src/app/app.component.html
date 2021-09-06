@@ -1,8 +1,13 @@
 <div>
   <app-modal-base></app-modal-base>
 </div>
-<div>
-  <app-scroll-top-button></app-scroll-top-button>
+<div id="first-aux-menu">
+  <div id="first-aux-left">
+    <app-audio-bar-lite></app-audio-bar-lite>
+  </div>
+  <div id="first-aux-right">
+    <app-scroll-top-button></app-scroll-top-button>
+  </div>
 </div>
 <div id="header" class="principal-module">
   <app-header *ngIf="Globals_User.user"></app-header>

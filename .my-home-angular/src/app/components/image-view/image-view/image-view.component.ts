@@ -27,6 +27,9 @@ export class ImageViewComponent implements OnInit {
   ErrorTools = ErrorTools;
   DragImageEvent = DragHorizontalPicture;
 
+  apiPreview = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/preview/`;
+  apiData = `${this.connection.protocol}://${this.connection.host}:${this.connection.port}/api/file/data/`;
+
   constructor(private authTools: AuthTools) { }
 
   ngOnInit(): void {
@@ -57,7 +60,6 @@ export class ImageViewComponent implements OnInit {
           instance.onKeepMouseDown();
         }
       }
-      console.log(event.touches.length)
     }
   }
 

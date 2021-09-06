@@ -8,6 +8,8 @@ import { ReproductionTools } from "./reproduction.tools";
 
 export class ViewTools{
 
+    static showLite = 'hidden';
+
     static viewStatus: {playLogo: string, volLogo: string, time: string, maxTime: string, timeToolTip: {position:number ,value: string, display: string}} = {
       playLogo: Icons.play,
       volLogo: Color_Vars.volume_logo.percentage_75,

@@ -20,6 +20,8 @@ export class AudioBarComponent implements OnInit {
 
   @Input() ajustableWidth: boolean = true;
 
+  destroySession = true;
+
   ToClick = DragEvent.toClick;
   DragEvent = DragEvent.mouseDrag;
   DragProgress = DragEvent.ProgressBar;
@@ -45,16 +47,26 @@ export class AudioBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    ViewTools.showLite = 'hidden';
     ResizeTools.setInitialSize();
     ResizeTools.screenResize();
     OperationsTools.setInitialValues(this);
   }
 
   ngOnDestroy() {
-    OperationsTools.destroyComponent(this);
+    if(this.destroySession){
+      OperationsTools.destroyComponent(this);
+    }
+    else{
+      ViewTools.showLite = 'visible';
+      OperationsTools.progressBarUnsubscribe(this);
+    }
   }
   
-  
+  setDestroySession(mode: boolean): void{
+    this.destroySession = mode; 
+  }
+
   /////////////////////
   // BETA FUNCTIONS //
   ////////////////////

@@ -87,12 +87,10 @@
 #vol-bar-padding{
     position: absolute;
     vertical-align: bottom; 
-    display: inline-block; 
-    margin-top: 10px; 
-    margin-bottom: 10px;   
-    padding-top: 5px;
-    padding-bottom: 5px;
-    height: 5px; 
+    top: -5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 15px; 
     cursor: pointer;
     z-index: 2;
 }
@@ -121,6 +119,16 @@
 .next-button{
     font-size: 2em;
 }
+
+.play-button-lite{
+    color: white !important;
+    font-size: 1.5em;
+}
+.next-button-lite{
+    color: white !important;
+    font-size: 1em;
+}
+
 .left-button{
     margin-right: 2.5px;
 }
@@ -178,4 +186,31 @@
     text-align: center;
     border-radius: 50%;
     background-color: gray;
+}
+
+#audio-bar-lite{
+    min-width: 25px;
+    min-height: 25px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 2;
+}
+
+#audio-lite-background{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.3);
+}
+
+#audio-lite-background p{
+    margin: 5px;
+}
+
+.visible{
+    display: block;
+}
+
+.hidden{
+    display: none;
 }

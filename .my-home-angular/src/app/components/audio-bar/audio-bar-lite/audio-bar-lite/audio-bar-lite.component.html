@@ -1,0 +1,9 @@
+<div id="audio-bar-lite" class="{{View.showLite}}">
+    <div id="audio-lite-background">
+        <p class="my-home-icons-font-125-white" [routerLink]='["/Manage" + Operations.theme.data.path]' (click)='Operations.setSafeTime()'>=</p>
+        <button (click)='Reproduction.nextTheme(this,$event)' value="-1" class="button button-style button-clear next-button-lite">$</button>
+        <button (click)='Operations.setPlayPause(this)' class="button button-style button-clear play-button-lite">{{View.viewStatus.playLogo}}</button>
+        <button (click)='Reproduction.nextTheme(this,$event)' value="1" class="button button-style button-clear next-button-lite">%</button>
+        <p class="my-home-icons-font-125-white" (click)='Operations.destroyComponent(this)'>3</p>
+    </div>
+</div>

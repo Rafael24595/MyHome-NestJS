@@ -22,7 +22,11 @@
         </div>
     </div>
     <div class="inferior-tools">
-        <p (click)='rotateImage(false)' class="my-home-icons-font-150-white">^</p>
-        <p (click)='rotateImage(true)' class="my-home-icons-font-150-white">_</p>
+        <a href="{{apiData + collection.list[image.position].path}}" target="_blank" class="my-home-icons-font-150-white">8</a>
+        <div>
+            <p (click)='rotateImage(false)' class="my-home-icons-font-150-white">^</p>
+            <p (click)='rotateImage(true)' class="my-home-icons-font-150-white">_</p>
+        </div>
+        <a href="{{apiData + collection.list[image.position].path}}" download="{{apiData + collection.list[image.position].path}}" class="my-home-icons-font-150-white">`</a>
     </div>
 </ng-container>

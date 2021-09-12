@@ -1,0 +1,30 @@
+<div id="modal-screen" class="simple-modal-size" style="min-width:75%;">
+    <div style="white-space: nowrap; text-align: center;">
+        <div class="title-box"></div>
+        <h2 style="display: inline-block;">{{modal.modalDataForm.title}}</h2>
+        <div class="title-box" style="float: right;"><a class="my-home-icons-font-125-black" href="javascript:void(0);" (click)='closeModal()'>3</a></div>
+    </div>
+    <div class="underline-box"></div>
+    <br>
+    <div id="modal-form-form" style="padding-left: 15px;padding-right: 15px;" class="{{(modal.modalDataForm.center) ? 'center-input' : '' }}">
+        <div *ngFor='let input of modal.modalDataForm.inputs'>
+            <ng-container *ngIf='input.title == "" && input.type == "empty"; else elseContent'>
+                <br>
+            </ng-container>
+            <ng-template #elseContent>
+                <label for="{{input.name}}">
+                    <ng-container *ngIf='input.title'>
+                        <p style="cursor: pointer; margin-bottom: 10px;"><span><b>{{input.title}}</b>:</span></p>
+                    </ng-container>
+                    <input type="{{input.type}}" value="{{input.value}}" name="modal-form-{{input.name}}">
+                </label>
+            </ng-template>
+            <div></div>
+        </div>
+        <br>
+        <div class="underline-box"></div>
+        <br>
+        <button (click)='submitForm()'>{{modal.modalDataForm.buttonTittle}}</button>
+    </div>
+    <br>
+</div>

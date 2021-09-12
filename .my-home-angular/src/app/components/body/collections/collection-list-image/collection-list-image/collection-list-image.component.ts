@@ -57,7 +57,7 @@ export class CollectionListImageComponent implements OnInit {
     this.image.show = false;
     this.updateURI();
     setTimeout(() => {
-      MiscTools.scrollToLastElement(`body`, `${user_config.lastElementIdCollection.path}`);
+      MiscTools.scrollToElement(`${user_config.lastElementIdCollection.path}`);
       MiscTools.resetLastElementCollection();
     }, 1);
   }

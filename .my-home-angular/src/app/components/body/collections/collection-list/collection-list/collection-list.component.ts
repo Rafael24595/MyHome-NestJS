@@ -33,7 +33,7 @@ export class CollectionListComponent implements OnInit {
 
   ngForEnd(): void{
     MiscTools.resetScroll(`body`);
-    MiscTools.scrollToLastElement(`body`, `element-${user_config.lastElementIdCollection.path}`);
+    MiscTools.scrollToElement(`element-${user_config.lastElementIdCollection.path}`);
   }
 
   toCollection(element: Theme[] |Picture[],path:string):void{

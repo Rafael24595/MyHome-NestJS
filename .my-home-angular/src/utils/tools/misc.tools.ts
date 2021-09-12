@@ -132,15 +132,23 @@ export class MiscTools{
         user_config.lastElementIdCollection.pathParent = (pathParent) ? pathParent : '';
     }
 
-    static scrollToLastElement(parent: string, child: string){
-        const parentElement = document.getElementById(parent);
+    static scrollToElement(child: string){
         const childElement = document.getElementById(child);
-        if(parentElement && childElement){
-          const elementTop = childElement.getBoundingClientRect().top;
+        let hasTabindex = true;
+        if(childElement){console.log(childElement.tabIndex)
+            if(!childElement.getAttribute('tabindex')){
+                childElement.tabIndex = -1;
+                hasTabindex = false;
+            }
+            childElement.focus();
+            if(!hasTabindex){
+                childElement.removeAttribute('tabindex');
+            }
+         /* const elementTop = childElement.getBoundingClientRect().top;
           const elementHeight = childElement.getBoundingClientRect().height;
           const scrollValue = elementTop - elementHeight;
           if(scrollValue > 1)
-            parentElement.scrollTo(0, scrollValue);
+            parentElement.scrollTo(0, scrollValue);*/
         }
         else{
             console.error('Not elements found');

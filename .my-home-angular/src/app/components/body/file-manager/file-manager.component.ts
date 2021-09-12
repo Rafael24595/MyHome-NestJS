@@ -138,7 +138,7 @@ export class FileManagerComponent implements OnInit {
   hideLoadMessage(){
     if(this.dirLoading){
       this.dirLoading = false;
-      MiscTools.scrollToLastElement(`body`, `element-${user_config.lastElementIdMedia.path}`);
+      MiscTools.scrollToElement(`element-${user_config.lastElementIdMedia.path}`);
     }
   }
 

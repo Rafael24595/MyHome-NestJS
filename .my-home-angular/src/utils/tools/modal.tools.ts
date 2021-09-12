@@ -1,6 +1,8 @@
+import { CollectionsComponent } from "src/app/components/body/collections/collections.component";
 import { FileManagerComponent } from "src/app/components/body/file-manager/file-manager.component";
 import { ModalBaseComponent } from "src/app/components/modal-components/modal-base.component";
 import { Modal } from "src/classes/Modal";
+import { ModalForm } from "src/classes/ModalForm";
 import { Path } from "src/classes/Path";
 import { group_types, order_types } from "../variables/Globals";
 import { MiscTools } from "./misc.tools";
@@ -76,6 +78,24 @@ export class ModalTools{
         );
 
         ModalBaseComponent.openModal(options);
+    }
+
+    static generateSearchForm(instance: CollectionsComponent, defaultValue?: string): void{
+        if(instance.collectionList.collection){
+            defaultValue = (defaultValue) ? defaultValue : '';
+            const options = ModalForm.setBasicModalCenter(
+                'Buscar',
+                instance.search.bind(instance),
+                [
+                  {title:'',name:'',type: 'empty', value:'', required: false, validationRegex: '', change: undefined},
+                  {title:'',name:'search',type: 'text', value: defaultValue, required: false, validationRegex: '', change: undefined},
+                  {title:'',name:'',type: 'empty', value:'', required: false, validationRegex: '', change: undefined},
+                ],
+                'Buscar'
+            );
+    
+            ModalBaseComponent.openModal(options);
+        }
     }
 
 }

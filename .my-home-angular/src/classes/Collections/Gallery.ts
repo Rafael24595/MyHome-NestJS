@@ -10,7 +10,7 @@ export class Gallery extends FileCollectionAbstract{
 
     constructor(name:string, owner: string, userView:boolean, userManage:boolean, privateState:boolean, list:Picture[], systemList: boolean, path: string, totalElements: number, imageElements: number, location?: string, image?: string, total?: number, position?: number){
         image = (image) ? image : logos_name.image_collection;
-        super(name, owner, userView, userManage, privateState, systemList, path, location, image, total, position);
+        super(name, owner, userView, userManage, privateState, systemList, path, list, location, image, total, position);
         this.list = list;
         this.totalElements = totalElements;
         this.imageElements = imageElements;

@@ -8,7 +8,7 @@ export class PlayListMusic extends FileCollectionAbstract{
 
     constructor(name:string, owner: string, userView:boolean, userManage:boolean, privateState:boolean, list:Theme[], systemList: boolean, path: string, location?: string, image?: string){
         image = (image) ? image : logos_name.audio_collection;
-        super(name, owner, userView, userManage, privateState, systemList, path, location, image);
+        super(name, owner, userView, userManage, privateState, systemList, path, list, location, image);
         this.list = list;
     }
 

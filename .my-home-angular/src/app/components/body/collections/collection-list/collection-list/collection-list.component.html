@@ -1,15 +1,25 @@
 <ng-container *ngIf='collection'>
     <div style="position: relative; padding-left: 15px; padding-right: 15px;">
         <div class="random-access">
-            <p (click)='toRandomCollection()'><span class="reproductor-icon">K</span> Reproducción aleatoria</p>
-            <p>Total: {{collection.list.length}}</p>
+            <ng-container *ngIf='collection.searchParam != ""; else ElseSearch'>
+                <p (click)='toRandomCollection()'><span class="reproductor-icon">K</span> Reproducción aleatoria</p>
+                <p>Búsqueda: {{collection.getSearchCoincidenceLength()}}</p>
+            </ng-container>
+            <ng-template #ElseSearch>
+                <p (click)='toRandomCollection()'><span class="reproductor-icon">K</span> Reproducción aleatoria</p>
+                <p>Total: {{collection.list.length}}</p>
+            </ng-template>
         </div>
-        <div *ngFor='let element of collection.list; let last = last' [routerLink]='[collection.path]' id="element-{{element.path}}" class="list-element">
+        <div *ngFor='let element of collection.list; let last = last'>
             <!--<span *ngIf='last'>{{last ? ngForEnd() : ''}}</span>-->
-            <div (click)='toCollection(collection.list, element.path)' class="list-element-content">
-                <p>{{element.name}}</p>
-                <div class="directory-element-menu-flex"><div></div><div></div><div></div></div>
-            </div>
+            <ng-container *ngIf='element.searchCoincidence'>
+                <div [routerLink]='[collection.path]' id="element-{{element.path}}" class="list-element">
+                    <div  (click)='toCollection(collection.list, element.path)' class="list-element-content">
+                        <p>{{element.name}}</p>
+                        <div class="directory-element-menu-flex"><div></div><div></div><div></div></div>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
 </ng-container>

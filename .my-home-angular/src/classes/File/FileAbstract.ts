@@ -12,8 +12,9 @@ export class FileAbstract{
     dateCreated: number;
     dateModify: number;
     tags: string[];
+    searchCoincidence: boolean;
 
-    constructor(id: string,path:string,createdBy: string,autor:{id:string, name:string},dateCreated: number,dateModify: number,tags: string[]){
+    constructor(id: string,path:string,createdBy: string,autor:{id:string, name:string},dateCreated: number,dateModify: number,tags: string[], searchCoincidence?: boolean){
        this.id = id;
        this.path = path;
        this.directory = MiscTools.getFileDir(path);
@@ -24,6 +25,7 @@ export class FileAbstract{
        this.dateCreated = dateCreated;
        this.dateModify = dateModify;
        this.tags = tags;
+       this.searchCoincidence = (searchCoincidence) ? searchCoincidence : true;
     }
 
     getId(){
@@ -62,6 +64,10 @@ export class FileAbstract{
         return this.tags;
     }
 
+    getSearchCoincidence(): boolean{
+        return this.searchCoincidence;
+    }
+
     setId(id: string){
         this.id = id;
     }
@@ -80,6 +86,10 @@ export class FileAbstract{
 
     setTags(tags: string[]){
         this.tags = tags;
+    }
+
+    setSearchCoincidence(searchCoincidence: boolean): void{
+        this.searchCoincidence = searchCoincidence;
     }
 
 }

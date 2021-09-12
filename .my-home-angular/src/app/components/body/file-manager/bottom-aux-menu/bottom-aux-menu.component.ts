@@ -26,7 +26,6 @@ export class BottomAuxMenuComponent implements OnInit {
   executeOption(mode: string){
 
     switch (mode){
-
       case "order":
         ModalTools.generateOrderBy(this.fileManagerComponent);
       break;

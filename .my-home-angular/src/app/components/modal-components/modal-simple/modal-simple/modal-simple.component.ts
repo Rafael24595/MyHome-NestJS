@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal, ModalElementsInterface } from 'src/classes/Modal';
+import { ModalElementsInterface } from 'src/classes/Modal';
 import { ModalBaseComponent, ModalStatus } from '../../modal-base.component';
 
 @Component({

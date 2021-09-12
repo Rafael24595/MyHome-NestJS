@@ -11,6 +11,7 @@ import { Theme } from 'src/classes/File/Theme';
 import { AuthTools } from 'src/utils/tools/auth.tools';
 import { CollectionTools } from 'src/utils/tools/collections.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
+import { ModalTools } from 'src/utils/tools/modal.tools';
 import { collection_owners, system_collections_group } from 'src/utils/variables/collection.constants';
 import { ProgressBarListener, ProgressBarRepSettings } from '../../audio-bar/audio-bar/utils/services/listener.service';
 import { CandyRowSimpleComponent } from '../../candy-row/candy-row-simple/candy-row-simple.component';
@@ -50,6 +51,7 @@ export class CollectionsComponent implements OnInit {
 
   ngOnDestroy() {
     this.routerEvent?.unsubscribe();
+    MiscTools.resetLastElementCollection();
   }
 
   async getCollections():Promise<void> {
@@ -217,6 +219,26 @@ export class CollectionsComponent implements OnInit {
             } 
           }
       }
+    }
+  }
+
+  showSearchModal(): void{
+    if(this.collectionList.collection){
+      const value = this.collectionList.collection.searchParam;
+      ModalTools.generateSearchForm(this, value);
+    }
+  }
+
+  search(query: {[key:string]: string}){console.log( this.collectionList)
+    let values = query['search'];console.log(values)
+    if(values){
+      this.collectionList.collection?.genericSearch(values);
+    }
+  }
+
+  cleanSearch(): void{
+    if(this.collectionList.collection){
+      this.collectionList.collection.cleanSearch();
     }
   }
 

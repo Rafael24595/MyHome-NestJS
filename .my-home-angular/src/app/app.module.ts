@@ -27,6 +27,7 @@ import { CollectionListImageComponent } from './components/body/collections/coll
 import { ImageViewComponent } from './components/image-view/image-view/image-view.component';
 import { ScrollTopButtonComponent } from './components/scroll-top-button/scroll-top-button/scroll-top-button.component';
 import { AudioBarLiteComponent } from './components/audio-bar/audio-bar-lite/audio-bar-lite/audio-bar-lite.component';
+import { ModalFormComponent } from './components/modal-components/modal-form/modal-form/modal-form.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { AudioBarLiteComponent } from './components/audio-bar/audio-bar-lite/aud
     CollectionListImageComponent,
     ImageViewComponent,
     ScrollTopButtonComponent,
-    AudioBarLiteComponent
+    AudioBarLiteComponent,
+    ModalFormComponent
   ],
   imports: [
     BrowserModule,

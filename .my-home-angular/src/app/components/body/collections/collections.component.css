@@ -15,3 +15,24 @@
     font-size: 0.85em;
     margin: 0px;
 }
+
+#title{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.menu-icon{
+    font-family: my-home-icons;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0px;
+}
+
+.visible{
+    visibility: visible;
+}
+
+.hidden{
+    visibility: hidden;
+}

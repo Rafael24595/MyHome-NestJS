@@ -1,4 +1,8 @@
-<h1 style="text-align: center;">Colecciones</h1>
+<div id="title">
+    <p class="menu-icon {{collectionList.type == 'audio' && collectionList.collection && collectionList.collection.searchParam != '' && collectionList.showList ? 'visible' : 'hidden'}}" (click)='cleanSearch()'>3</p>
+    <h1 style="text-align: center;">Colecciones</h1>
+    <p class="menu-icon {{collectionList.type == 'audio' && collectionList.showList ? 'visible' : 'hidden'}}" (click)='showSearchModal()' style="margin: 0px;">8</p>
+</div>
 <div class="underline-box"></div>
 <app-candy-row-simple></app-candy-row-simple>
 <ng-container *ngIf='!collectionList.showList; else ElseShowList'>

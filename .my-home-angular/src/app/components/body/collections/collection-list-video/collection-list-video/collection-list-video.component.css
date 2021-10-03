@@ -1,0 +1,11 @@
+.list-element{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.video-thumnail{
+    height: 80px;
+    width: 80px;
+}

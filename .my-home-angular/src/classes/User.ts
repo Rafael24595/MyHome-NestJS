@@ -46,7 +46,7 @@ export class User{
 
         if(playListVideo){
             playListVideo.forEach(video=>{
-            this.playListVideo.push(new PlayListVideo(video.name,video.owner,video.userView,video.userManage,video.privateState,video.list,video.systemList));
+            this.playListVideo.push(new PlayListVideo(video.name,video.owner,video.userView,video.userManage,video.privateState,video.list,video.systemList,video.path,video.totalElements,video.videoElements));
             });
         }
 

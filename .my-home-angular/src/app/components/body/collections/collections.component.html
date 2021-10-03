@@ -22,6 +22,9 @@
     <ng-container *ngIf='collectionList.type == "audio"'>
         <app-collection-list (ToCollection)="toCollection($event)" [collection]='collectionList.collection'></app-collection-list>
     </ng-container>
+    <ng-container *ngIf='collectionList.type == "video"'>
+        <app-collection-list-video (LoadNextCollectionPage)="loadNextCollectionPage()" [collection]='collectionList.collection'></app-collection-list-video>
+    </ng-container>
     <ng-container *ngIf='collectionList.type == "image"'>
         <app-collection-list-image (LoadNextCollectionPage)="loadNextCollectionPage()" [collection]='collectionList.collection'></app-collection-list-image>
     </ng-container>

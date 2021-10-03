@@ -116,6 +116,7 @@ export class CollectionsComponent implements OnInit {
             err => {console.error(err); resolve(undefined);}
           );
         break;
+        case 'video':
         case 'image':
           this.collectionsService.getSystemCollectionPage(type, position ? position : 0, path).subscribe(
             sucess => {
@@ -153,7 +154,7 @@ export class CollectionsComponent implements OnInit {
               this.collections = Gallery.interfaceToGalleryArray(object as Gallery[], path);
             break;
             case 'video':
-            
+              this.collections = PlayListVideo.interfaceToPlayListVideoArray(object as PlayListVideo[], path);
             break;
             case undefined:
             

@@ -1,0 +1,20 @@
+<ng-container *ngIf='collection'>
+    <ng-container *ngIf='!video.show; else ElseHide'>
+        <div style="position: relative; padding-left: 15px; padding-right: 15px;" class="list-element">
+            <div *ngFor='let element of collection.list; let i = index' id="element-{{element.path}}">
+                <!--<span *ngIf='last'>{{last ? ngForEnd() : ''}}</span>  [routerLink]='["/Manage" + element.path]'  -->
+                <div class="video-thumnail" (click)='showVideo(i)' style="display: inline-block;">
+                    <div></div>
+                    <div class="video-thumnail-area">
+                        <img src="{{connection.protocol}}://{{connection.host}}:{{connection.port}}/api/file/thumbnail/{{element.path}}" (error)="ErrorTools.reloadBrokenImage($event)">
+                    </div>
+               </div>
+            </div>
+       </div>
+    </ng-container>
+    <ng-template #ElseHide>
+        <!--<div class="image-panel">
+            <app-image-view (HideImage)="hideImage()" (LoadNextCollectionPage)="loadNextCollectionPage()" (UpdateURI)="updateURI($event)" [collection]='collection' [image]='image'></app-image-view>
+        </div>-->
+    </ng-template>
+</ng-container>

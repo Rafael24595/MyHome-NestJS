@@ -29,6 +29,7 @@ import { ScrollTopButtonComponent } from './components/scroll-top-button/scroll-
 import { AudioBarLiteComponent } from './components/audio-bar/audio-bar-lite/audio-bar-lite/audio-bar-lite.component';
 import { ModalFormComponent } from './components/modal-components/modal-form/modal-form/modal-form.component';
 import { CollectionListVideoComponent } from './components/body/collections/collection-list-video/collection-list-video/collection-list-video.component';
+import { VideoViewComponent } from './components/video-view/video-view/video-view.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { CollectionListVideoComponent } from './components/body/collections/coll
     ScrollTopButtonComponent,
     AudioBarLiteComponent,
     ModalFormComponent,
-    CollectionListVideoComponent
+    CollectionListVideoComponent,
+    VideoViewComponent
   ],
   imports: [
     BrowserModule,

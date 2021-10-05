@@ -1,0 +1,8 @@
+<p class="timeTag" style="margin-left: {{timeToolTip.position}}px; display:{{timeToolTip.display}}; ">{{timeToolTip.value}}</p>
+<div id="bar-ajustable-width" style="position: relative; display: inline-block; width: -webkit-fill-available; overflow: hidden; padding-left: 15px; padding-right: 15px;">
+    <div style="width: {{size}}px;" id='audio-bar-padding' (mousedown)='toClick($event)' (touchstart)='toClick($event)'></div>
+    <div style="width: {{progress}}px; background-color: {{barColor}};" id='audio-bar-progress'></div>
+    <div style="width: {{size}}px;" id='audio-bar'>
+        <div style="margin-left: {{progress}}px;" id='Meatball' (mousedown)='mouseDownBar()' (touchstart)='mouseDownBar()'></div>
+    </div>
+</div>

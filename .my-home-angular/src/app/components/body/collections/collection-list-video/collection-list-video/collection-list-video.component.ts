@@ -6,7 +6,7 @@ import { PlayListMusic } from 'src/classes/Collections/PlayListMusic';
 import { PlayListVideo } from 'src/classes/Collections/PlayListVideo';
 import { AuthTools } from 'src/utils/tools/auth.tools';
 import { MiscTools } from 'src/utils/tools/misc.tools';
-import { service_config } from 'src/utils/variables/Globals';
+import { service_config, user_config } from 'src/utils/variables/Globals';
 import { Location } from '@angular/common';
 import { ErrorTools } from 'src/utils/tools/error.tools';
 
@@ -32,6 +32,20 @@ export class CollectionListVideoComponent implements OnInit {
 
   ngOnInit(): void {console.log(this.collection)
     this.authTools.checkSession();
+  }
+
+  loadNextCollectionPage():void{
+    this.LoadNextCollectionPage.next();
+  }
+
+  hideVideo(): void{
+    this.video.position = 0;
+    this.video.show = false;
+    this.updateURI();
+    setTimeout(() => {
+      MiscTools.scrollToElement(`${user_config.lastElementIdCollection.path}`);
+      MiscTools.resetLastElementCollection();
+    }, 1);
   }
 
   showVideo(position: number): void{
